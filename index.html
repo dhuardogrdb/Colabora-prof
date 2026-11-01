@@ -3,6 +3,7 @@
 (function(){
 var CFG={apiKey:"AIzaSyBvZoAr0o02TaqpNz5MJbc-wT1xpIY1eDQ",authDomain:"colabora-prof.firebaseapp.com",projectId:"colabora-prof",storageBucket:"colabora-prof.firebasestorage.app",messagingSenderId:"665398636400",appId:"1:665398636400:web:bbd177e29f7879620429b5"};
 var MODELO_TEXTO="gemini-2.5-flash";
+var MODELO_IMAGEM="gemini-2.5-flash-image";
 var B="https://www.gstatic.com/firebasejs/11.10.0/",fb=null;
 function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js"),import(B+"firebase-ai.js")]).then(function(m){
   var app=m[0].initializeApp(CFG);
@@ -25,6 +26,13 @@ function col(c,name,cons){
 window.claude={use:async function(n){
   if(n==="db"){var c=await load();return{collection:function(x){return col(c,x,[])}}}
   if(n==="user"){return{can:async function(){return true}}}
+  if(n==="image"){return{gerar:async function(p){
+    var c=await load();
+    var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_IMAGEM,generationConfig:{responseModalities:[c.AI.ResponseModality.TEXT,c.AI.ResponseModality.IMAGE]}});
+    var r=await m.generateContent(p);
+    var im=r.response.inlineDataParts&&r.response.inlineDataParts();
+    if(!im||!im.length)throw new Error("sem imagem");
+    return "data:"+im[0].inlineData.mimeType+";base64,"+im[0].inlineData.data}}}
   if(n==="sample"){return{json:async function(p){
     var c=await load();
     var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_TEXTO,generationConfig:{responseMimeType:"application/json"}});
@@ -778,10 +786,10 @@ body:not(.home) #qrbloco{display:none}
   </div>
   <div class="note">Evite nomes de crianças e dados pessoais. A ilustração será feita por IA, nunca com foto real.</div>
   <button type="button" class="btn sec" id="gerar">🎨 Gerar ilustração com IA</button>
+  <div class="note" id="avisoDemora" role="note">⏳ A criação da ilustração por IA leva em média de 15 a 30 segundos. Depois de tocar no botão, aguarde sem fechar a tela.</div>
   <div class="gen" id="gen" hidden>
     <div class="prev" id="prev"><span>🎨</span>Ilustração provisória</div>
-    <div class="prov">Imagem provisória: nesta fase de teste, a ilustração real feita por IA ainda não está conectada.</div>
-    <div class="rest" id="rest"></div>
+        <div class="rest" id="rest"></div>
     <div id="aprov">
       <div class="q">Esta ilustração representa adequadamente a atividade que você realizou com as crianças?</div>
       <div class="opts">
@@ -1778,7 +1786,7 @@ function resetGen(){
   $("#genOv").hidden=true;$("#genFalha").hidden=true;$("#enviar").textContent=ENV_TXT;
   $("#gen").hidden=true;$("#corr").hidden=true;$("#aprov").hidden=false;
   $("#sim").classList.remove("on");$("#nao").classList.remove("on");
-  $("#gerar").hidden=false;$("#gerar").disabled=false;$("#enviar").disabled=true;
+  $("#gerar").hidden=false;$("#avisoDemora").hidden=false;$("#gerar").disabled=false;$("#enviar").disabled=true;
   if($("#ct"))$("#ct").value="";
   if(typeof dica==="function")dica();
   document.querySelectorAll("#tchk .chip.on").forEach(c=>c.classList.remove("on"));
@@ -1803,11 +1811,24 @@ function montaPromptImagem(o){
   p+=" Mostre o ambiente, os materiais e as crianças só de forma estilizada, sem rostos detalhados, sem pessoas reais, sem fotografias e sem texto escrito na imagem.";
   if(o.correcao)p+=" Ajuste pedido pelo professor: "+o.correcao;
   return p}
+function reduzImagem(src,max,q){
+  return new Promise((res,rej)=>{
+    const i=new Image();
+    i.onload=()=>{
+      const k=Math.min(1,max/Math.max(i.width,i.height)),w=Math.round(i.width*k),h=Math.round(i.height*k);
+      const c=document.createElement("canvas");c.width=w;c.height=h;
+      const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(i,0,0,w,h);
+      let out=c.toDataURL("image/jpeg",q);
+      if(out.length>230000)out=c.toDataURL("image/jpeg",0.5);
+      res(out)};
+    i.onerror=()=>rej(new Error("imagem invalida"));
+    i.src=src})
+}
 async function gerarImagem(dados){
   const prompt=montaPromptImagem(dados);
-  /* Provisório: aqui entra a chamada real ao serviço de imagens (via servidor), enviando "prompt", quando for conectada. */
-  await new Promise(r=>setTimeout(r,900));
-  return null;
+  const srv=await claude.use("image");
+  const bruta=await srv.gerar(prompt);
+  return await reduzImagem(bruta,640,0.72);
 }
 async function gerar(corr){
   if(G.busy)return;
@@ -1830,7 +1851,7 @@ async function gerar(corr){
   try{
     if(!ok)throw new Error("falhou");
     G.n++;G.img=img;G.aprovada=false;
-    $("#gen").hidden=false;$("#gerar").hidden=true;
+    $("#gen").hidden=false;$("#gerar").hidden=true;$("#avisoDemora").hidden=true;
     $("#aprov").hidden=false;$("#corr").hidden=true;
     $("#sim").classList.remove("on");$("#nao").classList.remove("on");
     $("#prev").innerHTML=img?'<img src="'+esc(img)+'" alt="Ilustração gerada" style="width:100%;height:100%;object-fit:cover;border-radius:12px">':'<span>🎨</span>Ilustração provisória';
