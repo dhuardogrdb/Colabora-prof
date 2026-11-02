@@ -856,6 +856,10 @@ body:not(.home) #qrbloco{display:none}
 @keyframes admPisca{0%,100%{background:#d92b2b}50%{background:#7d0f0f}}
 @media (prefers-reduced-motion:reduce){.adm-den>summary{animation:none}}
 .adm-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+@keyframes ilBarra{from{width:0}to{width:95%}}
+.il-bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:8px}
+.il-bar i{display:block;height:100%;width:0;background:var(--pri2);animation:ilBarra 30s linear forwards}
+.il-bt{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 </style>
 <dialog id="cfdlg">
   <div class="cfb">
@@ -1785,7 +1789,7 @@ const MAX_GER=3,ENV_TXT=$("#enviar").textContent;
 let G={n:0,aprovada:false,img:null,busy:false,publicada:false};
 function pic(a){
   if(a.imagem) return '<div class="pic has"><img src="'+esc(a.imagem)+'" alt="Ilustração da atividade '+esc(a.titulo)+'" style="width:100%;height:100%;object-fit:cover"></div>';
-  return '<div class="pic"><span>🎨</span>Ilustração provisória</div>';
+  return '<div class="pic"><span>🎨</span>'+(a.imagemEncerrada?'Não foi possível gerar a ilustração desta atividade':'Ilustração provisória')+'</div>';
 }
 function resetGen(){
   G={n:0,aprovada:false,img:null,busy:false,publicada:false,semImg:false};
@@ -1870,10 +1874,10 @@ async function gerar(corr){
     toast("Não consegui criar a imagem. Você pode tentar de novo ou publicar sem ilustração.");
     try{
       const er=window._errImg||{};
-      const msg=String((er.code?er.code+" — ":"")+(er.message||er)).slice(0,600);
+      const msg=(function(er){var p=[];try{if(er.name)p.push("nome: "+er.name);if(er.code)p.push("código: "+er.code);p.push("mensagem: "+(er.message||String(er)));var cd=er.customErrorData;if(cd){p.push("status: "+(cd.status||"")+" "+(cd.statusText||""));if(cd.errorDetails)p.push("detalhes: "+JSON.stringify(cd.errorDetails));if(cd.response)p.push("resposta: "+JSON.stringify(cd.response))}if(er.cause)p.push("causa: "+(er.cause.message||String(er.cause)));if(er.stack)p.push("pilha: "+String(er.stack).split("\n").slice(0,6).join(" | "))}catch(_){p.push(String(er))}return p.join("\n")})(er).slice(0,2500);
       let box=document.getElementById("errDiag");
-      if(!box){box=document.createElement("div");box.id="errDiag";box.className="note";box.style.cssText="word-break:break-word;font-size:.78rem";$("#genFalha").appendChild(box)}
-      box.textContent="Detalhe técnico (mostre ao Eduardo/Claude): "+msg;
+      if(!box){box=document.createElement("div");box.id="errDiag";box.className="note";box.style.cssText="word-break:break-word;font-size:.78rem;white-space:pre-wrap;user-select:text";$("#genFalha").appendChild(box)}
+      box.textContent="Detalhe técnico (mostre ao Eduardo/Claude):\n"+msg;try{console.error("Detalhe completo do erro de imagem:",msg)}catch(_){}
     }catch(_){}
   }
   G.busy=false;
@@ -2022,7 +2026,7 @@ function admLista(){
     '<div class="adm-bar"><button class="btn sec" id="adSai" type="button">Sair</button><button class="btn sec" id="adFecha" type="button">Fechar</button></div>'+
     admAtencao(A,V)+
     admAba("man","Manutenção do site",manut+manutV)+
-    admAba("ati","Atividades ("+A.length+")",lAt)+
+    admAba("ati","Atividades ("+A.length+")",lAt)+admAba("ilu",admIluTitulo(A),admIluCorpo(A))+
     admAba("var","Variações ("+VR.length+")",lVr)+
     admAba("sug","Sugestões para a plataforma ("+SG.length+")",lSg)+
     admAba("ava","Avaliações de experiência ("+V.length+")",lAv);
@@ -2102,6 +2106,76 @@ async function admApaga(col,id){
     _sigLista=null;render();toast("Apagado.");
   }catch(e){toast("Não consegui apagar agora.")}
 }
+/* ===== Administrador: gerar ilustração para fichas que ainda não têm ===== */
+const IL_MAX=3;
+const admIl={};
+let admIlBusy=false;
+const ilPend=A=>A.filter(a=>!a.imagem&&!a.imagemEncerrada);
+const ilFim=A=>A.filter(a=>!a.imagem&&a.imagemEncerrada);
+function admIluTitulo(A){return"🎨 Fichas sem ilustração ("+ilPend(A).length+")"}
+function admIlItem(a){
+  const s=admIl[a.id]||{n:0},desc=String(a.descricao||"");
+  let h='<b>'+esc(a.titulo)+'</b><small>'+esc((a.turmas||[]).join(", "))+' · '+esc(a.unidade||"")+'</small><p style="margin:6px 0 0">'+esc(desc.slice(0,160))+'</p>';
+  if(desc.trim().length<60)h+='<small style="display:block;margin-top:6px;color:#e8590c">⚠️ Descrição muito curta: a IA pode ter pouco material para criar a imagem.</small>';
+  if(s.feito)return h+'<div class="note" style="margin-top:8px">✅ Ilustração salva nesta ficha.</div>';
+  if(s.fim)return h+'<div class="note" style="margin-top:8px">As '+IL_MAX+' tentativas foram usadas. Esta ficha ficará sem ilustração.</div>';
+  if(s.busy)return h+'<div class="note" style="margin-top:8px"><b>Criando a ilustração…</b> Leva de 20 a 30 segundos, no máximo 1 minuto. Aguarde, por favor.<div class="il-bar"><i></i></div></div>';
+  if(s.img){
+    h+='<img src="'+esc(s.img)+'" alt="Ilustração gerada para '+esc(a.titulo)+'" style="width:100%;max-width:360px;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;margin:10px 0 6px">';
+    h+='<small>Tentativa '+s.n+' de '+IL_MAX+'</small><p style="margin:6px 0 0;font-weight:700">Esta ilustração condiz com a atividade?</p>';
+    h+='<div class="il-bt"><button type="button" class="btn" data-ilsim="'+esc(a.id)+'">✅ Sim, usar esta</button><button type="button" class="btn sec" data-ilnao="'+esc(a.id)+'">'+(s.n<IL_MAX?'❌ Não, gerar outra':'❌ Não, deixar sem ilustração')+'</button></div>';
+    return h}
+  if(s.erro)h+='<div class="note" style="margin-top:8px;word-break:break-word">Não consegui criar a imagem agora. Esta tentativa não foi contada.<br><small>Detalhe técnico: '+esc(s.erro)+'</small></div>';
+  h+='<div class="il-bt"><button type="button" class="btn" data-ilgen="'+esc(a.id)+'">'+(s.erro?'🎨 Tentar de novo':'🎨 Gerar ilustração')+'</button></div>';
+  return h}
+function admIluCorpo(A){
+  const P=A.filter(a=>(!a.imagem&&!a.imagemEncerrada)||(admIl[a.id]&&admIl[a.id].feito)),F=ilFim(A);
+  let h='<p style="margin:0 0 8px;color:var(--mut)">Fichas publicadas sem ilustração de IA. Toque em gerar, confira a imagem e diga se ela condiz com a atividade. Se disser não, a IA tenta de novo, até '+IL_MAX+' tentativas.</p>';
+  h+=P.length?P.map(a=>'<div class="adm-item" data-il="'+esc(a.id)+'">'+admIlItem(a)+'</div>').join(""):'<div class="empty">Todas as fichas já têm ilustração.</div>';
+  if(F.length){
+    h+='<p style="margin:12px 0 6px;color:var(--mut)">Sem ilustração (as '+IL_MAX+' tentativas foram usadas):</p>';
+    h+=F.map(a=>'<div class="adm-item"><b>'+esc(a.titulo)+'</b><small>'+esc((a.turmas||[]).join(", "))+' · '+esc(a.unidade||"")+'</small><small style="display:block;margin-top:6px">Esta ficha fica sem ilustração. Se achar melhor, apague na aba Atividades.</small></div>').join("")}
+  return h}
+function admIlDesenha(id){
+  const a=acts.find(x=>x.id===id),el=document.querySelector('[data-il="'+CSS.escape(id)+'"]');
+  if(!a||!el){if(admLogado&&$("#addlg").open)admLista();return}
+  el.innerHTML=admIlItem(a)}
+async function admIlSalva(id,campos){
+  if(store&&store.live){const db=await claude.use("db");await db.collection("atividades").doc(id).update(campos)}
+  else{const a=acts.find(x=>x.id===id);if(a){Object.assign(a,campos);ls("cp_acts",acts.filter(x=>!x.demo))}}
+  _sigLista=null;try{render()}catch(e){}}
+async function admIlGera(id){
+  const a=acts.find(x=>x.id===id);
+  if(!a||admIlBusy)return;
+  const s=admIl[id]||(admIl[id]={n:0});
+  if(s.n>=IL_MAX)return;
+  admIlBusy=true;s.busy=true;s.erro="";admIlDesenha(id);
+  const dados={titulo:a.titulo,descricao:a.descricao,como:a.como||"",materiais:a.materiais||"",turmas:a.turmas||[],
+    correcao:s.n>0?"Esta é uma nova tentativa: crie uma versão diferente da anterior, com outra composição e outros detalhes, mantendo o mesmo estilo de desenho.":""};
+  let img=null,ok=false,err=null;
+  for(let k=1;k<=3&&!ok;k++){
+    try{img=await Promise.race([gerarImagem(dados),new Promise((_,rej)=>setTimeout(()=>rej(new Error("tempo esgotado (60 s) sem resposta do servidor")),60000))]);ok=true}
+    catch(e){err=e;try{console.error("Erro ao gerar imagem:",e)}catch(_){}if(k<3)await new Promise(r=>setTimeout(r,1200))}
+  }
+  s.busy=false;admIlBusy=false;
+  if(ok){s.n++;s.img=img;s.erro=""}
+  else s.erro=String((err&&err.code?err.code+" — ":"")+((err&&err.message)||err)).slice(0,300);
+  admIlDesenha(id)}
+async function admIlSim(id){
+  const s=admIl[id];
+  if(!s||!s.img||s.busy)return;
+  try{await admIlSalva(id,{imagem:s.img,imagemAprovada:true,geracoes:s.n});s.feito=true;s.img=null;toast("Ilustração salva na ficha.")}
+  catch(e){toast("Não consegui salvar agora. Tente de novo.")}
+  admIlDesenha(id)}
+async function admIlNao(id){
+  const s=admIl[id];
+  if(!s||s.busy)return;
+  if(s.n>=IL_MAX){
+    try{await admIlSalva(id,{imagemEncerrada:true,geracoes:s.n});s.fim=true;s.img=null;toast("Pronto. Esta ficha ficará sem ilustração.")}
+    catch(e){toast("Não consegui salvar agora. Tente de novo.")}
+    admIlDesenha(id);return}
+  s.img=null;await admIlGera(id)}
+
 $("#addlg").addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.ab){d.open?admAbertas.add(d.dataset.ab):admAbertas.delete(d.dataset.ab)}},true);
 $("#addlg").addEventListener("click",async e=>{
   const t=e.target;
@@ -2111,6 +2185,9 @@ $("#addlg").addEventListener("click",async e=>{
   if(t.id==="adVidVolta"){await admVideoVolta();return}
   if(t.id==="adFolhaOk"){await admFolhaSalva();return}
   if(t.id==="adFolhaVolta"){await admFolhaVolta();return}
+  const il=t.closest("[data-ilgen],[data-ilsim],[data-ilnao]");
+  if(il){const id=il.dataset.ilgen||il.dataset.ilsim||il.dataset.ilnao;
+    if(il.dataset.ilgen)await admIlGera(id);else if(il.dataset.ilsim)await admIlSim(id);else await admIlNao(id);return}
   if(t.id==="adEntra"){
     if(($("#adCod").value||"").trim()===COD_ADMIN){admLogado=true;admLista()}
     else{toast("Código incorreto.");$("#adCod").value=""}
