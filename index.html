@@ -725,8 +725,31 @@ body:not(.home) #qrbloco{display:none}
 .mdl-box input,.mdl-box textarea{width:100%;box-sizing:border-box;margin-top:4px;font:inherit}
 .mdl-box textarea{min-height:110px}
 .mdl-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
 .mdl-aviso{font-size:.8rem;color:var(--mut);margin:6px 0 0}
+.mh-box{max-width:620px}
+.mh-lbl{display:block;font-weight:700;font-size:.9rem;margin:10px 0 4px}
+.mh-q{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px;height:28vh;height:28dvh;min-height:120px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;white-space:pre-wrap;line-height:1.45;font-size:.96rem}
+.mh-q.ia{border-color:var(--pri);box-shadow:0 0 0 3px var(--soft)}
+.mh-load{color:var(--mut);font-style:italic}
+.mh-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mh-acoes .btn{flex:1 1 140px}
 </style>
+<div class="mdl" id="mhModal" hidden role="dialog" aria-modal="true" aria-labelledby="mhT">
+  <div class="mdl-box mh-box">
+    <button class="mdl-x" id="mhX" type="button" aria-label="Fechar">×</button>
+    <h2 id="mhT">Melhorar a descrição</h2>
+    <p class="var-sub">A IA só organiza o que você escreveu, sem inventar nada. Você decide qual texto fica.</p>
+    <span class="mh-lbl">Seu texto</span>
+    <div class="mh-q" id="mhOrig" tabindex="0"></div>
+    <span class="mh-lbl">Sugestão da IA</span>
+    <div class="mh-q ia" id="mhIA" tabindex="0"></div>
+    <div class="mh-acoes">
+      <button class="btn sec" id="mhManter" type="button">Manter o meu</button>
+      <button class="btn" id="mhUsar" type="button" disabled>Usar o da IA</button>
+    </div>
+  </div>
+</div>
 <div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
   <div class="mdl-box">
     <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
@@ -788,6 +811,7 @@ body:not(.home) #qrbloco{display:none}
   </details>
   <label>Nome da atividade<input id="t" maxlength="80" required placeholder="Ex.: Corrida do saco"></label>
   <label>Descrição breve da atividade<textarea id="d" maxlength="500" required placeholder="Ex.: As crianças ficam em roda. Uma é o pegador e corre atrás das outras. Quem for tocado vira o novo pegador."></textarea><span class="aj cnt" id="dCnt"></span></label>
+  <button type="button" class="btn sec" id="melhd" hidden>✍️ Melhorar descrição com IA</button>
   <label><span>Informações complementares <small>(opcional)</small></span><textarea id="c" maxlength="500" placeholder="Ex.: 15 minutos, espaço pequeno, pode ser feita sentada"></textarea></label>
   <label><span>Materiais <small>(opcional)</small></span><input id="mat" maxlength="200" placeholder="Ex.: tecido, cone, caixa de som"></label>
   <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="au" maxlength="60" placeholder="Ex.: CEI Ana Amélia Bezerra de Menezes"></label>
@@ -973,7 +997,7 @@ async function init(){
   try{
     if(window.claude&&claude.use){
       const [db,user,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);
-      sample=sm;if(sample)$("#ia").hidden=false;
+      sample=sm;if(sample){$("#ia").hidden=false;$("#melhd").hidden=false}
       const cw=user?await user.can("data.write"):null;
       if(db&&cw!==false){
         const A=db.collection("atividades"),V=db.collection("votos"),R=db.collection("denuncias"),AV=db.collection("avaliacoes"),RA=db.collection("denAval");
@@ -1157,6 +1181,50 @@ $("#ia").onclick=async()=>{
   cats.classList.remove("atualiza");
   b.disabled=false;
 };
+/* Melhorar descrição com IA: janela com dois quadros (original em cima, sugestão embaixo), rolagem sincronizada */
+(function(){
+  const M=$("#mhModal"),O=$("#mhOrig"),A=$("#mhIA"),usar=$("#mhUsar");
+  let sugestao="",sync=false,tok=0;
+  function fecha(){tok++;M.hidden=true}
+  function espelha(de,para){
+    de.addEventListener("scroll",()=>{
+      if(sync)return;
+      const m=de.scrollHeight-de.clientHeight;if(m<=0)return;
+      const r=de.scrollTop/m;
+      sync=true;para.scrollTop=r*(para.scrollHeight-para.clientHeight);
+      requestAnimationFrame(()=>{sync=false});
+    },{passive:true});
+  }
+  espelha(O,A);espelha(A,O);
+  $("#mhX").onclick=fecha;
+  $("#mhManter").onclick=fecha;
+  M.addEventListener("click",e=>{if(e.target===M)fecha()});
+  usar.onclick=()=>{
+    if(!sugestao)return;
+    const d=$("#d");d.value=sugestao.slice(0,500);
+    d.dispatchEvent(new Event("input",{bubbles:true}));
+    fecha();toast("Descrição atualizada. Confira antes de publicar.");
+  };
+  $("#melhd").onclick=async()=>{
+    const d=$("#d").value.trim();
+    if(d.length<15){toast("Escreva a descrição primeiro.");return}
+    const meu=++tok;
+    sugestao="";usar.disabled=true;
+    O.textContent=d;O.scrollTop=0;
+    A.innerHTML='<span class="mh-load">A IA está organizando o seu texto…</span>';A.scrollTop=0;
+    M.hidden=false;
+    try{
+      const r=await sample.json('Você ajuda professores de Educação Física da educação infantil a deixar a descrição de uma atividade mais clara para outros professores. Reescreva o texto abaixo em português do Brasil, com frases simples e organizadas (como começa, o que as crianças fazem, como termina), corrigindo erros de escrita. REGRAS: preserve o sentido, a lógica e todas as ideias do professor; não invente regras, materiais, variações, objetivos ou detalhes que ele não citou; não use nomes de crianças; mantenha o texto com no máximo 480 caracteres. Responda só JSON no formato {"texto":"..."}.\nNome da atividade: '+$("#t").value.trim()+'\nTexto do professor: '+d);
+      if(meu!==tok)return;
+      const t=String((r&&r.texto)||"").trim();
+      if(!t)throw 0;
+      sugestao=t;A.textContent=t;usar.disabled=false;
+    }catch(e){
+      if(meu!==tok)return;
+      A.innerHTML='<span class="mh-load">Não consegui melhorar agora. Você pode manter o seu texto.</span>';
+    }
+  };
+})();
 let _pendente=null;
 $("#enviar").onclick=()=>{
   if(G.publicada||G.busy)return;
