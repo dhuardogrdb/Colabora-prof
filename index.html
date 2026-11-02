@@ -256,6 +256,7 @@ dialog.fichaD p{margin:0 0 12px;font-size:.9rem;color:var(--mut)}
 .fx-b svg{width:20px;height:20px;display:block}
 .fx-b:hover,.fx-b:focus-visible{background:#d6334a;border-color:#fff;color:#fff;transform:scale(1.06)}
 .fx-b:focus-visible{outline:3px solid #fff;outline-offset:2px}
+#errTela .fx-b{position:fixed;z-index:2147483647}
 @keyframes fxIn{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.fx-b{animation:none}}
 
@@ -669,7 +670,7 @@ body:not(.home) #qrbloco{display:none}
       <a class="sb" id="shTg" target="_blank" rel="noopener noreferrer" href="#"><span class="ic tg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M3.5 11.2L19.8 4.6c.8-.3 1.4.2 1.2 1.2l-2.8 13c-.2.9-.8 1.1-1.5.7l-4.2-3.1-2 2c-.2.2-.4.4-.8.4l.3-4.3 7.8-7c.3-.3-.1-.4-.5-.2L8.1 13.2 3.9 12c-.9-.3-.9-.9.2-1.3z"/></svg></span>Telegram</a>
       <button class="sb" id="shCp" type="button"><span class="ic cp"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/></svg></span>Copiar link</button>
     </div>
-    <p class="qrn">No Instagram, o botão copia o link para você colar na bio, no story ou numa mensagem.</p>
+    <p class="qrn">No Instagram, o botão abre a lista de aplicativos do aparelho com uma imagem do QR Code e o link, para você enviar por mensagem ou postar no story. Se o aparelho não permitir, o link é copiado.</p>
   </div>
 </section>
 
@@ -746,8 +747,8 @@ body:not(.home) #qrbloco{display:none}
     <button class="mdl-x" id="sugX" type="button" aria-label="Fechar">×</button>
     <h2 id="sugT">Sugestões para a plataforma</h2>
     <p class="var-sub">O que você mudaria ou acrescentaria no Colabora, Prof?</p>
-    <label>Sua sugestão<textarea id="sugTx" maxlength="500" placeholder="Ex.: Seria bom poder filtrar por tempo de duração."></textarea></label>
-    <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="sugNm" maxlength="60"></label>
+    <label>Deixe sua sugestão<textarea id="sugTx" maxlength="500" placeholder="Ex.: Seria bom poder filtrar por tempo de duração."></textarea></label>
+    <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="sugNm" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"></label>
     <div class="mdl-acoes"><button class="btn" id="sugEnv" type="button">Enviar</button></div>
   </div>
 </div>
@@ -1888,6 +1889,7 @@ async function gerar(corr){
       let box=document.getElementById("errDiag");
       if(!box){box=document.createElement("div");box.id="errDiag";box.className="note";box.style.cssText="word-break:break-word;font-size:.78rem;white-space:pre-wrap;user-select:text";$("#genFalha").appendChild(box)}
       box.textContent="Detalhe técnico (mostre ao Eduardo/Claude):\n"+msg;try{console.error("Detalhe completo do erro de imagem:",msg)}catch(_){}
+       mostraErroTela("Não foi possível gerar a imagem (formulário)",msg);
     }catch(_){}
   }
   G.busy=false;
@@ -1986,6 +1988,19 @@ async function qrBaixa(){
       if(!J){toast("Não consegui montar o PDF agora.");return}
       const doc=new J({unit:"mm",format:"a4",orientation:"portrait"});
       doc.addImage(cfg?cfg.dados:FOLHA_A4,"JPEG",0,0,210,297,undefined,"FAST");
+      /* arte original: cobre o QR antigo e desenha o QR do endereco atual no mesmo lugar */
+      if(!cfg){
+        try{
+          const url=qrUrl(),mq=url?qrMatriz(url):null;
+          if(mq){
+            const PX=210/1055;                       /* mm por pixel da imagem (1055 x 1491) */
+            const bx=625*PX,by=678*PX,bw=299*PX,bh=285*PX; /* miolo branco do quadro, dentro da borda verde-agua */
+            doc.setFillColor(255,255,255);doc.rect(bx,by,bw,bh,"F");
+            const n=mq.length,z=2,lado=Math.min(bw,bh),cel=lado/(n+2*z);
+            const qx=bx+(bw-cel*n)/2,qy=by+(bh-cel*n)/2;
+            doc.setFillColor(0,0,0);
+            for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(mq[r][c])doc.rect(qx+c*cel,qy+r*cel,cel+.02,cel+.02,"F")}
+        }catch(e){}}
       blob=doc.output("blob")}
   }catch(e){toast("Não consegui montar o PDF agora.");return}
   let d=null;
@@ -1994,12 +2009,81 @@ async function qrBaixa(){
   try{await d.save({filename:"colabora-prof-folha-a4.pdf",data:blob});toast("PDF pronto. Imprima e cole na sala dos professores.")}
   catch(e){if(!e||e.code!=="declined")toast("Não consegui baixar agora.")}
 }
+
+/* ===== Compartilhar no Instagram: arte quadrada com QR Code grande ===== */
+function artePostagem(url){
+  return new Promise(function(ok,er){
+    try{
+      var m=qrMatriz(url);if(!m){er(new Error("sem qr"));return}
+      var W=1080,c=document.createElement("canvas");c.width=W;c.height=W;
+      var x=c.getContext("2d");
+      x.fillStyle="#fffaf3";x.fillRect(0,0,W,W);
+      x.fillStyle="#0f8b8d";x.fillRect(0,0,W,22);
+      x.fillStyle="#e8590c";x.fillRect(0,W-22,W,22);
+      x.textAlign="center";x.textBaseline="alphabetic";
+      x.fillStyle="#0f8b8d";x.font="800 84px 'Fredoka','Trebuchet MS',system-ui,sans-serif";
+      x.fillText("Colabora, ",W/2-66,128);
+      var w1=x.measureText("Colabora, ").width;
+      x.fillStyle="#e8590c";x.textAlign="left";x.fillText("Prof",W/2-66+w1/2,128);
+      x.textAlign="center";
+      x.fillStyle="#2a2430";x.font="600 38px system-ui,sans-serif";
+      x.fillText("Atividades de Educação Física da educação infantil",W/2,190);
+      x.fillText("compartilhadas por professores",W/2,238);
+      var n=m.length,z=2,tot=n+2*z,box=600,cel=Math.floor(box/tot),lado=cel*tot;
+      var qx=Math.round((W-lado)/2),qy=262;
+      x.fillStyle="#fff";x.fillRect(qx-18,qy-18,lado+36,lado+36);
+      x.fillStyle="#000";
+      for(var r=0;r<n;r++)for(var k=0;k<n;k++)if(m[r][k])x.fillRect(qx+(k+z)*cel,qy+(r+z)*cel,cel,cel);
+      x.fillStyle="#e8590c";x.font="800 46px system-ui,sans-serif";
+      x.fillText("Aponte a câmera e participe",W/2,qy+lado+18+58);
+      x.fillStyle="#6b6275";x.font="500 30px system-ui,sans-serif";
+      var t=url.replace(/^https?:\/\//,"");if(t.length>46)t=t.slice(0,45)+"…";
+      x.fillText(t,W/2,qy+lado+18+104);
+      c.toBlob(function(b){b?ok(b):er(new Error("sem imagem"))},"image/png");
+    }catch(e){er(e)}
+  });
+}
+async function compartilhaInstagram(){
+  var u=qrUrl();if(!u)return;
+  var texto="Conheça o Colabora, Prof: um espaço para professores de Educação Física da educação infantil compartilharem atividades. "+u;
+  try{
+    var blob=await artePostagem(u);
+    var file=new File([blob],"colabora-prof.png",{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],text:texto,title:"Colabora, Prof"});return}
+  }catch(e){if(e&&e.name==="AbortError")return}
+  try{if(navigator.share){await navigator.share({title:"Colabora, Prof",text:texto,url:u});return}}catch(e){if(e&&e.name==="AbortError")return}
+  copiaLink("Link copiado. Cole no Instagram, na bio, no story ou em uma mensagem.");
+}
+
 $("#qrUrl").value=SITE_URL;
 $("#qrUrl").addEventListener("input",qrDesenha);
 $("#qrPdf").onclick=qrBaixa;
-$("#shIg").onclick=()=>copiaLink("Link copiado. Cole no Instagram, na bio, no story ou em uma mensagem.");
+$("#shIg").onclick=compartilhaInstagram;
 $("#shCp").onclick=()=>copiaLink("Link copiado.");
 qrDesenha();
+
+
+/* ===== Janelona de diagnostico de erro (tela cheia, com X) ===== */
+function mostraErroTela(titulo,texto){
+  try{
+    var old=document.getElementById("errTela");if(old)old.remove();
+    var w=document.createElement("div");w.id="errTela";
+    w.style.cssText="position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;font-family:system-ui,sans-serif";
+    var top=document.createElement("div");
+    top.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 72px 14px 16px;min-height:68px;background:#e8590c;color:#fff;flex:0 0 auto";
+    var h=document.createElement("div");h.style.cssText="font-weight:800;font-size:1.05rem";h.textContent=titulo||"Erro na geração da imagem por IA";
+    var x=document.createElement("button");x.type="button";x.className="fx-b";x.setAttribute("aria-label","Fechar");x.title="Fechar";
+    x.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>';
+    x.onclick=function(){w.remove()};
+    top.appendChild(h);top.appendChild(x);
+    var corpo=document.createElement("div");
+    corpo.style.cssText="flex:1 1 auto;overflow:auto;padding:16px;font-size:.95rem;line-height:1.45;white-space:pre-wrap;word-break:break-word;user-select:text;color:#222";
+    corpo.textContent="Tire um print desta tela inteira e envie ao Claude.\n\n"+texto;
+    w.appendChild(top);w.appendChild(corpo);
+    document.body.appendChild(w);
+  }catch(e){try{alert((titulo||"Erro")+"\n\n"+texto)}catch(_){}}
+}
 
 /* ===== Painel de administrador (fase de teste) ===== */
 const COD_ADMIN="3410";
@@ -2027,17 +2111,16 @@ function admLista(){
     '<input id="adVid" type="url" inputmode="url" placeholder="https://youtu.be/..." autocomplete="off" style="width:100%;box-sizing:border-box;margin:4px 0 8px">'+
     '<div class="row"><button class="btn" id="adVidOk" type="button">Atualizar vídeo</button>'+(vOk?'<button class="btn sec" id="adVidVolta" type="button">Voltar ao vídeo original</button>':'')+'</div></div>';
   const nomeAt=id=>{const x=acts.find(q=>q.id===id);return x?x.titulo:"(atividade apagada)"};
-  const VR=vars.slice().sort((a,b)=>(b.t||0)-(a.t||0)),SG=sugs.slice().sort((a,b)=>(b.t||0)-(a.t||0));
-  const lVr=VR.length?VR.map(v=>'<div class="adm-item"><b>'+esc(nomeAt(v.a))+'</b><small>'+esc(v.nome||"Professor(a)")+' · denúncias: '+(repsV[v.id]||0)+'</small><p style="margin:6px 0 0">'+esc(v.texto)+'</p><button class="adm-del" data-xdel="variacoes:'+esc(v.id)+'" type="button">Apagar variação</button></div>').join(""):'<div class="empty">Nenhuma variação.</div>';
+  const VR=vars.filter(v=>(repsV[v.id]||0)>0).sort((a,b)=>(repsV[b.id]||0)-(repsV[a.id]||0)||(b.t||0)-(a.t||0)),SG=sugs.slice().sort((a,b)=>(b.t||0)-(a.t||0));
+  const lVr=VR.length?VR.map(v=>'<div class="adm-item"><b>'+esc(nomeAt(v.a))+'</b><small>'+esc(v.nome||"Professor(a)")+' · denúncias: '+(repsV[v.id]||0)+'</small><p style="margin:6px 0 0">'+esc(v.texto)+'</p><button class="adm-del" data-xdel="variacoes:'+esc(v.id)+'" type="button">Apagar variação</button></div>').join(""):'<div class="empty">Nenhuma variação denunciada.</div>';
   const lSg=SG.length?SG.map(x=>'<div class="adm-item"><small>'+esc(x.nome||"Anônimo")+' · '+(x.t?new Date(x.t).toLocaleString("pt-BR"):"sem data")+'</small><p style="margin:6px 0 0">'+esc(x.texto)+'</p><button class="adm-del" data-xdel="sugestoes:'+esc(x.id)+'" type="button">Apagar sugestão</button></div>').join(""):'<div class="empty">Nenhuma sugestão.</div>';
   const lAt=A.length?A.map(a=>'<div class="adm-item"><b>'+esc(a.titulo)+'</b><small>'+esc((a.turmas||[]).join(", "))+' · '+esc(a.unidade||"")+' · denúncias: '+(reps[a.id]||0)+'</small><p style="margin:6px 0 0">'+esc(String(a.descricao||"").slice(0,160))+'</p><button class="adm-del" data-adel="'+esc(a.id)+'" type="button">Apagar atividade</button></div>').join(""):'<div class="empty">Nenhuma atividade.</div>';
   const lAv=V.length?V.map(x=>'<div class="adm-item"><small>'+(x.t?new Date(x.t).toLocaleString("pt-BR"):"sem data")+'</small><p style="margin:6px 0 0">'+esc(((x.m||"")+" "+(x.n||"")).trim()||"(somente respostas marcadas, sem texto)")+'</p><button class="adm-del" data-vdel="'+esc(x.id)+'" type="button">Apagar avaliação</button></div>').join(""):'<div class="empty">Nenhuma avaliação.</div>';
   $("#adBody").innerHTML='<h2>🔒 Administrador</h2>'+
-    '<div class="adm-bar"><button class="btn sec" id="adSai" type="button">Sair</button><button class="btn sec" id="adFecha" type="button">Fechar</button></div>'+
+    '<div class="fx"><button type="button" class="fx-b" id="adSai" aria-label="Sair e fechar" title="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>'+
     admAtencao(A,V)+
     admAba("man","Manutenção do site",manut+manutV)+
-    admAba("ati","Atividades ("+A.length+")",lAt)+admAba("ilu",admIluTitulo(A),admIluCorpo(A))+
-    admAba("var","Variações ("+VR.length+")",lVr)+
+    admAba("ilu",admIluTitulo(A),admIluCorpo(A))+
     admAba("sug","Sugestões para a plataforma ("+SG.length+")",lSg)+
     admAba("ava","Avaliações de experiência ("+V.length+")",lAv);
 }
@@ -2049,8 +2132,8 @@ function admAtencao(A,V){
   if(!n)return"";
   let h='<p style="margin:0 0 8px;color:var(--mut)">Do mais denunciado para o menos. Se algo estiver errado, apague na hora, sem esperar chegar a '+LIMITE_DEN+' denúncias.</p>';
   h+=DA.map(a=>'<div class="adm-item"><b>'+esc(a.titulo)+'</b><small>Atividade · denúncias: '+(reps[a.id]||0)+' de '+LIMITE_DEN+'</small><p style="margin:6px 0 0">'+esc(String(a.descricao||"").slice(0,300))+'</p><button class="adm-del" data-adel="'+esc(a.id)+'" type="button">Apagar atividade</button></div>').join("");
-  h+=DV.map(x=>'<div class="adm-item"><b>Avaliação de experiência</b><small>Denúncias: '+(repsA[x.id]||0)+' de '+LIMITE_DEN+'</small><p style="margin:6px 0 0">'+esc(((x.m||"")+" "+(x.n||"")).trim()||"(somente respostas marcadas, sem texto)")+'</p><button class="adm-del" data-vdel="'+esc(x.id)+'" type="button">Apagar avaliação</button></div>').join("");
-  h+=DX.map(v=>'<div class="adm-item"><b>Variação</b><small>Denúncias: '+(repsV[v.id]||0)+' de '+LIMITE_DEN+'</small><p style="margin:6px 0 0">'+esc(v.texto)+'</p><button class="adm-del" data-xdel="variacoes:'+esc(v.id)+'" type="button">Apagar variação</button></div>').join("");
+  h+=DV.map(x=>'<div class="adm-item"><b>Avaliação de experiência</b><small>Avaliação · denúncias: '+(repsA[x.id]||0)+' de '+LIMITE_DEN+'</small><p style="margin:6px 0 0">'+esc(((x.m||"")+" "+(x.n||"")).trim()||"(somente respostas marcadas, sem texto)")+'</p><button class="adm-del" data-vdel="'+esc(x.id)+'" type="button">Apagar avaliação</button></div>').join("");
+  h+=DX.map(v=>'<div class="adm-item"><b>'+esc((acts.find(q=>q.id===v.a)||{}).titulo||"(atividade apagada)")+'</b><small>Variação · '+esc(v.nome||"Professor(a)")+' · denúncias: '+(repsV[v.id]||0)+' de '+LIMITE_DEN+'</small><p style="margin:6px 0 0">'+esc(v.texto)+'</p><button class="adm-del" data-xdel="variacoes:'+esc(v.id)+'" type="button">Apagar variação</button></div>').join("");
   return'<details class="adm-ab adm-den" data-ab="den"'+(admAbertas.has("den")?" open":"")+'><summary>⚠️ DENÚNCIA: '+n+(n===1?" item precisa":" itens precisam")+' de atenção</summary><div class="adm-ab-c">'+h+'</div></details>'}
 function admFolhaCfg(){return folhaCfg||(store&&!store.live?ls("cp_folha"):null)}
 function admFolhaStatus(){const c=admFolhaCfg();return c?'Valendo agora: '+esc(c.nome||"arquivo enviado")+' (enviado em '+new Date(c.t).toLocaleString("pt-BR")+')':'Valendo agora: a arte original do site.'}
@@ -2122,7 +2205,7 @@ const admIl={};
 let admIlBusy=false;
 const ilPend=A=>A.filter(a=>!a.imagem&&!a.imagemEncerrada);
 const ilFim=A=>A.filter(a=>!a.imagem&&a.imagemEncerrada);
-function admIluTitulo(A){return"🎨 Fichas sem ilustração ("+ilPend(A).length+")"}
+function admIluTitulo(A){return"Fichas sem ilustração ("+ilPend(A).length+")"}
 function admIlItem(a){
   const s=admIl[a.id]||{n:0},desc=String(a.descricao||"");
   let h='<b>'+esc(a.titulo)+'</b><small>'+esc((a.turmas||[]).join(", "))+' · '+esc(a.unidade||"")+'</small><p style="margin:6px 0 0">'+esc(desc.slice(0,160))+'</p>';
@@ -2135,7 +2218,7 @@ function admIlItem(a){
     h+='<small>Tentativa '+s.n+' de '+IL_MAX+'</small><p style="margin:6px 0 0;font-weight:700">Esta ilustração condiz com a atividade?</p>';
     h+='<div class="il-bt"><button type="button" class="btn" data-ilsim="'+esc(a.id)+'">✅ Sim, usar esta</button><button type="button" class="btn sec" data-ilnao="'+esc(a.id)+'">'+(s.n<IL_MAX?'❌ Não, gerar outra':'❌ Não, deixar sem ilustração')+'</button></div>';
     return h}
-  if(s.erro)h+='<div class="note" style="margin-top:8px;word-break:break-word">Não consegui criar a imagem agora. Esta tentativa não foi contada.<br><small>Detalhe técnico: '+esc(s.erro)+'</small></div>';
+  if(s.erro)h+='<div class="note" style="margin-top:8px;word-break:break-word">Não consegui criar a imagem agora. Esta tentativa não foi contada.<br><small style="display:block;white-space:pre-wrap;user-select:text;word-break:break-word">Detalhe técnico: '+esc(s.erro)+'</small></div>';
   h+='<div class="il-bt"><button type="button" class="btn" data-ilgen="'+esc(a.id)+'">'+(s.erro?'🎨 Tentar de novo':'🎨 Gerar ilustração')+'</button></div>';
   return h}
 function admIluCorpo(A){
@@ -2169,7 +2252,8 @@ async function admIlGera(id){
   }
   s.busy=false;admIlBusy=false;
   if(ok){s.n++;s.img=img;s.erro=""}
-  else s.erro=String((err&&err.code?err.code+" — ":"")+((err&&err.message)||err)).slice(0,300);
+  else s.erro=String((err&&err.name?err.name+" | ":"")+(err&&err.code?"codigo: "+err.code+" | ":"")+"mensagem: "+((err&&err.message)||err)+(err&&err.stack?" | pilha: "+String(err.stack).split("\n").slice(0,6).join(" | "):"")).slice(0,2000);
+  if(!ok)mostraErroTela("Não foi possível gerar a imagem (administrador)",s.erro);
   admIlDesenha(id)}
 async function admIlSim(id){
   const s=admIl[id];
@@ -2190,7 +2274,7 @@ $("#addlg").addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.da
 $("#addlg").addEventListener("click",async e=>{
   const t=e.target;
   if(t.id==="adFecha"){$("#addlg").close();return}
-  if(t.id==="adSai"){admLogado=false;$("#addlg").close();toast("Você saiu da área do administrador.");return}
+  if(t.closest&&t.closest("#adSai")){admLogado=false;$("#addlg").close();toast("Você saiu da área do administrador.");return}
   if(t.id==="adVidOk"){await admVideoSalva();return}
   if(t.id==="adVidVolta"){await admVideoVolta();return}
   if(t.id==="adFolhaOk"){await admFolhaSalva();return}
@@ -2241,14 +2325,14 @@ $("#varEnv").onclick=async()=>{
   try{await store.varAdd({a:varAtual,nome:nome,texto:texto,t:Date.now()});ls("cp_nome",nome);$("#varTx").value="";varFormAberto=false;varDesenha();toast("Variação enviada. Obrigado por colaborar!")}
   catch(e){toast("Não consegui enviar agora. Tente de novo.")}
   b.disabled=false};
-$("#sugAbre").onclick=()=>{const n=ls("cp_nome");if(n&&!$("#sugNm").value)$("#sugNm").value=n;$("#sugModal").hidden=false;$("#sugTx").focus()};
+$("#sugAbre").onclick=()=>{$("#sugNm").value="";$("#sugModal").hidden=false;$("#sugTx").focus()};
 $("#sugX").onclick=()=>{$("#sugModal").hidden=true};
 $("#sugModal").addEventListener("click",e=>{if(e.target.id==="sugModal")$("#sugModal").hidden=true});
 $("#sugEnv").onclick=async()=>{
   const texto=$("#sugTx").value.trim(),nome=$("#sugNm").value.trim(),b=$("#sugEnv");
   if(!texto){toast("Escreva sua sugestão antes de enviar.");return}
   b.disabled=true;
-  try{await store.sugAdd({nome:nome,texto:texto,t:Date.now()});ls("cp_nome",nome);$("#sugTx").value="";$("#sugModal").hidden=true;toast("Sugestão enviada. Obrigado por ajudar a plataforma!")}
+  try{await store.sugAdd({nome:nome,texto:texto,t:Date.now()});$("#sugTx").value="";$("#sugNm").value="";$("#sugModal").hidden=true;toast("Sugestão enviada. Obrigado por ajudar a plataforma!")}
   catch(e){toast("Não consegui enviar agora. Tente de novo.")}
   b.disabled=false};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("#varModal").hidden)varFecha();if(!$("#sugModal").hidden)$("#sugModal").hidden=true}});
