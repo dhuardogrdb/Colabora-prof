@@ -1,13 +1,13 @@
 <!doctype html><html><head><meta charset=utf8><meta name="color-scheme" content="light"><meta name="theme-color" content="#fffaf3"><script>
-/* Colabora, Prof: ponte entre o site e o Firebase (Firestore + Gemini) */
+/* Colabora, Prof: ponte entre o site e o Firebase (Firestore + Gemini via Vertex/Agent Platform, cobrado no faturamento do Google Cloud) */
 (function(){
 var CFG={apiKey:"AIzaSyBvZoAr0o02TaqpNz5MJbc-wT1xpIY1eDQ",authDomain:"colabora-prof.firebaseapp.com",projectId:"colabora-prof",storageBucket:"colabora-prof.firebasestorage.app",messagingSenderId:"665398636400",appId:"1:665398636400:web:bbd177e29f7879620429b5"};
-var MODELO_TEXTO="gemini-2.5-flash";
+var MODELO_TEXTO="gemini-3.5-flash-lite";
 var MODELO_IMAGEM="gemini-nano-banana-2.1";
 var B="https://www.gstatic.com/firebasejs/11.10.0/",fb=null;
 function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js"),import(B+"firebase-ai.js")]).then(function(m){
   var app=m[0].initializeApp(CFG);
-  return{F:m[1],AI:m[2],db:m[1].getFirestore(app),ai:m[2].getAI(app,{backend:new m[2].GoogleAIBackend()})};
+  return{F:m[1],AI:m[2],db:m[1].getFirestore(app),ai:m[2].getAI(app,{backend:(m[2].AgentPlatformBackend?new m[2].AgentPlatformBackend("global"):new m[2].VertexAIBackend("global"))})};
 }))}
 function col(c,name,cons){
   var F=c.F,ref=F.collection(c.db,name),q=function(){return cons.length?F.query.apply(null,[ref].concat(cons)):ref};
