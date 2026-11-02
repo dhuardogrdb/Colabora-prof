@@ -727,29 +727,33 @@ body:not(.home) #qrbloco{display:none}
 .mdl-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
 .mdl-aviso{font-size:.8rem;color:var(--mut);margin:6px 0 0}
-.mh-box{max-width:620px}
-.mh-lbl{display:block;font-weight:700;font-size:.9rem;margin:10px 0 4px}
-.mh-q{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px;height:28vh;height:28dvh;min-height:120px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;white-space:pre-wrap;line-height:1.45;font-size:.96rem}
+#mhModal{border:0;border-radius:20px;padding:0;width:min(680px,95vw);max-height:94vh;max-height:94dvh;background:var(--card);color:var(--ink);overflow:hidden}
+#mhModal::backdrop{background:rgba(20,16,26,.72)}
+#mhModal .mdl-box{max-width:none;max-height:94vh;max-height:94dvh;border-radius:20px;box-shadow:none}
+.mh-box{max-width:none}
+.mh-campo{margin:0 0 14px;padding:0 0 12px;border-bottom:1px solid var(--line)}
+.mh-campo:last-of-type{border-bottom:0}
+.mh-campo h3{margin:0 0 6px;font-size:1rem}
+.mh-lbl{display:block;font-weight:700;font-size:.8rem;color:var(--mut);margin:8px 0 3px;text-transform:uppercase;letter-spacing:.03em}
+.mh-q{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:9px 12px;max-height:22vh;max-height:22dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;white-space:pre-wrap;line-height:1.45;font-size:.95rem;min-height:2.6em}
 .mh-q.ia{border-color:var(--pri);box-shadow:0 0 0 3px var(--soft)}
+.mh-vazio{color:var(--mut);font-style:italic}
 .mh-load{color:var(--mut);font-style:italic}
-.mh-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mh-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;position:sticky;bottom:0;background:var(--card);padding:10px 0 2px}
 .mh-acoes .btn{flex:1 1 140px}
 </style>
-<div class="mdl" id="mhModal" hidden role="dialog" aria-modal="true" aria-labelledby="mhT">
+<dialog id="mhModal" aria-labelledby="mhT">
   <div class="mdl-box mh-box">
     <button class="mdl-x" id="mhX" type="button" aria-label="Fechar">×</button>
-    <h2 id="mhT">Melhorar a descrição</h2>
-    <p class="var-sub">A IA só organiza o que você escreveu, sem inventar nada. Você decide qual texto fica.</p>
-    <span class="mh-lbl">Seu texto</span>
-    <div class="mh-q" id="mhOrig" tabindex="0"></div>
-    <span class="mh-lbl">Sugestão da IA</span>
-    <div class="mh-q ia" id="mhIA" tabindex="0"></div>
+    <h2 id="mhT">Melhorar o preenchimento</h2>
+    <p class="var-sub">A IA só organiza o que você escreveu, colocando cada informação no campo certo, sem inventar nada. Você decide o que fica.</p>
+    <div id="mhCampos"></div>
     <div class="mh-acoes">
-      <button class="btn sec" id="mhManter" type="button">Manter o meu</button>
-      <button class="btn" id="mhUsar" type="button" disabled>Usar o da IA</button>
+      <button class="btn sec" id="mhManter" type="button">Manter tudo como está</button>
+      <button class="btn" id="mhUsar" type="button" disabled>Usar as sugestões da IA</button>
     </div>
   </div>
-</div>
+</dialog>
 <div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
   <div class="mdl-box">
     <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
@@ -789,6 +793,11 @@ body:not(.home) #qrbloco{display:none}
 .dica{background:var(--soft);border-radius:12px;padding:10px 12px;color:var(--ink)}
 .ex{border:1px dashed var(--pri);border-radius:12px;padding:8px 12px;background:var(--bg)}
 .ex summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--pri)}
+.aviso-ia{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,var(--soft),var(--bg));border:2px solid var(--pri);border-radius:16px;padding:14px 16px;margin:10px 0 12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.aviso-ia .ai-ic{font-size:2rem;line-height:1;flex:none}
+.aviso-ia b{display:block;font-size:1.05rem;margin-bottom:4px;color:var(--ink)}
+.aviso-ia p{margin:0;font-size:.95rem;line-height:1.45;color:var(--ink)}
+.aviso-ia p+p{margin-top:6px}
 .exb{margin-top:8px;font-size:.88rem}.exb p{margin:0 0 6px}
 .mbx{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:6px}
 .mrow{display:flex;gap:8px;align-items:center}.mrow input{flex:1}.mrow .btn{white-space:nowrap}
@@ -798,6 +807,14 @@ body:not(.home) #qrbloco{display:none}
 <form id="f" method="dialog" onsubmit="return false">
   <div class="fx"><button type="button" class="fx-b" id="fechar" aria-label="Fechar formulário" title="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
   <h2>Formulário de compartilhamento de atividades</h2>
+  <div class="aviso-ia" role="note">
+    <span class="ai-ic" aria-hidden="true">✨</span>
+    <div>
+      <b>Este formulário conta com a ajuda de Inteligência Artificial</b>
+      <p>Em alguns momentos da ficha, você poderá pedir à IA para organizar e melhorar a sua escrita, além de sugerir as categorias da atividade.</p>
+      <p><b style="display:inline;font-size:inherit">A decisão final é sempre sua:</b> a IA só sugere, e nada muda sem a sua aprovação.</p>
+    </div>
+  </div>
   <details class="ex"><summary>👀 Ver um exemplo de ficha preenchida</summary>
     <div class="exb">
       <p class="aj">Escreva do seu jeito, com frases completas, sem abreviações, e use vírgulas para separar os itens.</p>
@@ -811,9 +828,9 @@ body:not(.home) #qrbloco{display:none}
   </details>
   <label>Nome da atividade<input id="t" maxlength="80" required placeholder="Ex.: Corrida do saco"></label>
   <label>Descrição breve da atividade<textarea id="d" maxlength="500" required placeholder="Ex.: As crianças ficam em roda. Uma é o pegador e corre atrás das outras. Quem for tocado vira o novo pegador."></textarea><span class="aj cnt" id="dCnt"></span></label>
-  <button type="button" class="btn sec" id="melhd" hidden>✍️ Melhorar descrição com IA</button>
   <label><span>Informações complementares <small>(opcional)</small></span><textarea id="c" maxlength="500" placeholder="Ex.: 15 minutos, espaço pequeno, pode ser feita sentada"></textarea></label>
   <label><span>Materiais <small>(opcional)</small></span><input id="mat" maxlength="200" placeholder="Ex.: tecido, cone, caixa de som"></label>
+  <button type="button" class="btn sec" id="melhd" hidden>✍️ Melhorar o preenchimento com IA</button>
   <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="au" maxlength="60" placeholder="Ex.: CEI Ana Amélia Bezerra de Menezes"></label>
   <fieldset id="tfs" style="border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0">
     <legend style="font-weight:600;font-size:.9rem;padding:0 6px">Onde a atividade foi realizada? <small style="font-weight:400;color:var(--mut)">(marque uma ou mais turmas)</small></legend>
@@ -1181,47 +1198,50 @@ $("#ia").onclick=async()=>{
   cats.classList.remove("atualiza");
   b.disabled=false;
 };
-/* Melhorar descrição com IA: janela com dois quadros (original em cima, sugestão embaixo), rolagem sincronizada */
+/* Melhorar o preenchimento com IA: janelona com os 4 campos (nome, descrição, complementares, materiais) */
 (function(){
-  const M=$("#mhModal"),O=$("#mhOrig"),A=$("#mhIA"),usar=$("#mhUsar");
-  let sugestao="",sync=false,tok=0;
-  function fecha(){tok++;M.hidden=true}
-  function espelha(de,para){
-    de.addEventListener("scroll",()=>{
-      if(sync)return;
-      const m=de.scrollHeight-de.clientHeight;if(m<=0)return;
-      const r=de.scrollTop/m;
-      sync=true;para.scrollTop=r*(para.scrollHeight-para.clientHeight);
-      requestAnimationFrame(()=>{sync=false});
-    },{passive:true});
+  const M=$("#mhModal"),C=$("#mhCampos"),usar=$("#mhUsar");
+  const CAMPOS=[["t","Nome da atividade"],["d","Descrição breve da atividade"],["c","Informações complementares"],["mat","Materiais"]];
+  let sug=null,tok=0;
+  function fecha(){tok++;if(M.open)M.close()}
+  function bloco(id,rot,orig,nova,load){
+    return '<div class="mh-campo"><h3>'+rot+'</h3>'+
+      '<span class="mh-lbl">Seu texto</span><div class="mh-q">'+(orig?esc(orig):'<span class="mh-vazio">(vazio)</span>')+'</div>'+
+      '<span class="mh-lbl">Sugestão da IA</span><div class="mh-q ia">'+(load?'<span class="mh-load">A IA está organizando…</span>':(nova?esc(nova):'<span class="mh-vazio">(vazio)</span>'))+'</div></div>';
   }
-  espelha(O,A);espelha(A,O);
+  function desenha(orig,nova,load){
+    C.innerHTML=CAMPOS.map(([id,rot])=>bloco(id,rot,orig[id],nova&&nova[id],load)).join("");
+  }
   $("#mhX").onclick=fecha;
   $("#mhManter").onclick=fecha;
   M.addEventListener("click",e=>{if(e.target===M)fecha()});
+  M.addEventListener("close",()=>{tok++});
   usar.onclick=()=>{
-    if(!sugestao)return;
-    const d=$("#d");d.value=sugestao.slice(0,500);
-    d.dispatchEvent(new Event("input",{bubbles:true}));
-    fecha();toast("Descrição atualizada. Confira antes de publicar.");
+    if(!sug)return;
+    const lim={t:80,d:500,c:500,mat:200};
+    CAMPOS.forEach(([id])=>{
+      const el=$("#"+id);if(!el)return;
+      el.value=String(sug[id]||"").slice(0,lim[id]);
+      el.dispatchEvent(new Event("input",{bubbles:true}));
+    });
+    fecha();toast("Campos atualizados. Confira antes de publicar.");
   };
   $("#melhd").onclick=async()=>{
-    const d=$("#d").value.trim();
-    if(d.length<15){toast("Escreva a descrição primeiro.");return}
+    const orig={t:$("#t").value.trim(),d:$("#d").value.trim(),c:$("#c").value.trim(),mat:$("#mat").value.trim()};
+    if((orig.t+orig.d+orig.c+orig.mat).length<15){toast("Preencha os campos primeiro.");return}
     const meu=++tok;
-    sugestao="";usar.disabled=true;
-    O.textContent=d;O.scrollTop=0;
-    A.innerHTML='<span class="mh-load">A IA está organizando o seu texto…</span>';A.scrollTop=0;
-    M.hidden=false;
+    sug=null;usar.disabled=true;
+    desenha(orig,null,true);
+    if(!M.open)M.showModal();
     try{
-      const r=await sample.json('Você ajuda professores de Educação Física da educação infantil a deixar a descrição de uma atividade mais clara para outros professores. Reescreva o texto abaixo em português do Brasil, com frases simples e organizadas (como começa, o que as crianças fazem, como termina), corrigindo erros de escrita. REGRAS: preserve o sentido, a lógica e todas as ideias do professor; não invente regras, materiais, variações, objetivos ou detalhes que ele não citou; não use nomes de crianças; mantenha o texto com no máximo 480 caracteres. Responda só JSON no formato {"texto":"..."}.\nNome da atividade: '+$("#t").value.trim()+'\nTexto do professor: '+d);
+      const r=await sample.json('Você ajuda professores de Educação Física da educação infantil a preencher corretamente o formulário de uma atividade. Às vezes o professor escreve tudo como uma história ou mistura as informações nos campos errados. Leia os quatro campos abaixo e redistribua o conteúdo, em português do Brasil, assim:\n- "t" (nome da atividade): curto, até 60 caracteres, sem pontuação final.\n- "d" (descrição breve): o que as crianças fazem, como começa e como termina, em frases simples. Até 480 caracteres.\n- "c" (informações complementares): só características, como duração, quantidade de crianças, tipo de espaço (sala, pátio), faixa etária, adaptações. Frases curtas ou itens separados por vírgula. Até 480 caracteres.\n- "mat" (materiais): SOMENTE uma lista curta de itens separados por vírgula, sem verbos, sem história, sem números, sem artigos. Exemplo: panos, tecidos, cones, caixa de som. Até 190 caracteres. Se não houver materiais, devolva string vazia.\nREGRAS: preserve o sentido e todas as ideias do professor; mova cada informação para o campo certo; não invente nada que ele não escreveu; não use nomes de crianças; corrija erros de escrita. Responda só JSON no formato {"t":"...","d":"...","c":"...","mat":"..."}.\nNome: '+orig.t+'\nDescrição: '+orig.d+'\nInformações complementares: '+orig.c+'\nMateriais: '+orig.mat);
       if(meu!==tok)return;
-      const t=String((r&&r.texto)||"").trim();
-      if(!t)throw 0;
-      sugestao=t;A.textContent=t;usar.disabled=false;
+      const n={};CAMPOS.forEach(([id])=>{n[id]=String((r&&r[id])||"").trim()});
+      if(!n.t&&!n.d&&!n.c&&!n.mat)throw 0;
+      sug=n;desenha(orig,n,false);usar.disabled=false;
     }catch(e){
       if(meu!==tok)return;
-      A.innerHTML='<span class="mh-load">Não consegui melhorar agora. Você pode manter o seu texto.</span>';
+      C.innerHTML='<p class="mh-load">Não consegui melhorar agora. Você pode manter o que escreveu.</p>';
     }
   };
 })();
