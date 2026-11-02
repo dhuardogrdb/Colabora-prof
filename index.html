@@ -3,7 +3,7 @@
 (function(){
 var CFG={apiKey:"AIzaSyBvZoAr0o02TaqpNz5MJbc-wT1xpIY1eDQ",authDomain:"colabora-prof.firebaseapp.com",projectId:"colabora-prof",storageBucket:"colabora-prof.firebasestorage.app",messagingSenderId:"665398636400",appId:"1:665398636400:web:bbd177e29f7879620429b5"};
 var MODELO_TEXTO="gemini-2.5-flash";
-var MODELO_IMAGEM="gemini-2.5-flash-image";
+var MODELO_IMAGEM="gemini-nano-banana-2.1";
 var B="https://www.gstatic.com/firebasejs/11.10.0/",fb=null;
 function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js"),import(B+"firebase-ai.js")]).then(function(m){
   var app=m[0].initializeApp(CFG);
@@ -29,9 +29,19 @@ window.claude={use:async function(n){
   if(n==="image"){return{gerar:async function(p){
     var c=await load();
     var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_IMAGEM,generationConfig:{responseModalities:[c.AI.ResponseModality.TEXT,c.AI.ResponseModality.IMAGE]}});
-    var r=await m.generateContent(p);
-    var im=r.response.inlineDataParts&&r.response.inlineDataParts();
-    if(!im||!im.length)throw new Error("sem imagem");
+    var r;
+    try{r=await m.generateContent(p)}
+    catch(e){
+      var msg=String((e&&e.message)||e);
+      if(/reading 'some'/.test(msg))throw new Error("O Google recusou o pedido sem conteudo (modelo "+MODELO_IMAGEM+" indisponivel para este projeto, ou resposta bloqueada). Detalhe original: "+msg);
+      throw e}
+    var resp=r&&r.response;
+    var im=resp&&resp.inlineDataParts&&resp.inlineDataParts();
+    if(!im||!im.length){
+      var motivo="";
+      try{var cand=resp&&resp.candidates&&resp.candidates[0];
+        motivo=(cand&&cand.finishReason?"finishReason="+cand.finishReason:"")+(resp&&resp.promptFeedback&&resp.promptFeedback.blockReason?" blockReason="+resp.promptFeedback.blockReason:"")}catch(_){}
+      throw new Error("sem imagem na resposta "+motivo)}
     return "data:"+im[0].inlineData.mimeType+";base64,"+im[0].inlineData.data}}}
   if(n==="sample"){return{json:async function(p){
     var c=await load();
