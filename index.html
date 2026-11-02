@@ -215,7 +215,13 @@ body.sc .hlogo{opacity:1;transform:none}
 #genOvT{font:700 1.3rem/1.25 "Fredoka","Trebuchet MS",system-ui,sans-serif;max-width:22ch}
 #genOvS{font-size:.95rem;opacity:.85;max-width:30ch}
 @keyframes giraG{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){#genOv .sp{animation-duration:2.4s}}
+@media(prefers-reduced-motion:reduce){#genOv .sp{animation-duration:2.4s}
+@keyframes viraAmp{0%,60%{transform:rotate(0)}85%,100%{transform:rotate(180deg)}}
+.amp{display:inline-block;animation:viraAmp 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.amp{animation:none}}
+#genBar{width:min(260px,70vw);height:10px;border-radius:999px;background:rgba(255,255,255,.25);overflow:hidden}
+#genBarI{display:block;height:100%;width:0;border-radius:999px;background:#fff}
+@media (prefers-reduced-motion:reduce){#genBarI{transition:none!important}}}
 dialog.fichaD{width:min(94vw,520px);padding:16px;text-align:center}
 dialog.fichaD img{width:100%;height:auto;border-radius:12px;display:block;margin-bottom:10px}
 dialog.fichaD p{margin:0 0 12px;font-size:.9rem;color:var(--mut)}
@@ -754,7 +760,7 @@ body:not(.home) #qrbloco{display:none}
 .mrow{display:flex;gap:8px;align-items:center}.mrow input{flex:1}.mrow .btn{white-space:nowrap}
 </style>
 <dialog id="dlg">
-<div id="genOv" hidden role="status" aria-live="polite"><div class="sp" aria-hidden="true"></div><div id="genOvT"></div><div id="genOvS"></div></div>
+<div id="genOv" hidden role="status" aria-live="polite"><div aria-hidden="true" style="font-size:3.4rem;line-height:1"><span class="amp">⏳</span></div><div id="genOvT"></div><div id="genOvS"></div><div id="genBar" aria-hidden="true"><i id="genBarI"></i></div></div>
 <form id="f" method="dialog" onsubmit="return false">
   <div class="fx"><button type="button" class="fx-b" id="fechar" aria-label="Fechar formulário" title="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
   <h2>Formulário de compartilhamento de atividades</h2>
@@ -786,7 +792,7 @@ body:not(.home) #qrbloco{display:none}
   </div>
   <div class="note">Evite nomes de crianças e dados pessoais. A ilustração será feita por IA, nunca com foto real.</div>
   <button type="button" class="btn sec" id="gerar">🎨 Gerar ilustração com IA</button>
-  <div class="note" id="avisoDemora" role="note">⏳ A criação da ilustração por IA leva em média de 15 a 30 segundos. Depois de tocar no botão, aguarde sem fechar a tela.</div>
+  <div id="avisoDemora" role="note" style="border:3px solid #e8590c;background:#fff4e6;color:#2a2430;border-radius:16px;padding:16px;margin:10px 0;text-align:center"><div style="font-size:2.4rem;line-height:1"><span class="amp">⏳</span></div><div style="font-size:1.2rem;font-weight:800;color:#e8590c;margin:6px 0">A criação da imagem por IA demora um pouco</div><div style="font-size:1rem;line-height:1.4">Depois de tocar no botão, <b>aguarde de 20 a 30 segundos</b> (no máximo 1 minuto). Não feche nem saia desta tela enquanto a barra de espera estiver aparecendo.</div></div>
   <div class="gen" id="gen" hidden>
     <div class="prev" id="prev"><span>🎨</span>Ilustração provisória</div>
         <div class="rest" id="rest"></div>
@@ -1837,15 +1843,16 @@ async function gerar(corr){
   if(G.n>=MAX_GER){toast("Limite de tentativas atingido.");atualizaRest();return}
   G.busy=true;$("#gerar").disabled=true;$("#nova").disabled=true;$("#enviar").disabled=true;
   G.semImg=false;$("#genFalha").hidden=true;$("#enviar").textContent=ENV_TXT;
-  const ov=(m,x)=>{$("#genOvT").textContent=m;$("#genOvS").textContent=x;$("#genOv").hidden=false};
-  ov("A criação da imagem por IA pode demorar um pouco","Aguarde, por favor. Não feche esta tela.");
+  const barra=()=>{const b=$("#genBarI");if(!b)return;b.style.transition="none";b.style.width="0";void b.offsetWidth;b.style.transition="width 30s linear";b.style.width="95%"};
+  const ov=(m,x)=>{$("#genOvT").textContent=m;$("#genOvS").textContent=x;$("#genOv").hidden=false;barra()};
+  ov("Criando a ilustração por IA…","Isso leva de 20 a 30 segundos, no máximo 1 minuto. Aguarde, por favor. Não feche esta tela.");
   const dados={titulo:t,descricao:d,como:$("#c").value.trim(),materiais:matNorm($("#mat").value).join(", "),turmas:[...document.querySelectorAll("#tchk .chip.on")].map(c=>c.dataset.t),correcao:corr||""};
   let img=null,ok=false;
   for(let k=1;k<=3&&!ok;k++){
     try{
       if(k>1)ov("Tentando de novo… tentativa "+k+" de 3","A criação da imagem pode demorar. Aguarde, por favor.");
-      img=await gerarImagem(dados);ok=true;
-    }catch(e){if(k<3)await new Promise(r=>setTimeout(r,1200))}
+      img=await Promise.race([gerarImagem(dados),new Promise((_,rej)=>setTimeout(()=>rej(new Error("tempo esgotado (60 s) sem resposta do servidor")),60000))]);ok=true;
+    }catch(e){window._errImg=e;try{console.error("Erro ao gerar imagem:",e)}catch(_){}if(k<3)await new Promise(r=>setTimeout(r,1200))}
   }
   $("#genOv").hidden=true;
   try{
@@ -1861,6 +1868,13 @@ async function gerar(corr){
     G.semImg=true;$("#genFalha").hidden=false;
     $("#gerar").disabled=false;$("#enviar").disabled=false;$("#enviar").textContent="Publicar atividade sem ilustração";
     toast("Não consegui criar a imagem. Você pode tentar de novo ou publicar sem ilustração.");
+    try{
+      const er=window._errImg||{};
+      const msg=String((er.code?er.code+" — ":"")+(er.message||er)).slice(0,600);
+      let box=document.getElementById("errDiag");
+      if(!box){box=document.createElement("div");box.id="errDiag";box.className="note";box.style.cssText="word-break:break-word;font-size:.78rem";$("#genFalha").appendChild(box)}
+      box.textContent="Detalhe técnico (mostre ao Eduardo/Claude): "+msg;
+    }catch(_){}
   }
   G.busy=false;
   if(G.n<MAX_GER)$("#nova").disabled=false;
