@@ -8,7 +8,7 @@ var B="https://www.gstatic.com/firebasejs/11.10.0/",fb=null;
 var fbErro=null;
 function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js")]).then(function(m){
   var app=m[0].initializeApp(CFG);
-  var c={F:m[1],AI:null,ai:null,db:m[1].getFirestore(app)};
+  var c={F:m[1],AI:null,ai:null,db:(function(){try{return m[1].initializeFirestore(app,{experimentalAutoDetectLongPolling:true,useFetchStreams:false})}catch(e){return m[1].getFirestore(app)}})()};
   /* a IA carrega à parte: se ela falhar, o banco de fichas continua funcionando */
   c.iaPronta=import(B+"firebase-ai.js").then(function(a){
     c.AI=a;c.ai=a.getAI(app,{backend:(a.AgentPlatformBackend?new a.AgentPlatformBackend("global"):new a.VertexAIBackend("global"))});return c
@@ -1171,6 +1171,7 @@ async function apagaFicha(id){
   }
 }
 async function init(){
+  var _t8=setTimeout(function(){if(window.__recebeu)return;try{var av=document.querySelector("#aviso");if(av){av.hidden=false;var d=document.createElement("div");d.id="avDemora";d.style.cssText="margin-top:6px;font-size:.8rem;word-break:break-word";d.textContent="Detalhe técnico: o banco de fichas não respondeu em 8 segundos. "+(window.__erroInit?String(window.__erroInit.message||window.__erroInit):(window.__fbErro?String(window.__fbErro.message||window.__fbErro):"sem erro registrado, possível bloqueio de conexão com o Firestore."));av.appendChild(d)}}catch(_){}},8000);
   try{
     if(window.claude&&claude.use){
       const [db,user,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);window.__dbOk=true;
@@ -1180,7 +1181,7 @@ async function init(){
         const A=db.collection("atividades"),V=db.collection("votos"),R=db.collection("denuncias"),AV=db.collection("avaliacoes"),RA=db.collection("denAval");
         AV.onSnapshot(s=>{avs=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>{});
         RA.onSnapshot(s=>{repsA={};minhasRepA=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;repsA[a]=(repsA[a]||0)+1;if(d.id.endsWith("__"+dev))minhasRepA.add(a)});render()},()=>{});
-        A.onSnapshot(s=>{acts=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>{});
+        A.onSnapshot(s=>{window.__recebeu=true;var x=document.getElementById("avDemora");if(x)x.remove();acts=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},function(e){window.__erroInit=e;try{var av=document.querySelector("#aviso");if(av){av.hidden=false;var d=document.createElement("div");d.style.cssText="margin-top:6px;font-size:.8rem;word-break:break-word";d.textContent="Detalhe técnico: "+String((e&&e.code?e.code+" - ":"")+((e&&e.message)||e));av.appendChild(d)}}catch(_){}});
         V.onSnapshot(s=>{counts={};mine=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;counts[a]=(counts[a]||0)+1;if(d.id.endsWith("__"+dev))mine.add(a)});render()},()=>{});
         R.onSnapshot(s=>{reps={};minhasRep=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;reps[a]=(reps[a]||0)+1;if(d.id.endsWith("__"+dev))minhasRep.add(a)});render()},()=>{});
         const VA=db.collection("variacoes"),SG=db.collection("sugestoes"),RV=db.collection("denVar");
