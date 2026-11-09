@@ -5,18 +5,10 @@ var CFG={apiKey:"AIzaSyBvZoAr0o02TaqpNz5MJbc-wT1xpIY1eDQ",authDomain:"colabora-p
 var MODELO_TEXTO="gemini-3.5-flash-lite";
 var MODELO_IMAGEM="gemini-nano-banana-2.1";
 var B="https://www.gstatic.com/firebasejs/11.10.0/",fb=null;
-var fbErro=null;
-function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js")]).then(function(m){
+function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js"),import(B+"firebase-ai.js")]).then(function(m){
   var app=m[0].initializeApp(CFG);
-  var c={F:m[1],AI:null,ai:null,db:(function(){try{return m[1].initializeFirestore(app,{experimentalAutoDetectLongPolling:true,useFetchStreams:false})}catch(e){return m[1].getFirestore(app)}})()};
-  /* a IA carrega à parte: se ela falhar, o banco de fichas continua funcionando */
-  c.iaPronta=import(B+"firebase-ai.js").then(function(a){
-    c.AI=a;c.ai=a.getAI(app,{backend:(a.AgentPlatformBackend?new a.AgentPlatformBackend("global"):new a.VertexAIBackend("global"))});return c
-  }).catch(function(e){c.iaErro=e;throw e});
-  c.iaPronta.catch(function(){});
-  return c;
-}).catch(function(e){fbErro=e;window.__fbErro=e;throw e}))}
-function carregaIA(){return load().then(function(c){return c.iaPronta})}
+  return{F:m[1],AI:m[2],db:m[1].getFirestore(app),ai:m[2].getAI(app,{backend:(m[2].AgentPlatformBackend?new m[2].AgentPlatformBackend("global"):new m[2].VertexAIBackend("global"))})};
+}))}
 function col(c,name,cons){
   var F=c.F,ref=F.collection(c.db,name),q=function(){return cons.length?F.query.apply(null,[ref].concat(cons)):ref};
   return{
@@ -35,7 +27,7 @@ window.claude={use:async function(n){
   if(n==="db"){var c=await load();return{collection:function(x){return col(c,x,[])}}}
   if(n==="user"){return{can:async function(){return true}}}
   if(n==="image"){return{gerar:async function(p){
-    var c=await carregaIA();
+    var c=await load();
     var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_IMAGEM,generationConfig:{responseModalities:[c.AI.ResponseModality.TEXT,c.AI.ResponseModality.IMAGE]}});
     var r;
     try{r=await m.generateContent(p)}
@@ -52,7 +44,7 @@ window.claude={use:async function(n){
       throw new Error("sem imagem na resposta "+motivo)}
     return "data:"+im[0].inlineData.mimeType+";base64,"+im[0].inlineData.data}}}
   if(n==="sample"){return{json:async function(p){
-    var c=await carregaIA();
+    var c=await load();
     var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_TEXTO,generationConfig:{responseMimeType:"application/json"}});
     var r=await m.generateContent(p),t=r.response.text().replace(/```json|```/g,"").trim();
     return JSON.parse(t)}}}
@@ -212,17 +204,7 @@ body:not(.home) .rolar{display:none}
 @media (prefers-reduced-motion:reduce){.dk.pisca{animation:none}.gotaC{transition:none}}
 #f.seqm .seqdock{margin-top:4px;padding:0}
 #f.seqm .seqbot+#envRow{margin:0}
-.seqfab{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;box-sizing:border-box;z-index:9;pointer-events:auto;background:#e8590c;border-color:#e8590c;color:#fff;font-weight:800;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.28);animation:fabIn .35s ease-out}
-#f.seqm .seqdock{min-height:48px}
-/* efeito: bolinhas verdes se juntam e viram o botão; se algo muda, o botão volta a ser bolinhas */
-.seqfab.abre{animation:fabAbre .45s cubic-bezier(.22,1,.36,1) both}
-@keyframes fabAbre{0%{opacity:0;transform:scale(.25);border-radius:999px;letter-spacing:-.1em}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:none}}
-.seqfab.fecha{animation:fabFecha .3s ease-in both;pointer-events:none}
-@keyframes fabFecha{to{opacity:0;transform:scale(.25)}}
-.dk.junta{transition:transform .5s cubic-bezier(.5,0,.75,.4),opacity .35s ease .15s;transform:translate(var(--jx),var(--jy)) rotate(200deg) scale(.2);opacity:0;pointer-events:none}
-.dk.volta{animation:dkVolta .45s cubic-bezier(.22,1,.36,1) both}
-@keyframes dkVolta{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.seqfab.abre,.seqfab.fecha,.dk.volta{animation:none}.dk.junta{transition:none}}
+.seqfab{position:fixed;right:14px;bottom:74px;z-index:9;pointer-events:auto;background:#e8590c;border-color:#e8590c;color:#fff;font-weight:800;box-shadow:0 6px 18px rgba(0,0,0,.28);animation:fabIn .35s ease-out}
 .seqfab[hidden]{display:none!important}
 @keyframes fabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .seqdock .btn{flex:0 0 auto}
@@ -572,9 +554,6 @@ dialog[open]::backdrop{animation:fundoIn .4s ease}
 @keyframes fundoIn{from{opacity:0}to{opacity:1}}
 input,textarea,select{transition:border-color .3s ease,box-shadow .3s ease}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 4px var(--soft)}
-.descOk{animation:descOk .7s ease-out}
-@keyframes descOk{0%{box-shadow:0 0 0 0 rgba(47,158,68,.6)}100%{box-shadow:0 0 0 14px rgba(47,158,68,0)}}
-@media (prefers-reduced-motion:reduce){.descOk{animation:none}}
 .gen:not([hidden]){animation:painelIn .55s var(--suave)}
 .gen .opts button{transition:transform .25s var(--pula),border-color .25s ease,background .25s ease}
 .gen .opts button:hover{transform:translateX(4px)}
@@ -816,7 +795,7 @@ body:not(.home) #qrbloco{display:none}
     <div class="row dir"><button class="mini" id="vd">📊 Ver análise de dados</button></div>
   </div>
   <div class="note" id="aviso" hidden>Modo de teste: o que você publicar aqui fica salvo só neste aparelho. Para compartilhar entre professores, é preciso ligar o armazenamento coletivo.</div>
-  <div class="bar"><h2>Atividades</h2><div class="vcols" id="vcols"><button type="button" id="vcolsBtn" aria-label="Mudar quantas fichas aparecem por linha" title="Toque para mudar quantas fichas aparecem por linha"><span class="vq" id="vcolsIco" aria-hidden="true"></span></button></div><span id="fl"></span></div>
+  <div class="bar"><h2>Atividades</h2><div class="vcols" id="vcols" role="radiogroup" aria-label="Quantas fichas mostrar por linha"><span class="vcols-t">Ver fichas</span><button type="button" role="radio" data-cols="1" aria-checked="false" aria-label="Uma ficha por linha" title="1 ficha por linha"><i></i><b>1</b></button><button type="button" role="radio" data-cols="2" aria-checked="false" aria-label="Duas fichas por linha" title="2 fichas por linha"><i></i><i></i><b>2</b></button><button type="button" role="radio" data-cols="3" aria-checked="false" aria-label="Três fichas por linha" title="3 fichas por linha"><i></i><i></i><i></i><b>3</b></button><button type="button" role="radio" data-cols="4" aria-checked="false" aria-label="Quatro fichas por linha" title="4 fichas por linha"><i></i><i></i><i></i><i></i><b>4</b></button></div><span id="fl"></span></div>
   <div id="sug" class="sug" hidden></div>
   <div id="lista"></div>
 </section>
@@ -866,21 +845,6 @@ body:not(.home) #qrbloco{display:none}
 .var-alerta b{color:#8a3d00}
 :root[data-theme="dark"] .var-alerta{background:#3a2a22;border-color:#6b4a2f;color:#f1dcc4}
 :root[data-theme="dark"] .var-alerta b{color:#ffb070}
-.var-alerta .va-p{margin:6px 0 0}
-.var-alerta .va-lista{margin:8px 0 2px;padding:8px 10px 8px 28px;background:rgba(255,255,255,.55);border:1px dashed #ffc078;border-radius:10px;list-style:disc}
-.var-alerta .va-lista li{margin:3px 0}
-.var-alerta .va-lista li span{font-weight:700;color:#8a3d00}
-:root[data-theme="dark"] .var-alerta .va-lista{background:rgba(0,0,0,.25);border-color:#6b4a2f}
-:root[data-theme="dark"] .var-alerta .va-lista li span{color:#ffb070}
-.var-alerta[hidden]{display:none!important}
-.var-alerta.var-leitura{background:#ebfbee;border-color:#b2f2bb;border-left-color:#2f9e44;color:#1f4d2b}
-.var-alerta.var-leitura b{color:#216e39}
-.var-alerta.var-leitura .va-lista{border-color:#8ce99a}
-.var-alerta.var-leitura .va-lista li span{color:#216e39}
-:root[data-theme="dark"] .var-alerta.var-leitura{background:#1f3326;border-color:#35603f;color:#d3efd9}
-:root[data-theme="dark"] .var-alerta.var-leitura b,:root[data-theme="dark"] .var-alerta.var-leitura .va-lista li span{color:#8ce99a}
-
-
 #mhModal{border:0;border-radius:20px;padding:0;width:min(680px,95vw);max-height:94vh;max-height:94dvh;background:var(--card);color:var(--ink);overflow:hidden}
 #mhModal::backdrop{background:rgba(20,16,26,.72)}
 #mhModal .mdl-box{max-width:none;max-height:94vh;max-height:94dvh;border-radius:20px;box-shadow:none}
@@ -1171,17 +1135,16 @@ async function apagaFicha(id){
   }
 }
 async function init(){
-  var _t8=setTimeout(function(){if(window.__recebeu)return;try{var av=document.querySelector("#aviso");if(av){av.hidden=false;var d=document.createElement("div");d.id="avDemora";d.style.cssText="margin-top:6px;font-size:.8rem;word-break:break-word";d.textContent="Detalhe técnico: o banco de fichas não respondeu em 8 segundos. "+(window.__erroInit?String(window.__erroInit.message||window.__erroInit):(window.__fbErro?String(window.__fbErro.message||window.__fbErro):"sem erro registrado, possível bloqueio de conexão com o Firestore."));av.appendChild(d)}}catch(_){}},8000);
   try{
     if(window.claude&&claude.use){
-      const [db,user,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);window.__dbOk=true;
+      const [db,user,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);
       sample=sm;if(sample){$("#ia").hidden=false;$("#melhd").hidden=false}
       const cw=user?await user.can("data.write"):null;
       if(db&&cw!==false){
         const A=db.collection("atividades"),V=db.collection("votos"),R=db.collection("denuncias"),AV=db.collection("avaliacoes"),RA=db.collection("denAval");
         AV.onSnapshot(s=>{avs=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>{});
         RA.onSnapshot(s=>{repsA={};minhasRepA=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;repsA[a]=(repsA[a]||0)+1;if(d.id.endsWith("__"+dev))minhasRepA.add(a)});render()},()=>{});
-        A.onSnapshot(s=>{window.__recebeu=true;var x=document.getElementById("avDemora");if(x)x.remove();acts=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},function(e){window.__erroInit=e;try{var av=document.querySelector("#aviso");if(av){av.hidden=false;var d=document.createElement("div");d.style.cssText="margin-top:6px;font-size:.8rem;word-break:break-word";d.textContent="Detalhe técnico: "+String((e&&e.code?e.code+" - ":"")+((e&&e.message)||e));av.appendChild(d)}}catch(_){}});
+        A.onSnapshot(s=>{acts=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>{});
         V.onSnapshot(s=>{counts={};mine=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;counts[a]=(counts[a]||0)+1;if(d.id.endsWith("__"+dev))mine.add(a)});render()},()=>{});
         R.onSnapshot(s=>{reps={};minhasRep=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;reps[a]=(reps[a]||0)+1;if(d.id.endsWith("__"+dev))minhasRep.add(a)});render()},()=>{});
         const VA=db.collection("variacoes"),SG=db.collection("sugestoes"),RV=db.collection("denVar");
@@ -1206,8 +1169,7 @@ async function init(){
           sugAdd:o=>SG.add(o)};
       }
     }
-  }catch(e){window.__erroInit=e;try{console.error("Colabora Prof: falha ao conectar no Firebase",e)}catch(_){}
-    try{var av=document.querySelector("#aviso");if(av){var det=document.createElement("div");det.style.cssText="margin-top:6px;font-size:.8rem;word-break:break-word;opacity:.9";det.textContent="Detalhe técnico: "+String((e&&e.code?e.code+" - ":"")+((e&&e.message)||e));av.appendChild(det)}}catch(_){}}
+  }catch(e){}
   if(!store){store=local;acts=ls("cp_acts")||[];if(DEMO_ON){const ja=new Set(acts.map(x=>x.id));DEMO.forEach(d=>{if(!ja.has(d.id))acts.push(Object.assign({demo:true},d))})}{const ja2=new Set(acts.map(x=>x.id));FICHAS_TESTE.forEach(d=>{if(!ja2.has(d.id))acts.push(Object.assign({},d))})}mine=new Set(ls("cp_votes")||[]);acts.forEach(a=>{if(a.demo)counts[a.id]=DEMO_H[a.id]||0});mine.forEach(a=>counts[a]=(DEMO_H[a]||0)+1);minhasRep=new Set(ls("cp_reps")||[]);reps=ls("cp_repn")||{};avs=ls("cp_avs")||[];minhasRepA=new Set(ls("cp_ravs")||[]);repsA=ls("cp_ravn")||{};vars=ls("cp_vars")||[];minhasRepV=new Set(ls("cp_rvars")||[]);repsV=ls("cp_rvarn")||{};sugs=ls("cp_sugs")||[];$("#aviso").hidden=false;
     videoAplicaCfg(ls("cp_video")||"");
     visitas=ls("cp_vis")||[];
@@ -1348,27 +1310,6 @@ const UNH={"Brincadeiras e jogos":"Ex.: pega-pega, esconde-esconde, brincadeiras
 const CAH={"O eu, o outro e o nós":"Ex.: conviver, cooperar, respeitar regras e colegas.","Corpo, gestos e movimentos":"Ex.: correr, pular, equilibrar, imitar gestos.","Traços, sons, cores e formas":"Ex.: música, ritmo, cores e formas na brincadeira.","Escuta, fala, pensamento e imaginação":"Ex.: ouvir, cantar, contar, imaginar, faz de conta.","Espaços, tempos, quantidades, relações e transformações":"Ex.: contar, comparar tamanhos, perto e longe, antes e depois."};
 function dica(){$("#unH").textContent=UNH[$("#un").value]||"";$("#caH").textContent=CAH[$("#ca").value]||""}
 $("#d").addEventListener("input",()=>{const n=$("#d").value.trim().length;$("#dCnt").textContent=n<40?"Conte um pouco mais ("+n+" de pelo menos 40 letras)":"✓ Boa descrição"});
-/* Borda do campo de descrição: vermelha com pouco texto, passa por laranja e amarelo e chega no verde nas 40 letras */
-function descCor(){
-  const el=$("#d"),n=el.value.trim().length,ok=n>=40,antes=el.dataset.ok==="1";
-  el.dataset.ok=ok?"1":"0";
-  if(!n){el.style.transition="";el.style.borderColor="";el.style.boxShadow="";return}
-  if(ok){
-    /* chegou nas 40 letras: pula direto para o verde e dá um pulsinho de aviso */
-    el.style.transition="none";
-    el.style.borderColor="#2f9e44";
-    el.style.boxShadow="0 0 0 3px rgba(47,158,68,.25)";
-    if(!antes){el.classList.remove("descOk");void el.offsetWidth;el.classList.add("descOk");setTimeout(()=>el.classList.remove("descOk"),800)}
-    return;
-  }
-  /* antes disso: do vermelho até o amarelo, sem nunca chegar no verde */
-  el.style.transition="";
-  const h=Math.round(Math.min(n,39)/39*52);
-  el.style.borderColor="hsl("+h+",85%,46%)";
-  el.style.boxShadow="0 0 0 3px hsla("+h+",90%,50%,.22)";
-}
-$("#d").addEventListener("input",descCor);
-$("#f").addEventListener("reset",()=>setTimeout(descCor,0));
 $("#un").onchange=dica;$("#ca").onchange=dica;dica();
 $("#novo").onclick=()=>$("#dlg").showModal();
 var SEQ={on:false,id:null,n:1,cur:0,enc:[]};
@@ -1394,42 +1335,17 @@ var _dkSig="";
 var seqBusyC=false;
 function seqSigs(){const c=encCap();return SEQ.enc.map((e,i)=>{const x=i===SEQ.cur?c:e;return JSON.stringify([c.t,c.turmas,c.un,c.ca,x.d,x.c,x.mat,x.G.n,x.G.aprovada,x.G.semImg])})}
 function seqNome(i){return"Publicar "+(ORD[i]?ORD[i].toLowerCase():(i+1)+"º")+" encontro"}
-var _fabOn=false,_fabT=null;
-/* Quando todas as bolinhas ficam verdes, elas se juntam rapidinho e viram o botão de publicar.
-   Se algo mudar, o botão se desfaz e as bolinhas voltam a esperar a marcação verde. */
-function seqFabEfeito(quer){
-  const fab=$("#seqPubFab"),dd=$("#seqDD");
-  if(!fab||quer===_fabOn)return;
-  _fabOn=quer;clearTimeout(_fabT);
-  const reduz=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
-  if(quer){
-    const dots=[...dd.querySelectorAll(".dk")];
-    if(reduz||!dots.length){fab.hidden=false;return}
-    fab.hidden=false;fab.classList.remove("fecha","abre");fab.style.visibility="hidden";
-    const fr=fab.getBoundingClientRect(),cx=fr.left+fr.width/2,cy=fr.top+fr.height/2;
-    dots.forEach(d=>{const r=d.getBoundingClientRect();d.style.setProperty("--jx",(cx-(r.left+r.width/2))+"px");d.style.setProperty("--jy",(cy-(r.top+r.height/2))+"px");d.classList.remove("volta");d.classList.add("junta")});
-    _fabT=setTimeout(()=>{fab.style.visibility="";fab.classList.add("abre")},420);
-  }else{
-    const dots=[...dd.querySelectorAll(".dk")];
-    fab.classList.remove("abre");
-    dots.forEach(d=>{d.classList.remove("junta");d.classList.add("volta")});
-    if(reduz||fab.hidden){fab.hidden=true;return}
-    fab.classList.add("fecha");
-    _fabT=setTimeout(()=>{fab.hidden=true;fab.classList.remove("fecha");fab.style.visibility=""},300);
-  }
-}
 function seqDock(){
   if(!SEQ.on)return;
   const P=seqProntos(),S=seqSigs(),st=SEQ.enc.map((e,i)=>P[i]&&e.conf===S[i]?2:(e.conf?1:0)),sig=st.join("")+"|"+SEQ.cur;
-  const todas=st.every(x=>x===2)&&!G.busy;
   if(sig!==_dkSig){_dkSig=sig;
-    $("#seqDD").innerHTML=SEQ.enc.map((e,i)=>'<button type="button" class="dk'+(st[i]===2?" ok":st[i]===1?" pisca":"")+(i===SEQ.cur?" on":"")+(_fabOn&&todas?" junta":"")+'" data-i="'+i+'" aria-label="Encontro '+(i+1)+(st[i]===2?", publicado":st[i]===1?", mudou, publique de novo":", ainda não publicado")+'">'+(i+1)+'</button>').join("")}
+    $("#seqDD").innerHTML=SEQ.enc.map((e,i)=>'<button type="button" class="dk'+(st[i]===2?" ok":st[i]===1?" pisca":"")+(i===SEQ.cur?" on":"")+'" data-i="'+i+'" aria-label="Encontro '+(i+1)+(st[i]===2?", publicado":st[i]===1?", mudou, publique de novo":", ainda não publicado")+'">'+(i+1)+'</button>').join("")}
   const pr=P[SEQ.cur],cf=$("#seqConf");
   $("#enviar").hidden=true;$("#envRow").hidden=true;
   $("#seqLimpa").hidden=pr;
   cf.hidden=!pr;cf.classList.toggle("ok",st[SEQ.cur]===2);cf.disabled=st[SEQ.cur]===2||seqBusyC||G.busy;
   cf.textContent=st[SEQ.cur]===2?"✓ "+seqNome(SEQ.cur).replace("Publicar ","")+" publicado":seqNome(SEQ.cur);
-  seqFabEfeito(todas);
+  $("#seqPubFab").hidden=!st.every(x=>x===2)||G.busy;
 }
 function seqGota(i,fim){
   const b=$("#seqConf"),d=document.querySelector('#seqDD .dk[data-i="'+i+'"]');
@@ -1450,35 +1366,12 @@ function seqConfirma(){
   seqBusyC=true;$("#seqConf").disabled=true;
   seqGota(i,()=>{SEQ.enc[i].conf=S[i];seqBusyC=false;_dkSig="";seqDock()});
 }
-/* Pergunta de confirmação feita dentro da própria página: o confirm() do navegador é bloqueado em páginas publicadas */
-function confirma(msg){
-  return new Promise(res=>{
-    const dl=document.getElementById("dlg"),host=(dl&&dl.open)?dl:document.body;
-    const ov=document.createElement("div");
-    ov.setAttribute("role","alertdialog");ov.setAttribute("aria-modal","true");
-    ov.style.cssText="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)";
-    const box=document.createElement("div");
-    box.style.cssText="background:#fff;color:#2b2118;border-radius:18px;padding:20px 18px 16px;max-width:340px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.3);text-align:center";
-    const p=document.createElement("p");p.style.cssText="margin:0 0 16px;line-height:1.4;font-weight:600";p.textContent=msg;
-    const row=document.createElement("div");row.style.cssText="display:flex;gap:10px;justify-content:center";
-    const no=document.createElement("button");no.type="button";no.className="btn sec";no.textContent="Cancelar";
-    const yes=document.createElement("button");yes.type="button";yes.className="btn";yes.textContent="Apagar";
-    const tec=e=>{if(e.key==="Escape"){e.stopPropagation();e.preventDefault();fim(false)}};
-    const fim=v=>{document.removeEventListener("keydown",tec,true);ov.remove();res(v)};
-    no.onclick=()=>fim(false);yes.onclick=()=>fim(true);
-    ov.addEventListener("click",e=>{if(e.target===ov)fim(false)});
-    document.addEventListener("keydown",tec,true);
-    row.append(no,yes);box.append(p,row);ov.append(box);host.appendChild(ov);yes.focus();
-  });
-}
-async function seqLimpaFicha(){
+function seqLimpaFicha(){
   if(G.busy)return;
-  if(!await confirma("Limpar esta ficha? O que você escreveu nela será apagado."))return;
+  if(!confirm("Limpar esta ficha? O que você escreveu nela será apagado."))return;
   const c=encCap(),um=SEQ.enc.length===1;
   const n={t:um?"":c.t,d:"",c:"",mat:"",un:c.un,ca:c.ca,turmas:um?[]:c.turmas.slice(),G:G0(),conf:null};
   SEQ.enc[SEQ.cur]=n;encAplica(n);seqShare();seqUi();
-  /* avisa o rascunho automático, para ele não devolver o texto antigo depois */
-  $("#f").dispatchEvent(new Event("input",{bubbles:true}));
 }
 function seqUi(){
   $("#seqSel").classList.toggle("on",SEQ.on);
@@ -1538,7 +1431,7 @@ function seqPublica(){
   $("#cfResumo").innerHTML='<p><b>Sequência didática com '+L.length+' encontros</b></p>'+L.map(o=>'<p><b>Encontro '+o.seqN+':</b> '+esc(o.titulo)+' · '+esc(o.turmas.join(", "))+' · '+esc(o.unidade)+'</p>').join("")+'<p><b>Autoria:</b> '+esc(au||"não informada")+'</p>';
   $("#cfOk").checked=false;$("#cfPub").disabled=true;$("#cfdlg").showModal();
 }
-$("#dlg").addEventListener("close",()=>{seqSet(false);_fabOn=false;clearTimeout(_fabT);const f=$("#seqPubFab");if(f){f.hidden=true;f.classList.remove("abre","fecha");f.style.visibility=""}});
+$("#dlg").addEventListener("close",()=>seqSet(false));
 $("#fabBt").onclick=()=>$("#dlg").showModal();
 $("#cancel").onclick=()=>{$("#dlg").close();resetGen()};
 $("#fechar").onclick=()=>{$("#dlg").close();resetGen()};
@@ -1770,8 +1663,8 @@ $("#cfPub").onclick=async()=>{
     b.hidden=false;
     mostraLimpar(true);
     armaSumir(b);
-    document.getElementById("rascDesc").onclick=async()=>{
-      if(!await confirma("Descartar o texto recuperado e começar uma ficha em branco?"))return;
+    document.getElementById("rascDesc").onclick=()=>{
+      if(!confirm("Descartar o texto recuperado e começar uma ficha em branco?"))return;
       restaurando=true;
       try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
       window.rascLimpa();b.hidden=true;mostraLimpar(false);
@@ -1781,8 +1674,8 @@ $("#cfPub").onclick=async()=>{
   const LB=document.getElementById("limparFicha");
   function mostraLimpar(m){if(!LB)return;LB.classList.toggle("on",!!m);LB.setAttribute("aria-hidden",m?"false":"true");LB.tabIndex=m?0:-1}
   if(LB){
-    LB.onclick=async()=>{
-      if(!await confirma("Limpar a ficha inteira e começar do zero? O texto digitado será apagado."))return;
+    LB.onclick=()=>{
+      if(!confirm("Limpar a ficha inteira e começar do zero? O texto digitado será apagado."))return;
       restaurando=true;
       try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
       window.rascLimpa();
@@ -3009,23 +2902,10 @@ function varDesenha(){
   const vazio=!L.length,form=vazio||varFormAberto;
   $("#varT").textContent=vazio?"Sugira uma variação":"Variações";
   $("#varSub").textContent=a?a.titulo:"";
-  if(a){
-    const tu=Array.isArray(a.turmas)&&a.turmas.length?a.turmas.join(", "):"a mesma da ficha";
-    $("#vaTurmas").textContent=tu;
-    $("#vaTitulo").textContent="“"+(a.titulo||"")+"”";
-    const ma=(a.materiais&&String(a.materiais).trim())?a.materiais:"os mesmos da ficha (a ficha não lista materiais)";
-    $("#vaMats").textContent=ma;
-    $("#vlTurmas").textContent=tu;
-    $("#vlTitulo").textContent="“"+(a.titulo||"")+"”";
-    $("#vlMats").textContent=ma;
-  }
   const lista=$("#varLista"),ant=lista.children.length;
   lista.innerHTML=L.map((v,i)=>'<div class="var-it '+(i%2?"d":"e")+'"'+(i<ant?' style="animation:none"':'')+'><b>'+esc(v.nome||"Professor(a)")+'</b><p>'+esc(v.texto)+'</p><button type="button" class="den'+(minhasRepV.has(v.id)?" feita":"")+'" data-vd="'+esc(v.id)+'">'+txtDen(minhasRepV.has(v.id))+'</button></div>').join("");
   if(L.length>ant){const m=document.querySelector("#varModal .mdl-box");if(m)setTimeout(()=>{m.scrollTop=m.scrollHeight},60)}
   $("#varForm").hidden=!form;$("#varNova").hidden=form;
-  /* quem só está lendo vê o aviso verde; quem vai escrever vê o aviso de orientação */
-  $("#varAlerta").hidden=!form;
-  $("#varLeitura").hidden=!(L.length&&!form);
 }
 function varFecha(){varAtual=null;varFormAberto=false;$("#varModal").hidden=true}
 document.addEventListener("click",e=>{
@@ -3277,16 +3157,15 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 </div>
 <style id="vcolsCss">
 /* ===== Seletor de fichas por linha (1 a 4) ===== */
-.vcols{display:inline-flex;align-items:center;margin-left:auto}
-.vcols[hidden]{display:none!important}
-.vcols button{display:inline-flex;align-items:center;justify-content:center;min-width:56px;min-height:44px;padding:8px 12px;border:1px solid var(--line);background:var(--bg);color:var(--pri);border-radius:12px;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .15s ease}
-.vcols button:hover{border-color:var(--pri)}
-.vcols button:active{transform:scale(.94)}
+.vcols{display:inline-flex;align-items:center;gap:6px;margin-left:auto}
+.vcols-t{font-size:.8rem;color:var(--mut);font-weight:600;margin-right:2px}
+.vcols button{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:46px;min-height:44px;padding:5px 6px 4px;border:1px solid var(--line);background:var(--bg);color:var(--mut);border-radius:12px;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.vcols button{display:inline-grid;grid-auto-flow:column;grid-template-rows:14px auto;gap:2px 2px;align-content:center;justify-content:center}
+.vcols button i{display:block;width:8px;height:14px;border-radius:2px;background:currentColor;opacity:.55}
+.vcols button b{grid-column:1/-1;font-size:.72rem;line-height:1;text-align:center}
+.vcols button[aria-checked="true"]{background:var(--pri);color:#fff;border-color:var(--pri)}
+.vcols button[aria-checked="true"] i{opacity:.95}
 .vcols button:focus-visible{outline:3px solid var(--pri2);outline-offset:2px}
-.vcols .vq{display:inline-flex;align-items:stretch;gap:3px;height:22px}
-.vcols .vq i{display:block;width:9px;border-radius:2.5px;background:currentColor;animation:vqEntra .25s ease backwards}
-@keyframes vqEntra{from{transform:scaleY(.4);opacity:0}to{transform:scaleY(1);opacity:1}}
-@media(prefers-reduced-motion:reduce){.vcols .vq i{animation:none}}
 #fl{flex-basis:100%}
 #fl:empty{display:none}
 
@@ -3356,25 +3235,23 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 #lista.c4 .card p{-webkit-line-clamp:3;line-clamp:3}
 /* o texto cortado continua disponível no modo de 1 ou 2 fichas */
 
-/* Celular: 1, 2 ou 3 fichas por linha (o botão alterna entre elas) */
-/* Celular com 3 fichas: bem compactas; toque na ficha abre a leitura inteira */
+/* ===== Celular: só 1 ou 2 fichas por linha (3 e 4 ficam pequenas demais) ===== */
 @media(max-width:600px){
-  #lista.c3 .card h4{font-size:.85rem}
-  #lista.c3 .in{padding:0 8px 8px}
-  #lista.c3 .card p{font-size:.74rem}
-  #lista.c3 .tag{font-size:.6rem;padding:2px 6px}
-  #lista.c3 .btn-sh{width:30px;height:30px;top:6px;right:6px}
-  #lista.c3 .heart,#lista.c3 .den{padding:5px 7px;font-size:.72rem}
-  #lista.c3 .vbtn{margin-right:0;border-right:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:.72rem}
-  #lista.c3 .row{gap:4px;flex-wrap:wrap}
-  #lista.c3 .in::after{display:block}
-  #lista.c3 .card{cursor:pointer}
-}
-/* Celular com 2 fichas: ajustes para caber em tela pequena */
-@media(max-width:600px){
+  .vcols button[data-cols="3"],.vcols button[data-cols="4"]{display:none}
+  #lista.c3,#lista.c4{--cols:2!important}
+  #lista.c3 .card h4,#lista.c4 .card h4{font-size:1.05rem}
+  #lista.c3 .in,#lista.c4 .in{padding:0 12px 12px}
+  #lista.c3 .card p,#lista.c4 .card p{font-size:.92rem;-webkit-line-clamp:unset;line-clamp:unset;display:block}
+  #lista.c3 .tag,#lista.c4 .tag{font-size:.75rem;padding:3px 10px}
+  #lista.c3 .btn-sh,#lista.c4 .btn-sh{width:38px;height:38px;top:8px;right:8px}
+  #lista.c3 .heart,#lista.c3 .den,#lista.c4 .heart,#lista.c4 .den{padding:6px 10px;font-size:.82rem}
+  #lista.c3 .vbtn,#lista.c4 .vbtn{margin-right:-12px;border-right:0;border-radius:999px 0 0 999px;padding:6px 14px 6px 10px;font-size:.82rem}
+  #lista.c3 .row,#lista.c4 .row{gap:6px}
   #lista.c2 .vbtn{margin-right:0;border-right:1px solid var(--line);border-radius:999px}
+  #lista.c3 .vbtn,#lista.c4 .vbtn{margin-right:0;border-right:1px solid var(--line)}
   #lista.c2 .heart,#lista.c2 .den{padding:6px 9px;font-size:.8rem}
   #lista.c2 .tag{font-size:.7rem;padding:2px 8px}
+  .wrap:has(#busca.on.wide){max-width:760px}
 }
 
 /* ===== Janela com a ficha inteira (modo resumido) ===== */
@@ -3396,65 +3273,34 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 #lista.c3 .card,#lista.c4 .card{cursor:pointer}
 #lista.c3 .card:focus-visible,#lista.c4 .card:focus-visible{outline:3px solid var(--pri2);outline-offset:2px}
 #lista.c3 .in::after,#lista.c4 .in::after{content:"Toque para ler tudo";display:block;margin-top:6px;font-size:.68rem;color:var(--pri);font-weight:700}
-@media(max-width:600px){#lista.c4 .in::after{display:none}#lista.c4 .card{cursor:default}}
+@media(max-width:600px){#lista.c3 .in::after,#lista.c4 .in::after{display:none}#lista.c3 .card,#lista.c4 .card{cursor:default}}
 </style>
 <script id="vcolsJs">
 (function(){
   var KEY="cp_cols",lista=document.getElementById("lista"),box=document.getElementById("vcols"),busca=document.getElementById("busca");
   if(!lista||!box)return;
-  /* Regras por aparelho: celular = 1, 2 ou 3 (padrão 1); tablet = 2, 3 ou 4 (padrão 2); notebook = 3 ou 4 (padrão 3) */
-  function aparelho(){
-    var w=window.innerWidth||document.documentElement.clientWidth||1024;
-    if(w<=600)return "cel";
-    if(w<=1024)return "tab";
-    return "nb";
-  }
-  var REGRA={cel:{op:[1,2,3],pad:1},tab:{op:[2,3,4],pad:2},nb:{op:[3,4],pad:3}};
-  function ler(){var v=0;try{v=parseInt(JSON.parse(localStorage.getItem(KEY)),10)}catch(e){v=0}return(v>=1&&v<=4)?v:0}
-  var escolha=ler();
-  var atual=1;
-  function calcula(){
-    var r=REGRA[aparelho()];
-    /* usa a escolha do professor só se ela existir neste aparelho; senão, o padrão do aparelho */
-    return r.op.indexOf(escolha)>-1?escolha:r.pad;
-  }
+  function ler(){var v=1;try{v=parseInt(JSON.parse(localStorage.getItem(KEY)),10)}catch(e){v=1}return(v>=1&&v<=4)?v:1}
+  var atual=ler();
   function aplica(){
-    var r=REGRA[aparelho()];
-    atual=calcula();
     lista.classList.remove("c1","c2","c3","c4");
     lista.classList.add("gcols","c"+atual);
     lista.style.setProperty("--cols",atual);
     if(busca)busca.classList.toggle("wide",atual>=3);
-    /* o botão só some se o aparelho tiver uma única opção */
-    box.hidden=(r.op.length<2);
-    desenhaIcone();
-  }
-  /* um botão só: cada toque avança para a próxima quantidade permitida neste aparelho e, na última, volta para a primeira */
-  var btn=document.getElementById("vcolsBtn"),ico=document.getElementById("vcolsIco");
-  function desenhaIcone(){
-    if(!ico)return;
-    var h="";for(var k=0;k<atual;k++)h+="<i></i>";
-    ico.innerHTML=h;
-    if(btn)btn.setAttribute("aria-label",atual===1?"Mostrando 1 ficha por linha. Toque para mudar.":"Mostrando "+atual+" fichas por linha. Toque para mudar.");
+    var efetivo=(window.matchMedia&&window.matchMedia("(max-width:600px)").matches&&atual>2)?2:atual;
+    box.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-checked",String(+b.dataset.cols===efetivo))});
   }
   box.addEventListener("click",function(e){
-    if(!e.target.closest("#vcolsBtn"))return;
-    var op=REGRA[aparelho()].op,pos=op.indexOf(atual);
-    escolha=op[(pos+1)%op.length];
-    try{localStorage.setItem(KEY,JSON.stringify(escolha))}catch(err){}
+    var b=e.target.closest("button[data-cols]");if(!b)return;
+    atual=+b.dataset.cols;
+    try{localStorage.setItem(KEY,JSON.stringify(atual))}catch(err){}
     aplica();
-  });
-  /* se o aparelho girar ou a janela mudar de tamanho, reajusta */
-  var _rt=null,_ap=aparelho();
-  window.addEventListener("resize",function(){
-    clearTimeout(_rt);_rt=setTimeout(function(){var n=aparelho();if(n!==_ap){_ap=n;aplica()}},120);
   });
   aplica();
 
   /* ===== Abrir a ficha inteira numa janela (só nas colunas 3 e 4 no tablet/computador) ===== */
   var modal=document.getElementById("fichaModal"),corpo=document.getElementById("fichaCorpo"),xBtn=document.getElementById("fichaX"),voltaFoco=null;
-  function estreito(){return aparelho()==="cel"}
-  function resumido(){return atual>=3}
+  function estreito(){return window.matchMedia&&window.matchMedia("(max-width:600px)").matches}
+  function resumido(){return !estreito()&&atual>=3}
   function abre(cardEl){
     var id=(cardEl.querySelector("[data-h]")||{dataset:{}}).dataset.h,a=null;
     try{a=acts.find(function(x){return x.id===id})}catch(e){a=null}
@@ -3498,26 +3344,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
     <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
     <h2 id="varT">Variações</h2>
     <p class="var-sub" id="varSub"></p>
-    <div class="var-alerta" id="varAlerta" role="note"><span class="va-i" aria-hidden="true">💡</span><div>
-      <b>Antes de sugerir uma variação, leia com atenção:</b>
-      <p class="va-p">Uma variação é uma <b>pequena adaptação</b> da atividade original. Ela <b>precisa respeitar os dados principais desta ficha</b>, que não podem ser alterados:</p>
-      <ul class="va-lista" id="varDados">
-        <li><b>Faixa etária:</b> <span id="vaTurmas">a mesma da ficha</span></li>
-        <li><b>Nome da atividade:</b> <span id="vaTitulo">o mesmo da ficha</span></li>
-        <li><b>Materiais:</b> <span id="vaMats">os mesmos da ficha</span></li>
-      </ul>
-      <p class="va-p">Confira se a sua ideia cabe dentro disso. Se ela <b>exigir outra turma, outros materiais ou mudar bastante a atividade</b>, o melhor caminho é <b>criar uma ficha nova</b>, para que cada atividade continue adequada ao seu público. A decisão é sempre sua. 🧡</p>
-    </div></div>
-    <div class="var-alerta var-leitura" id="varLeitura" role="note" hidden><span class="va-i" aria-hidden="true">✅</span><div>
-      <b>Estas variações respeitam a ficha original:</b>
-      <p class="va-p">Cada variação abaixo é uma pequena adaptação que mantém os dados principais desta atividade.</p>
-      <ul class="va-lista">
-        <li><b>Faixa etária:</b> <span id="vlTurmas"></span></li>
-        <li><b>Nome da atividade:</b> <span id="vlTitulo"></span></li>
-        <li><b>Materiais:</b> <span id="vlMats"></span></li>
-      </ul>
-      <p class="va-p">Você está só vendo as variações dos colegas. Se alguma não combinar com a sua turma, use a ficha original ou crie uma ficha nova.</p>
-    </div></div>
+    <div class="var-alerta" role="note"><span class="va-i" aria-hidden="true">💡</span><div><b>Antes de sugerir uma variação:</b> ela serve para <b>pequenas modificações</b> da atividade original. A faixa etária, os materiais e a dinâmica <b>não são herdados</b> da atividade-mãe. Se a sua ideia muda bastante a atividade (outra turma, outros materiais ou outra dinâmica), vale mais a pena <b>criar uma ficha nova</b>. Mas fique à vontade: a decisão é sempre sua. 🧡</div></div>
     <div id="varLista" class="var-chat"></div>
     <div id="varForm" hidden>
       <label>Sua variação<textarea id="varTx" maxlength="500" placeholder="Ex.: Em vez de correr, as crianças vão engatinhando, para os bebês."></textarea></label>
