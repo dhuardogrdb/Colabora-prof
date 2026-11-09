@@ -104,43 +104,15 @@ window.claude={use:async function(n){
 @media (prefers-reduced-motion:reduce){.sec .si.hb{animation:none}.sec .sa{transition:none}}
 
 @media(min-width:760px){.pf-c{flex-wrap:wrap;overflow:visible}}
-.abg{margin-top:2px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease}
-.abg:hover{border-color:var(--pri)}
-.abg[open]{border-color:var(--pri)}
-.abg>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;-webkit-tap-highlight-color:transparent}
+.abg{margin-top:10px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.abg>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;font-weight:700;font-size:.95rem;color:var(--pri2)}
 .abg>summary::-webkit-details-marker{display:none}
-.abg-h{flex:1;min-width:0}
-.abg-h h3{margin:0 0 4px;font-size:1.05rem;color:var(--pri2)}
-.abg-h .pf-s2{margin:0}
-.abg-a{flex:none;font-size:1.4rem;line-height:1;color:var(--pri2);transition:transform .3s ease}
+.abg-t::before{content:"Ver gráfico"}
+.abg[open] .abg-t::before{content:"Fechar gráfico"}
+.abg-a{font-size:1.3rem;line-height:1;color:var(--mut);transition:transform .3s ease}
 .abg[open] .abg-a{transform:rotate(180deg)}
 .abg>summary:focus-visible{outline:3px solid var(--pri2);outline-offset:-3px}
 .abg-c{padding:6px 14px 14px;border-top:1px solid var(--line)}
-.bx-lista{display:flex;flex-direction:column;gap:10px;padding:2px 0 4px}
-.bx-op{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .2s ease,background .2s ease}
-.bx-op:hover,.bx-op:focus-visible{border-color:var(--pri);background:var(--soft);outline:none}
-.bx-i{flex:none;font-size:1.6rem;line-height:1}
-.bx-t{flex:1;min-width:0}
-.bx-t b{display:block;font-size:1rem;color:var(--pri2)}
-.bx-t small{display:block;margin-top:2px;color:var(--mut);font-size:.82rem;line-height:1.35}
-.bx-d{flex:none;font-size:1.3rem;color:var(--pri2);font-weight:800}
-.bx-op[disabled]{opacity:.6}
-
-.cjd{position:relative;margin:26px 0 6px;padding:16px 14px 14px;border:2px solid var(--pri);border-radius:20px;background:linear-gradient(180deg,var(--soft),var(--card) 140px);box-shadow:0 6px 20px color-mix(in srgb,var(--pri) 22%,transparent)}
-.cjd::before{content:"";position:absolute;left:18px;right:18px;top:-2px;height:5px;border-radius:0 0 6px 6px;background:linear-gradient(90deg,var(--pri),var(--pri2))}
-.cjd-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 8px}
-.cjd-selo{display:inline-block;padding:4px 12px;border-radius:999px;background:var(--pri2);color:#fff;font-weight:800;font-size:.74rem;letter-spacing:.03em;text-transform:uppercase}
-.cjd-n{font-size:.85rem;color:var(--pri2);font-weight:700}
-.cjd-n b{font-size:1.25rem}
-.cjd-t{margin:0 0 2px;font-size:1.2rem;color:var(--pri2)}
-.cjd-s{margin:0 0 6px;color:var(--mut);font-size:.85rem;line-height:1.35}
-.cjd .cjd-r{margin:4px 0 12px}
-.cjd .pf-b{border-top:0;margin-top:12px;padding-top:0}
-.cjd .abg{background:var(--card)}
-@keyframes cjdIn{0%{transform:translateY(8px);opacity:0}100%{transform:none;opacity:1}}
-.cjd{animation:cjdIn .5s ease both}
-@media (prefers-reduced-motion:reduce){.cjd{animation:none}}
-
 .abg-x{display:block;margin:14px auto 0;border:1px solid var(--line);background:var(--bg);color:var(--pri2);font:inherit;font-weight:700;font-size:.85rem;border-radius:999px;padding:8px 18px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.abg-a{transition:none}}
 
@@ -160,71 +132,6 @@ body:not(.home) .rolar{display:none}
 .rolar:focus-visible{outline:3px solid var(--pri2);outline-offset:2px;opacity:.8}
 .rolar svg{width:26px;height:26px}
 @media(prefers-reduced-motion:reduce){.rolar{transition:none}}
-</style>
-<style>
-.seqsel{position:relative;display:grid;grid-template-columns:1fr 1fr;background:#f3ece0;border-radius:999px;padding:4px;margin:10px 0}
-.seqth{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--pri2,#e8590c);border-radius:999px;transition:transform .35s cubic-bezier(.22,1,.36,1)}
-.seqsel.on .seqth{transform:translateX(100%)}
-.seqsel button{position:relative;z-index:1;background:none;border:0;padding:11px 8px;font:inherit;font-weight:700;color:#5a4a3a;cursor:pointer;border-radius:999px;transition:color .3s}
-.seqsel button[aria-checked=true]{color:#fff}
-.seqbar{border:2px solid var(--pri2,#e8590c);background:#fff4e6;border-radius:16px;padding:12px 14px;margin:6px 0 10px}
-.seqbar p{margin:6px 0 10px;font-size:.92rem}
-.seq{margin-bottom:12px;min-width:0}
-.seq-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 2px 6px}
-.seq-selo{background:var(--pri2,#e8590c);color:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-size:.85rem}
-.seq-n{font-size:.85rem;color:var(--mut,#6b5d4d)}
-.seq-t{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px}
-.seq-i{flex:0 0 90%;scroll-snap-align:center;min-width:0;display:flex;flex-direction:column}
-.seq-i .card{margin-bottom:0;flex:1}
-.seq-e{font-weight:800;color:var(--pri2,#e8590c);margin:0 4px 4px;font-size:.9rem}
-.seq-dica{text-align:center;font-size:.85rem;color:var(--mut,#6b5d4d)}
-#lista.gcols>.seq{min-width:0}
-.seqtop[hidden],.seqdock[hidden]{display:none!important}
-.seqtop{margin:6px 0 10px;text-align:center;overflow-x:auto}
-.seqtop .aj{margin:4px 0 0;font-weight:700}
-.seqdots{position:relative;display:inline-flex;align-items:center;height:46px;min-width:min-content}
-.seqbtns{display:flex;gap:6px}
-.sd{width:40px;height:40px;border-radius:50%;border:2px solid var(--pri2,#e8590c);background:#fff;color:var(--pri2,#e8590c);font:inherit;font-weight:800;cursor:pointer;position:relative;z-index:1;transition:color .3s}
-.sd.on{color:#fff}.sd.mais{border-style:dashed}
-.seqdrop{position:absolute;left:0;top:3px;width:40px;height:40px;border-radius:50%;background:var(--pri2,#e8590c);transition:transform .45s cubic-bezier(.22,1,.36,1);z-index:0}
-.seqdock{position:sticky;bottom:0;z-index:5;display:flex;align-items:center;gap:10px;background:#fffaf3;border-top:2px solid var(--pri2,#e8590c);padding:10px 12px;margin:12px -4px -4px;border-radius:14px 14px 0 0;box-shadow:0 -6px 16px rgba(0,0,0,.08)}
-.seqdd{display:flex;gap:6px;overflow-x:auto;flex:1}
-.dk{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:2px solid #cfc3b2;background:#fff;font:inherit;font-weight:800;color:#8a7a68;cursor:pointer;transition:background .3s,border-color .3s,color .3s}
-.dk.on{border-color:var(--pri2,#e8590c);color:var(--pri2,#e8590c)}
-.dk.ok{background:#2f9e44;border-color:#2f9e44;color:#fff}
-#envRow[hidden]{display:none!important}
-.seqbot{display:flex;flex-direction:column;gap:6px;margin-top:6px}
-.seqbot .btn{width:100%;box-sizing:border-box;padding:13px 12px;font-size:1.05rem;font-weight:800;margin:0}
-.seqbot[hidden],.seqbot .btn[hidden]{display:none!important}
-.seqbot .seqconf{background:#e8590c;border-color:#e8590c;color:#fff;transition:background .4s,border-color .4s}
-.seqbot .seqconf.ok{background:#2f9e44;border-color:#2f9e44;opacity:1}
-.dk.pisca{background:#fff4e6;border-color:#e8590c;color:#e8590c;animation:dkP 1s ease-in-out infinite}
-@keyframes dkP{50%{background:#e8590c;color:#fff}}
-.gotaC{position:fixed;z-index:30;width:20px;height:20px;border-radius:50%;background:#e8590c;pointer-events:none;box-shadow:0 3px 10px rgba(0,0,0,.3);transition:transform .75s cubic-bezier(.5,0,.85,.5),background .75s}
-@media (prefers-reduced-motion:reduce){.dk.pisca{animation:none}.gotaC{transition:none}}
-#f.seqm .seqdock{margin-top:4px;padding:0}
-#f.seqm .seqbot+#envRow{margin:0}
-.seqfab{position:fixed;right:14px;bottom:74px;z-index:9;pointer-events:auto;background:#e8590c;border-color:#e8590c;color:#fff;font-weight:800;box-shadow:0 6px 18px rgba(0,0,0,.28);animation:fabIn .35s ease-out}
-.seqfab[hidden]{display:none!important}
-@keyframes fabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.seqdock .btn{flex:0 0 auto}
-#f.seqm #enviar{display:none}
-@keyframes slR{from{transform:translateX(40px);opacity:.2}to{transform:none;opacity:1}}
-@keyframes slL{from{transform:translateX(-40px);opacity:.2}to{transform:none;opacity:1}}
-#fichaSlide{display:block}
-#fichaSlide.slR{animation:slR .4s cubic-bezier(.22,1,.36,1)}#fichaSlide.slL{animation:slL .4s cubic-bezier(.22,1,.36,1)}
-#dlg{overflow-x:hidden}
-#f.seqm #enviar{display:inline-block}
-.seqtop{text-align:left;overflow:visible;margin:10px 0}
-.encsel{background:#f3ece0;border-radius:999px;padding:4px;overflow-x:auto;scrollbar-width:none}
-.encsel::-webkit-scrollbar{display:none}
-.encin{position:relative;display:flex;width:max-content;min-width:100%}
-.encth{position:absolute;top:0;bottom:0;left:0;width:120px;background:var(--pri2,#e8590c);border-radius:999px;transition:transform .35s cubic-bezier(.22,1,.36,1)}
-.eb{position:relative;z-index:1;flex:0 0 120px;background:none;border:0;padding:11px 4px;font:inherit;font-weight:800;color:#5a4a3a;cursor:pointer;border-radius:999px;transition:color .3s;white-space:nowrap}
-.eb.on{color:#fff}.eb.mais{flex:0 0 48px}
-.seqdock{position:sticky;bottom:12px;z-index:5;justify-content:center;background:none;border:0;box-shadow:none;padding:0;margin:8px 0 0;pointer-events:none}
-.seqdd{flex:0 1 auto;justify-content:center;flex-wrap:wrap;pointer-events:none}
-.dk{pointer-events:auto;box-shadow:0 2px 8px rgba(0,0,0,.22)}
 </style>
 </head><body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap">
@@ -800,8 +707,7 @@ body:not(.home) #qrbloco{display:none}
   <div id="lista"></div>
 </section>
 <section id="experiencia" class="tela"><div class="bar"><h2 style="color:var(--pri2)">Dados da experiência do usuário</h2><button class="btn" id="avBtn2" type="button">Responder</button></div><div id="xp"></div><div class="row" id="csvrow2"><button class="btn sec" id="csv2">Baixar planilha (CSV)</button></div></section>
-<section id="dados" class="tela"><div class="bar"><h2 style="color:var(--pri2)">Dados do planejamento docente</h2></div><div id="stats"></div><div class="row" id="csvrow"><button class="btn" id="baixaAbre" type="button">⬇️ Baixar material</button></div></section>
-<div class="mdl" id="baixaModal" role="dialog" aria-modal="true" aria-labelledby="baixaT" hidden><div class="mdl-box"><button type="button" class="mdl-x" id="baixaX" aria-label="Fechar">×</button><h2 id="baixaT">Baixar material</h2><p class="var-sub">Escolha qual planilha você quer baixar.</p><div class="bx-lista"><button type="button" class="bx-op" data-bx="cor"><span class="bx-i">💖</span><span class="bx-t"><b>Análise dos corações</b><small>Atividades com seus corações, turmas, unidade temática e campo de experiência</small></span><span class="bx-d">⬇</span></button><button type="button" class="bx-op" data-bx="ati"><span class="bx-i">📊</span><span class="bx-t"><b>Análise das atividades</b><small>Quantas atividades há em cada turma, unidade temática e campo de experiência, e as combinações de turmas</small></span><span class="bx-d">⬇</span></button><button type="button" class="bx-op" data-bx="var"><span class="bx-i">💬</span><span class="bx-t"><b>Análise das variações</b><small>Quantas variações cada atividade recebeu</small></span><span class="bx-d">⬇</span></button><button type="button" class="bx-op" data-bx="mat"><span class="bx-i">🛒</span><span class="bx-t"><b>Lista de materiais</b><small>Os materiais mais usados em cada turma</small></span><span class="bx-d">⬇</span></button></div></div></div>
+<section id="dados" class="tela"><div class="bar"><h2 style="color:var(--pri2)">Dados do planejamento docente</h2></div><div id="stats"></div><div class="row" id="csvrow"><button class="btn sec" id="csv">Baixar planilha (CSV)</button> <button class="btn" id="csvMat" type="button">🛒 Baixar lista de materiais</button></div></section>
 <div class="sug-plat"><button class="btn sec" id="sugAbre" type="button">💡 Sugestões para a plataforma</button></div>
 <style>
 .sug-plat{text-align:center;margin:28px 0 8px}
@@ -839,12 +745,6 @@ body:not(.home) #qrbloco{display:none}
 .mdl-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
 .mdl-aviso{font-size:.8rem;color:var(--mut);margin:6px 0 0}
-#varModal{z-index:10050!important}
-.var-alerta{display:flex;gap:10px;align-items:flex-start;background:#fff4e6;border:1px solid #ffd8a8;border-left:5px solid var(--pri2);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:.88rem;line-height:1.45;color:#5c3b12}
-.var-alerta .va-i{font-size:1.2rem;line-height:1.2;flex:0 0 auto}
-.var-alerta b{color:#8a3d00}
-:root[data-theme="dark"] .var-alerta{background:#3a2a22;border-color:#6b4a2f;color:#f1dcc4}
-:root[data-theme="dark"] .var-alerta b{color:#ffb070}
 #mhModal{border:0;border-radius:20px;padding:0;width:min(680px,95vw);max-height:94vh;max-height:94dvh;background:var(--card);color:var(--ink);overflow:hidden}
 #mhModal::backdrop{background:rgba(20,16,26,.72)}
 #mhModal .mdl-box{max-width:none;max-height:94vh;max-height:94dvh;border-radius:20px;box-shadow:none}
@@ -876,6 +776,21 @@ body:not(.home) #qrbloco{display:none}
     </div>
   </div>
 </dialog>
+<div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
+  <div class="mdl-box">
+    <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
+    <h2 id="varT">Variações</h2>
+    <p class="var-sub" id="varSub"></p>
+    <div id="varLista" class="var-chat"></div>
+    <div id="varForm" hidden>
+      <label>Sua variação<textarea id="varTx" maxlength="500" placeholder="Ex.: Em vez de correr, as crianças vão engatinhando, para os bebês."></textarea></label>
+      <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="varNm" maxlength="60" placeholder="Ex.: CEI Ana Amélia Bezerra de Menezes"></label>
+      <p class="mdl-aviso">Não escreva nomes de crianças.</p>
+      <div class="mdl-acoes"><button class="btn" id="varEnv" type="button">Enviar</button><button class="btn sec" id="varCancela" type="button">Cancelar</button></div>
+    </div>
+    <div class="mdl-acoes"><button class="btn" id="varNova" type="button">Sugerir variação</button></div>
+  </div>
+</div>
 <div class="mdl" id="sugModal" hidden role="dialog" aria-modal="true" aria-labelledby="sugT">
   <div class="mdl-box">
     <button class="mdl-x" id="sugX" type="button" aria-label="Fechar">×</button>
@@ -900,11 +815,6 @@ body:not(.home) #qrbloco{display:none}
 .dica{background:var(--soft);border-radius:12px;padding:10px 12px;color:var(--ink)}
 .ex{border:1px dashed var(--pri);border-radius:12px;padding:8px 12px;background:var(--bg)}
 .ex summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--pri)}
-.exlinha{display:flex;align-items:flex-start;gap:0}
-.exlinha .ex{flex:1;min-width:0}
-#limparFicha{flex:none;white-space:nowrap;font-size:.85rem;overflow:hidden;box-sizing:border-box;width:0;max-width:0;padding:9px 0;margin-left:0;border-width:0;opacity:0;pointer-events:none;transition:max-width .45s ease,width .45s ease,margin-left .45s ease,padding .45s ease,opacity .35s ease .45s}
-#limparFicha.on{width:auto;max-width:200px;padding:9px 14px;margin-left:10px;border-width:1px;opacity:1;pointer-events:auto}
-@media (prefers-reduced-motion:reduce){#limparFicha{transition:none}}
 .aviso-ia{display:flex;gap:12px;align-items:flex-start;border:2px solid transparent;background:linear-gradient(#f5f3ff,#f5f3ff) padding-box,conic-gradient(from var(--gAng),#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4) border-box;animation:geminiGira 5s linear infinite;color:#2a2430;border-radius:16px;padding:14px 16px;margin:10px 0 12px;box-shadow:0 4px 14px rgba(107,91,214,.18)}
 .aviso-ia .ai-ic{animation:geminiPulsa 2.4s ease-in-out infinite}
 .aviso-ia>div>b:first-child{background:linear-gradient(90deg,#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4);background-size:300% 100%;animation:geminiFlui 6s linear infinite;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
@@ -921,8 +831,6 @@ body:not(.home) #qrbloco{display:none}
 <form id="f" method="dialog" onsubmit="return false">
   <div class="fx"><button type="button" class="fx-b" id="fechar" aria-label="Fechar formulário" title="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
   <h2>Formulário de compartilhamento de atividades</h2>
-  <div class="seqsel" id="seqSel" role="radiogroup" aria-label="Tipo de ficha"><span class="seqth"></span><button type="button" role="radio" aria-checked="true" data-s="0">Atividade única</button><button type="button" role="radio" aria-checked="false" data-s="1">Sequência didática</button></div>
-  <div class="seqtop" id="seqTop" hidden><div class="encsel" id="seqEnc" role="tablist" aria-label="Encontros da sequência"><div class="encin"><span class="encth" id="seqDrop"></span><div id="seqBtns" style="display:contents"></div></div></div></div>
   <div class="aviso-ia" role="note">
     <span class="ai-ic" aria-hidden="true">✨</span>
     <div>
@@ -931,7 +839,7 @@ body:not(.home) #qrbloco{display:none}
       <p><b style="display:inline;font-size:inherit">A sua opinião vem em primeiro lugar:</b> este formulário valoriza o olhar de quem conhece a prática. A IA só sugere, nada muda sem a sua aprovação, e <b style="display:inline;font-size:inherit">a decisão final é sempre sua.</b></p>
     </div>
   </div>
-  <div class="exlinha"><details class="ex"><summary>👀 Ver um exemplo de ficha preenchida</summary>
+  <details class="ex"><summary>👀 Ver um exemplo de ficha preenchida</summary>
     <div class="exb">
       <p class="aj">Escreva do seu jeito, com frases completas, sem abreviações, e use vírgulas para separar os itens.</p>
       <p><b>Nome:</b> Tartaruguinha 1, 2, 3</p>
@@ -941,8 +849,7 @@ body:not(.home) #qrbloco{display:none}
       <p><b>Turmas:</b> Infantil 3, Infantil 4</p>
       <p><b>Unidade temática:</b> Brincadeiras e jogos · <b>Campo:</b> Corpo, gestos e movimentos</p>
     </div>
-  </details><button type="button" class="btn sec" id="limparFicha" aria-hidden="true" tabindex="-1" title="Apagar tudo e começar uma ficha do zero">🧹 Limpar ficha</button></div>
-  <div id="fichaSlide">
+  </details>
   <div class="cats camposIA" id="camposIA">
   <label>Nome da atividade<input id="t" maxlength="80" required placeholder="Ex.: Corrida do saco"></label>
   <label>Descrição breve da atividade<textarea id="d" maxlength="500" required placeholder="Ex.: As crianças ficam em roda. Uma é o pegador e corre atrás das outras. Quem for tocado vira o novo pegador."></textarea><span class="aj cnt" id="dCnt"></span></label>
@@ -982,10 +889,7 @@ body:not(.home) #qrbloco{display:none}
     </div>
   </div>
   <div class="note" id="genFalha" hidden>Não conseguimos criar a ilustração agora. Você pode tentar de novo ou publicar a atividade sem ilustração. Tudo o que você escreveu foi mantido.</div>
-  <div class="seqbot" id="seqBot" hidden><button type="button" class="btn seqconf" id="seqConf" hidden></button><button type="button" class="btn sec" id="seqLimpa">🧹 Limpar ficha</button></div>
-  <div class="row" id="envRow"><button class="btn" id="enviar" type="button" disabled>Aprovar ilustração e publicar atividade</button><button class="btn sec" type="button" id="cancel">Cancelar</button></div>
-  </div>
-  <div class="seqdock" id="seqDock" hidden><div class="seqdd" id="seqDD"></div><button type="button" class="btn seqfab" id="seqPubFab" hidden>Publicar sequência didática</button></div>
+  <div class="row"><button class="btn" id="enviar" type="button" disabled>Aprovar ilustração e publicar atividade</button><button class="btn sec" type="button" id="cancel">Cancelar</button></div>
 </form>
 </dialog>
 <dialog id="conf">
@@ -1087,8 +991,6 @@ function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");cl
    Para tirar todas de uma vez: troque true por false na linha abaixo. */
 const DEMO_ON=true;
 const DEMO=[{"id":"demo01","titulo":"Spa para bebês","descricao":"Os bebês recebem um momento de cuidado e afeto, com massagem suave nos pés e nas mãos, música tranquila e um ambiente aconchegante.","como":"Faça em um espaço calmo e com pouca luz. Observe sempre se cada bebê está gostando do toque e pare se ele demonstrar desconforto. A bacia com água morna deve ficar sempre sob o olhar de um adulto.","materiais":"toalhas macias, colchonetes, almofadas, esponjas macias, bacia com água morna, caixa de som com música calma","autor":"Atividade de exemplo","turmas":["Berçário"],"unidade":"Brincadeiras e jogos","campo":"O eu, o outro e o nós","imagem":"","imagemAprovada":false,"t":1790942400000},{"id":"demo02","titulo":"Brincadeira de luzes e sombras","descricao":"Em um espaço com pouca luz, os bebês acompanham com os olhos e tentam alcançar as luzes e as sombras que se movem na parede e no chão.","como":"Nunca aponte a lanterna diretamente para os olhos dos bebês. Mostre as sombras das suas mãos e deixe que eles toquem nos tecidos coloridos.","materiais":"lanterna, papel celofane colorido, tecido transparente, lençol branco, fita adesiva","autor":"Atividade de exemplo","turmas":["Berçário"],"unidade":"Brincadeiras e jogos","campo":"Traços, sons, cores e formas","imagem":"","imagemAprovada":false,"t":1791028800000},{"id":"demo03","titulo":"Arco-íris de fitas","descricao":"Os bebês e as crianças pequenas exploram fitas coloridas penduradas, balançam, puxam e passam por baixo, descobrindo as cores do arco-íris.","como":"Pendure as fitas em uma altura que as crianças alcancem e cante uma música sobre as cores enquanto elas exploram.","materiais":"fitas de cetim coloridas, barbante, fita adesiva, caixa de som","autor":"Atividade de exemplo","turmas":["Berçário","Infantil 1"],"unidade":"Brincadeiras e jogos","campo":"Traços, sons, cores e formas","imagem":"","imagemAprovada":false,"t":1791115200000},{"id":"demo04","titulo":"Bolhas de sabão","descricao":"Uma pessoa sopra bolhas de sabão e as crianças tentam estourá-las, seguir com o olhar ou pegá-las, correndo, pulando e batendo palmas.","como":"Faça a mistura com água e detergente neutro. Com os menores, o adulto sopra as bolhas e as crianças observam e tentam tocar. Com as maiores, elas mesmas fazem as bolhas.","materiais":"água, detergente neutro, glicerina, canudos, bacias, varinhas para bolhas","autor":"Atividade de exemplo","turmas":["Berçário","Infantil 1","Infantil 2","Infantil 3","Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"Corpo, gestos e movimentos","imagem":"","imagemAprovada":false,"t":1791201600000},{"id":"demo05","titulo":"Túnel de tecidos","descricao":"Os bebês engatinham ou andam por um túnel feito de tecidos e caixas de papelão, encontrando objetos macios e surpresas no caminho.","como":"Deixe o túnel curto e bem iluminado, e fique do outro lado chamando a criança pelo nome para dar segurança.","materiais":"caixas de papelão grandes, tecidos leves, almofadas, brinquedos macios","autor":"Atividade de exemplo","turmas":["Berçário","Infantil 1"],"unidade":"Brincadeiras e jogos","campo":"Corpo, gestos e movimentos","imagem":"","imagemAprovada":false,"t":1791288000000},{"id":"demo06","titulo":"Rolinho no colchonete","descricao":"As crianças rolam de um lado para o outro sobre colchonetes, de barriga para cima e de barriga para baixo, e descobrem formas diferentes de se mover.","como":"Comece com o colchonete no chão, sem nenhuma rampa. Se a criança estiver com sono ou cansada, deixe que ela observe os colegas.","materiais":"colchonetes, almofadas, rolos de espuma","autor":"Atividade de exemplo","turmas":["Berçário","Infantil 1","Infantil 2"],"unidade":"Ginásticas","campo":"Corpo, gestos e movimentos","imagem":"","imagemAprovada":false,"t":1791374400000},{"id":"demo07","titulo":"Tartaruguinha 1, 2, 3","descricao":"As crianças engatinham como tartaruguinhas, com uma almofada nas costas como casco, e precisam chegar até a toca sem deixar o casco cair.","como":"Combine uma toca, que pode ser um colchonete, como ponto de chegada, e conte 1, 2, 3 para começar cada rodada.","materiais":"almofadas, colchonetes, cones","autor":"Atividade de exemplo","turmas":["Infantil 1","Infantil 2","Infantil 3"],"unidade":"Brincadeiras e jogos","campo":"Corpo, gestos e movimentos","imagem":"","imagemAprovada":false,"t":1791460800000},{"id":"demo08","titulo":"Circuito de bambolês","descricao":"Bambolês espalhados pelo chão formam um caminho. As crianças pulam, entram e saem dos bambolês e contam quantos já atravessaram.","como":"Varie as formas de passar: pulando com os dois pés, andando de lado, engatinhando. Comece com poucos bambolês e aumente aos poucos.","materiais":"bambolês, giz, cones","autor":"Atividade de exemplo","turmas":["Infantil 1","Infantil 2","Infantil 3","Infantil 4"],"unidade":"Brincadeiras e jogos","campo":"Espaços, tempos, quantidades, relações e transformações","imagem":"","imagemAprovada":false,"t":1791547200000},{"id":"demo09","titulo":"Dança das fitas","descricao":"Cada criança segura uma fita colorida e dança no ritmo da música, desenhando no ar linhas, círculos e ondas com o corpo.","como":"Troque entre música rápida e música lenta para as crianças perceberem como o corpo muda. Combine antes um espaço livre para todas dançarem.","materiais":"fitas coloridas, varetas de madeira, caixa de som","autor":"Atividade de exemplo","turmas":["Infantil 1","Infantil 2","Infantil 3"],"unidade":"Danças","campo":"Traços, sons, cores e formas","imagem":"","imagemAprovada":false,"t":1791633600000},{"id":"demo10","titulo":"Cobra de corda","descricao":"Dois colegas balançam uma corda no chão como se fosse uma cobra, e os outros tentam pular sem encostar nela.","como":"Comece com a corda parada e aumente o movimento aos poucos. Combine uma regra simples: quem encostar na cobra troca de lugar com quem balança.","materiais":"corda grossa, cones","autor":"Atividade de exemplo","turmas":["Infantil 2","Infantil 3","Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"Corpo, gestos e movimentos","imagem":"","imagemAprovada":false,"t":1791720000000},{"id":"demo11","titulo":"Esconde-esconde","descricao":"Uma criança conta até dez de olhos fechados enquanto as outras se escondem. Depois ela procura os colegas pelo pátio.","como":"Delimite o espaço do pátio e escolha esconderijos seguros, sem risco de queda. Com os menores, o professor se esconde junto com eles.","materiais":"nenhum material","autor":"Atividade de exemplo","turmas":["Infantil 2","Infantil 3","Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"O eu, o outro e o nós","imagem":"","imagemAprovada":false,"t":1791806400000},{"id":"demo12","titulo":"Pega-pega","descricao":"Uma criança é a pegadora e corre atrás dos colegas. Quem for pego vira a nova pegadora.","como":"Combine os limites do espaço e uma zona de descanso, a casinha, onde ninguém pode ser pego.","materiais":"coletes coloridos, cones","autor":"Atividade de exemplo","turmas":["Infantil 3","Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"Corpo, gestos e movimentos","imagem":"","imagemAprovada":false,"t":1791892800000},{"id":"demo13","titulo":"Pega-congela","descricao":"A pegadora toca nos colegas, que ficam congelados como estátuas até que outro colega toque neles e os descongele.","como":"Estimule a cooperação: lembre que quem salva um amigo também ajuda o grupo. Troque a pegadora a cada rodada.","materiais":"coletes coloridos, apito","autor":"Atividade de exemplo","turmas":["Infantil 3","Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"O eu, o outro e o nós","imagem":"","imagemAprovada":false,"t":1791979200000},{"id":"demo14","titulo":"Canoa de papelão","descricao":"As crianças sentam dentro de uma grande caixa de papelão que vira canoa e remam juntas, inventando uma viagem pelo rio com histórias e cantigas.","como":"Converse antes sobre os rios e os animais que vivem neles. Deixe as crianças ajudarem a decorar a canoa.","materiais":"caixas de papelão grandes, colheres de pau, tecido azul, tinta guache, pincéis","autor":"Atividade de exemplo","turmas":["Infantil 3","Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"Escuta, fala, pensamento e imaginação","imagem":"","imagemAprovada":false,"t":1792065600000},{"id":"demo15","titulo":"Dança da cadeira","descricao":"As crianças dançam ao redor das cadeiras enquanto a música toca. Quando ela para, cada uma precisa sentar em uma cadeira.","como":"Para ninguém ficar de fora, use a versão cooperativa: a cada rodada tire uma cadeira e todas devem caber nas que sobraram, em duplas ou no colo.","materiais":"cadeiras, caixa de som","autor":"Atividade de exemplo","turmas":["Infantil 3","Infantil 4","Infantil 5"],"unidade":"Danças","campo":"Traços, sons, cores e formas","imagem":"","imagemAprovada":false,"t":1792152000000},{"id":"demo16","titulo":"Boliche de garrafinhas","descricao":"As crianças rolam uma bola para derrubar garrafinhas enfileiradas e contam quantas caíram.","como":"Coloque um pouco de areia nas garrafinhas para ficarem firmes. Aumente a distância aos poucos.","materiais":"garrafas plásticas, bola macia, areia, fita adesiva","autor":"Atividade de exemplo","turmas":["Infantil 3","Infantil 4","Infantil 5"],"unidade":"Esportes","campo":"Espaços, tempos, quantidades, relações e transformações","imagem":"","imagemAprovada":false,"t":1792238400000},{"id":"demo17","titulo":"Cesta no balde","descricao":"As crianças tentam acertar bolinhas dentro de baldes colocados a distâncias diferentes, e cada balde vale uma pontuação combinada pelo grupo.","como":"Marque no chão, com giz, de onde cada criança deve lançar. Deixe cada uma escolher o balde que quer tentar.","materiais":"baldes, bolas pequenas, giz, cones","autor":"Atividade de exemplo","turmas":["Infantil 4","Infantil 5"],"unidade":"Esportes","campo":"Espaços, tempos, quantidades, relações e transformações","imagem":"","imagemAprovada":false,"t":1792324800000},{"id":"demo18","titulo":"Arranca-mandioca","descricao":"Uma criança segura firme em um poste e as outras formam uma fila abraçadas pela cintura. O grupo tenta arrancar a mandioca, puxando os colegas um por um.","como":"Faça sobre grama ou sobre colchonetes. Quem sai da fila fica por perto para ajudar a puxar. Pare a brincadeira se alguma criança se machucar ou ficar assustada.","materiais":"colchonetes","autor":"Atividade de exemplo","turmas":["Infantil 4","Infantil 5"],"unidade":"Brincadeiras e jogos","campo":"O eu, o outro e o nós","imagem":"","imagemAprovada":false,"t":1792411200000},{"id":"demo19","titulo":"Cabo de guerra cooperativo","descricao":"Dois grupos puxam uma corda em lados opostos e, ao final de cada rodada, trocam de lado, aprendendo a cooperar e a respeitar o outro grupo.","como":"Use uma corda larga que não machuque as mãos e uma linha marcada no chão. Converse com as crianças sobre respeitar o grupo adversário.","materiais":"corda grossa, fita adesiva, coletes coloridos","autor":"Atividade de exemplo","turmas":["Infantil 5"],"unidade":"Lutas","campo":"O eu, o outro e o nós","imagem":"","imagemAprovada":false,"t":1792497600000},{"id":"demo20","titulo":"Trilha de aventura","descricao":"Um percurso no pátio com obstáculos, como passar por baixo de cordas, equilibrar-se em tábuas baixas e subir em pneus, para vencer desafios em grupo.","como":"Monte o percurso com pouca altura e acompanhe de perto cada desafio. As crianças escolhem o que querem tentar.","materiais":"cordas, pneus, tábuas de madeira baixas, colchonetes, cones","autor":"Atividade de exemplo","turmas":["Infantil 3","Infantil 4","Infantil 5"],"unidade":"Práticas corporais de aventura","campo":"Espaços, tempos, quantidades, relações e transformações","imagem":"","imagemAprovada":false,"t":1792584000000}];
-/* ===== FICHAS PREENCHIDAS PARA TESTE (10) ===== */
-const FICHAS_TESTE=[{"id": "cf01", "titulo": "Siga o mestre dos animais", "descricao": "As crianças imitam o professor, que faz o movimento de um animal: pula como sapo, rasteja como cobra, balança os braços como elefante. Depois uma criança vira o mestre e escolhe o próximo animal.", "como": "Comece com animais bem conhecidos e deixe cada criança sugerir um novo animal.", "materiais": "", "autor": "", "turmas": ["Infantil 3"], "unidade": "Brincadeiras e jogos", "campo": "Corpo, gestos e movimentos", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675928}, {"id": "cf02", "titulo": "Dança das cadeiras com bambolês", "descricao": "Bambolês espalhados no chão fazem o papel das cadeiras. Quando a música toca, as crianças dançam em volta; quando para, cada uma entra em um bambolê. Ninguém sai da brincadeira, só se retiram alguns bambolês e os amigos se abraçam dentro do mesmo.", "como": "Reforce que o objetivo é cooperar: todo mundo cabe, mesmo com poucos bambolês.", "materiais": "bambolês, caixa de som", "autor": "", "turmas": ["Infantil 4"], "unidade": "Danças", "campo": "O eu, o outro e o nós", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675929}, {"id": "cf03", "titulo": "Circuito da floresta", "descricao": "Um percurso com obstáculos: passar por cima dos troncos (colchonetes), por baixo dos cipós (cordas), pular as poças (arcos) e equilibrar na ponte (banco baixo).", "como": "Deixe um adulto ao lado de cada obstáculo e ajuste a altura para a turma.", "materiais": "colchonetes, cordas, arcos, banco baixo", "autor": "", "turmas": ["Infantil 5"], "unidade": "Ginásticas", "campo": "Espaços, tempos, quantidades, relações e transformações", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675930}, {"id": "cf04", "titulo": "Pega-pega do gelo e do sol", "descricao": "Uma criança é o sol e tenta pegar os amigos. Quem é pego vira gelo e fica parado com os braços abertos. Para derreter, um amigo passa por baixo dos braços e a criança volta a correr.", "como": "Troque o sol de tempos em tempos para todos participarem.", "materiais": "", "autor": "", "turmas": ["Infantil 5"], "unidade": "Brincadeiras e jogos", "campo": "O eu, o outro e o nós", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675931}, {"id": "cf05", "titulo": "Dança das cores", "descricao": "Cada criança segura uma fita de uma cor. Quando o professor mostra uma cor e toca a música, quem tem aquela fita dança livremente no meio da roda, e os outros acompanham batendo palmas no ritmo.", "como": "Use músicas de ritmos diferentes: lenta, rápida, de roda.", "materiais": "fitas coloridas, caixa de som", "autor": "", "turmas": ["Infantil 2"], "unidade": "Danças", "campo": "Traços, sons, cores e formas", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675932}, {"id": "cf06", "titulo": "Cabo de guerra da amizade", "descricao": "Em duplas, as crianças seguram uma corda macia e puxam de leve uma para o lado da outra, tentando equilibrar o corpo sem soltar. Depois trocam de lado e de parceiro, sempre com respeito.", "como": "Combine antes que é brincadeira de equilíbrio e que ninguém puxa forte.", "materiais": "corda macia", "autor": "", "turmas": ["Infantil 5"], "unidade": "Lutas", "campo": "O eu, o outro e o nós", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675933}, {"id": "cf07", "titulo": "Gol de meia", "descricao": "Cada criança chuta uma bola de meia (meias enroladas) para tentar acertar em um balde ou em uma caixa colocada a distâncias diferentes. A turma conta junto os gols.", "como": "Comece perto e aumente a distância aos poucos.", "materiais": "bolas de meia, baldes ou caixas", "autor": "", "turmas": ["Infantil 4"], "unidade": "Esportes", "campo": "Espaços, tempos, quantidades, relações e transformações", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675934}, {"id": "cf08", "titulo": "Contando histórias com o corpo", "descricao": "O professor conta uma história curta e as crianças fazem os gestos dos personagens: o vento, a chuva, o gigante, o passarinho. No final, elas inventam um final diferente, também com o corpo.", "como": "Use histórias que as crianças já conhecem.", "materiais": "", "autor": "", "turmas": ["Infantil 3"], "unidade": "Brincadeiras e jogos", "campo": "Escuta, fala, pensamento e imaginação", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675935}, {"id": "cf09", "titulo": "Trilha da natureza", "descricao": "As crianças exploram o pátio ou a quadra seguindo uma trilha marcada com setas: pisam em areia, grama e folhas, passam por baixo de galhos e procuram tesouros escondidos, como pedrinhas e sementes.", "como": "Verifique o espaço antes para retirar objetos perigosos.", "materiais": "setas de papel, cestinhas, fita adesiva", "autor": "", "turmas": ["Infantil 4"], "unidade": "Práticas corporais de aventura", "campo": "Espaços, tempos, quantidades, relações e transformações", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675936}, {"id": "cf10", "titulo": "Engatinhar e rolar no túnel", "descricao": "Os bebês engatinham por um túnel de tecido e rolam sobre colchonetes macios, acompanhando o professor, que canta uma música de movimento. Os adultos ficam por perto, incentivando cada pequena conquista.", "como": "Observe cada bebê no seu tempo e não force o movimento.", "materiais": "túnel de tecido, colchonetes, almofadas", "autor": "", "turmas": ["Berçário"], "unidade": "Ginásticas", "campo": "Corpo, gestos e movimentos", "imagem": "", "imagemAprovada": false, "geracoes": 0, "t": 1794252675937}];
 const DEMO_H={"demo01":12,"demo02":9,"demo03":7,"demo04":14,"demo05":6,"demo06":5,"demo07":11,"demo08":10,"demo09":8,"demo10":13,"demo11":15,"demo12":12,"demo13":10,"demo14":9,"demo15":12,"demo16":8,"demo17":6,"demo18":7,"demo19":4,"demo20":11};
 const local={live:false,
   add:async o=>{acts.unshift(Object.assign({id:"l"+Date.now()},o));ls("cp_acts",acts.filter(x=>!x.demo));render()},
@@ -1170,7 +1072,7 @@ async function init(){
       }
     }
   }catch(e){}
-  if(!store){store=local;acts=ls("cp_acts")||[];if(DEMO_ON){const ja=new Set(acts.map(x=>x.id));DEMO.forEach(d=>{if(!ja.has(d.id))acts.push(Object.assign({demo:true},d))})}{const ja2=new Set(acts.map(x=>x.id));FICHAS_TESTE.forEach(d=>{if(!ja2.has(d.id))acts.push(Object.assign({},d))})}mine=new Set(ls("cp_votes")||[]);acts.forEach(a=>{if(a.demo)counts[a.id]=DEMO_H[a.id]||0});mine.forEach(a=>counts[a]=(DEMO_H[a]||0)+1);minhasRep=new Set(ls("cp_reps")||[]);reps=ls("cp_repn")||{};avs=ls("cp_avs")||[];minhasRepA=new Set(ls("cp_ravs")||[]);repsA=ls("cp_ravn")||{};vars=ls("cp_vars")||[];minhasRepV=new Set(ls("cp_rvars")||[]);repsV=ls("cp_rvarn")||{};sugs=ls("cp_sugs")||[];$("#aviso").hidden=false;
+  if(!store){store=local;acts=ls("cp_acts")||[];if(DEMO_ON){const ja=new Set(acts.map(x=>x.id));DEMO.forEach(d=>{if(!ja.has(d.id))acts.push(Object.assign({demo:true},d))})}mine=new Set(ls("cp_votes")||[]);acts.forEach(a=>{if(a.demo)counts[a.id]=DEMO_H[a.id]||0});mine.forEach(a=>counts[a]=(DEMO_H[a]||0)+1);minhasRep=new Set(ls("cp_reps")||[]);reps=ls("cp_repn")||{};avs=ls("cp_avs")||[];minhasRepA=new Set(ls("cp_ravs")||[]);repsA=ls("cp_ravn")||{};vars=ls("cp_vars")||[];minhasRepV=new Set(ls("cp_rvars")||[]);repsV=ls("cp_rvarn")||{};sugs=ls("cp_sugs")||[];$("#aviso").hidden=false;
     videoAplicaCfg(ls("cp_video")||"");
     visitas=ls("cp_vis")||[];
     store.visit=async()=>{const t=Date.now();visitas.push({dev:dev,d:diaStr(t),t:t});ls("cp_vis",visitas)};
@@ -1192,19 +1094,19 @@ async function init(){
 const txtDen=f=>f?"🚩 Denunciada ✕ retirar":"🚩 Denunciar";
 let _sigLista=null;
 function atualizaBolinhas(){
-  document.querySelectorAll("#lista .vbolha,#sug .vbolha,#fichaCorpo .vbolha").forEach(b=>{
+  document.querySelectorAll("#lista .vbolha,#sug .vbolha").forEach(b=>{
     const n=varCount(b.dataset.vb),ant=b.dataset.n===undefined?null:+b.dataset.n;
     b.dataset.n=n;b.hidden=!n;const t=String(n);if(b.textContent!==t)b.textContent=t;
     if(ant!==null&&n>ant){b.classList.remove("pulsa");void b.offsetWidth;b.classList.add("pulsa")}
   })}
 function atualizaCoracoes(){
   atualizaBolinhas();
-  document.querySelectorAll("#lista .heart,#sug .heart,#fichaCorpo .heart").forEach(h=>{
+  document.querySelectorAll("#lista .heart,#sug .heart").forEach(h=>{
     const id=h.dataset.h,on=mine.has(id),n=counts[id]||0;
     h.classList.toggle("on",on);
     const t="♥ "+n; if(h.textContent!==t)h.textContent=t;
   });
-  document.querySelectorAll("#lista .den,#sug .den,#fichaCorpo .den").forEach(b=>{
+  document.querySelectorAll("#lista .den,#sug .den").forEach(b=>{
     const f=minhasRep.has(b.dataset.d);b.classList.toggle("feita",f);
     const t=txtDen(f);if(b.textContent!==t)b.textContent=t;
   });
@@ -1218,16 +1120,8 @@ function render(){if(varAtual)varDesenha();stats();xp();matAtalhos();if(typeof s
   const sig=key+"|"+(filt||"")+"|"+(turma||"")+"|"+q+"|"+list.map(a=>a.id).join(",");
   if(sig===_sigLista&&$("#lista").children.length){atualizaCoracoes();return}
   _sigLista=sig;
-  const SQ={};list.forEach(a=>{if(a.seq)(SQ[a.seq]=SQ[a.seq]||[]).push(a)});
-  Object.keys(SQ).forEach(k=>SQ[k].sort((x,y)=>(x.seqN||0)-(y.seqN||0)));
-  const list2=list.filter(a=>!a.seq||SQ[a.seq][0]===a);
-  const g={};list2.forEach(a=>(g[a[key]||"Sem categoria"]=g[a[key]||"Sem categoria"]||[]).push(a));
-  $("#lista").innerHTML=Object.keys(g).sort().map(k=>"<h3>"+esc(k)+"</h3>"+g[k].sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0)).map(a=>a.seq&&SQ[a.seq]?cardSeq(SQ[a.seq]):card(a)).join("")).join("");;atualizaCoracoes()
-}
-function cardSeq(m){
-  return '<div class="seq"><div class="seq-h"><span class="seq-selo">🔗 Sequência didática</span><span class="seq-n">'+m.length+(m.length===1?" encontro":" encontros")+'</span></div><div class="seq-t" role="region" aria-label="Encontros da sequência didática, deslize para o lado">'
-   +m.map((a,i)=>'<div class="seq-i"><div class="seq-e">Encontro '+(i+1)+' de '+m.length+'</div>'+card(a)+'</div>').join("")+'</div>'
-   +(m.length>1?'<div class="seq-dica">Deslize para o lado para ver os próximos encontros →</div>':"")+'</div>';
+  const g={};list.forEach(a=>(g[a[key]||"Sem categoria"]=g[a[key]||"Sem categoria"]||[]).push(a));
+  $("#lista").innerHTML=Object.keys(g).sort().map(k=>"<h3>"+esc(k)+"</h3>"+g[k].sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0)).map(card).join("")).join("");
 }
 function card(a){
   const n=counts[a.id]||0,on=mine.has(a.id);
@@ -1295,8 +1189,6 @@ async function clicaCard(e){
     if(!un)chuva(r.left+r.width/2,r.top+r.height/2);}
 }
 $("#lista").onclick=clicaCard;$("#sug").onclick=clicaCard;
-/* a ficha grande (#fichaCorpo) é criada depois deste script; por isso o clique é delegado pelo document */
-document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#fichaCorpo"))clicaCard(e)});
 $("#cfNao").onclick=()=>{denId=null;$("#conf").close()};
 $("#cfSim").onclick=async()=>{
   const id=denId;denId=null;$("#conf").close();if(!id)return;
@@ -1312,126 +1204,6 @@ function dica(){$("#unH").textContent=UNH[$("#un").value]||"";$("#caH").textCont
 $("#d").addEventListener("input",()=>{const n=$("#d").value.trim().length;$("#dCnt").textContent=n<40?"Conte um pouco mais ("+n+" de pelo menos 40 letras)":"✓ Boa descrição"});
 $("#un").onchange=dica;$("#ca").onchange=dica;dica();
 $("#novo").onclick=()=>$("#dlg").showModal();
-var SEQ={on:false,id:null,n:1,cur:0,enc:[]};
-const ORD=["Primeiro","Segundo","Terceiro","Quarto","Quinto","Sexto","Sétimo","Oitavo","Nono","Décimo"];
-const G0=()=>({n:0,aprovada:false,img:null,busy:false,publicada:false,semImg:false});
-function encCap(){return{t:$("#t").value,d:$("#d").value,c:$("#c").value,mat:$("#mat").value,un:$("#un").value,ca:$("#ca").value,turmas:[...document.querySelectorAll("#tchk .chip.on")].map(c=>c.dataset.t),G:G,conf:((SEQ.on&&SEQ.enc[SEQ.cur])||{}).conf||null}}
-function encAplica(e){
-  resetGen();
-  $("#t").value=e.t;$("#d").value=e.d;$("#c").value=e.c;$("#mat").value=e.mat;$("#un").value=e.un;$("#ca").value=e.ca;
-  document.querySelectorAll("#tchk .chip").forEach(c=>c.classList.toggle("on",e.turmas.includes(c.dataset.t)));
-  if(typeof dica==="function")dica();
-  $("#d").dispatchEvent(new Event("input"));
-  G=e.G;
-  if(G.n>0){$("#gen").hidden=false;$("#gerar").hidden=true;$("#avisoDemora").hidden=true;
-    $("#prev").innerHTML=G.img?'<img src="'+esc(G.img)+'" alt="Ilustração gerada" style="width:100%;height:100%;object-fit:cover;border-radius:12px">':'<span>🎨</span>Ilustração provisória';
-    atualizaRest();$("#sim").classList.toggle("on",G.aprovada);$("#enviar").disabled=!G.aprovada;$("#nova").disabled=G.n>=MAX_GER}
-  if(G.semImg){$("#genFalha").hidden=false;$("#enviar").textContent="Publicar atividade sem ilustração";$("#enviar").disabled=false}
-}
-function encOk(e){return(e.G.n>0&&e.G.aprovada)||e.G.semImg}
-function encPronto(e){return !!(e.t.trim()&&e.d.trim().length>=40&&e.turmas.length&&encOk(e))}
-function seqProntos(){const c=encCap();return SEQ.enc.map((e,i)=>encPronto({t:c.t,turmas:c.turmas,d:i===SEQ.cur?c.d:e.d,G:i===SEQ.cur?G:e.G}))}
-var _dkSig="";
-var seqBusyC=false;
-function seqSigs(){const c=encCap();return SEQ.enc.map((e,i)=>{const x=i===SEQ.cur?c:e;return JSON.stringify([c.t,c.turmas,c.un,c.ca,x.d,x.c,x.mat,x.G.n,x.G.aprovada,x.G.semImg])})}
-function seqNome(i){return"Publicar "+(ORD[i]?ORD[i].toLowerCase():(i+1)+"º")+" encontro"}
-function seqDock(){
-  if(!SEQ.on)return;
-  const P=seqProntos(),S=seqSigs(),st=SEQ.enc.map((e,i)=>P[i]&&e.conf===S[i]?2:(e.conf?1:0)),sig=st.join("")+"|"+SEQ.cur;
-  if(sig!==_dkSig){_dkSig=sig;
-    $("#seqDD").innerHTML=SEQ.enc.map((e,i)=>'<button type="button" class="dk'+(st[i]===2?" ok":st[i]===1?" pisca":"")+(i===SEQ.cur?" on":"")+'" data-i="'+i+'" aria-label="Encontro '+(i+1)+(st[i]===2?", publicado":st[i]===1?", mudou, publique de novo":", ainda não publicado")+'">'+(i+1)+'</button>').join("")}
-  const pr=P[SEQ.cur],cf=$("#seqConf");
-  $("#enviar").hidden=true;$("#envRow").hidden=true;
-  $("#seqLimpa").hidden=pr;
-  cf.hidden=!pr;cf.classList.toggle("ok",st[SEQ.cur]===2);cf.disabled=st[SEQ.cur]===2||seqBusyC||G.busy;
-  cf.textContent=st[SEQ.cur]===2?"✓ "+seqNome(SEQ.cur).replace("Publicar ","")+" publicado":seqNome(SEQ.cur);
-  $("#seqPubFab").hidden=!st.every(x=>x===2)||G.busy;
-}
-function seqGota(i,fim){
-  const b=$("#seqConf"),d=document.querySelector('#seqDD .dk[data-i="'+i+'"]');
-  if(!b||!d){fim();return}
-  const r=b.getBoundingClientRect(),q=d.getBoundingClientRect(),g=document.createElement("div");
-  g.className="gotaC";g.style.left=(r.left+r.width/2-10)+"px";g.style.top=(r.top+r.height/2-10)+"px";
-  $("#dlg").appendChild(g);
-  const dx=q.left+q.width/2-(r.left+r.width/2),dy=q.top+q.height/2-(r.top+r.height/2);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{g.style.transform="translate("+dx+"px,"+dy+"px) scale(.8)";g.style.background="#2f9e44"}));
-  setTimeout(()=>{g.remove();fim()},800);
-}
-function seqConfirma(){
-  if(!SEQ.on||G.busy||seqBusyC)return;
-  if(!seqProntos()[SEQ.cur]){toast("Falta preencher esta ficha.");return}
-  SEQ.enc[SEQ.cur]=encCap();seqShare();
-  const i=SEQ.cur,S=seqSigs();
-  if(SEQ.enc[i].conf===S[i])return;
-  seqBusyC=true;$("#seqConf").disabled=true;
-  seqGota(i,()=>{SEQ.enc[i].conf=S[i];seqBusyC=false;_dkSig="";seqDock()});
-}
-function seqLimpaFicha(){
-  if(G.busy)return;
-  if(!confirm("Limpar esta ficha? O que você escreveu nela será apagado."))return;
-  const c=encCap(),um=SEQ.enc.length===1;
-  const n={t:um?"":c.t,d:"",c:"",mat:"",un:c.un,ca:c.ca,turmas:um?[]:c.turmas.slice(),G:G0(),conf:null};
-  SEQ.enc[SEQ.cur]=n;encAplica(n);seqShare();seqUi();
-}
-function seqUi(){
-  $("#seqSel").classList.toggle("on",SEQ.on);
-  document.querySelectorAll("#seqSel button").forEach(b=>b.setAttribute("aria-checked",String((b.dataset.s==="1")===SEQ.on)));
-  $("#f").classList.toggle("seqm",SEQ.on);$("#seqTop").hidden=!SEQ.on;$("#seqDock").hidden=!SEQ.on;
-  $("#seqBot").hidden=!SEQ.on;if(!SEQ.on){$("#envRow").hidden=false;$("#enviar").hidden=false;$("#enviar").textContent=G.semImg?"Publicar atividade sem ilustração":ENV_TXT;return}
-  $("#seqBtns").innerHTML=SEQ.enc.map((e,i)=>'<button type="button" class="eb'+(i===SEQ.cur?" on":"")+'" data-i="'+i+'" role="tab" aria-selected="'+(i===SEQ.cur)+'">'+(i+1)+'º encontro</button>').join("")+'<button type="button" class="eb mais" id="seqMais" aria-label="Adicionar encontro">+</button>';
-  $("#seqDrop").style.transform="translateX("+(SEQ.cur*120)+"px)";
-  const bar=$("#seqEnc");bar.scrollTo({left:SEQ.cur*120-(bar.clientWidth-120)/2,behavior:"smooth"});
-  seqDock();
-}
-function seqSet(on){
-  if(on===SEQ.on)return;
-  if(on){SEQ.on=true;SEQ.id="s"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);SEQ.cur=0;SEQ.enc=[encCap()]}
-  else{SEQ.on=false;SEQ.id=null;SEQ.cur=0;SEQ.enc=[]}
-  seqUi();
-}
-function seqShare(){
-  const c=encCap();
-  SEQ.enc.forEach(e=>{e.t=c.t;e.un=c.un;e.ca=c.ca;e.turmas=c.turmas.slice()});
-}
-function seqGo(i,dir){
-  if(G.busy||i<0||i>=SEQ.enc.length||i===SEQ.cur)return;
-  SEQ.enc[SEQ.cur]=encCap();seqShare();
-  const d=dir||(i>SEQ.cur?1:-1);
-  SEQ.cur=i;encAplica(SEQ.enc[i]);seqUi();
-  const f=$("#fichaSlide");f.classList.remove("slL","slR");void f.offsetWidth;f.classList.add(d>0?"slR":"slL");
-}
-function seqAdd(){
-  if(G.busy)return;
-  const p=encCap();SEQ.enc[SEQ.cur]=p;seqShare();
-  SEQ.enc.push({t:p.t,d:"",c:"",mat:"",un:p.un,ca:p.ca,turmas:p.turmas.slice(),G:G0(),conf:null});
-  seqGo(SEQ.enc.length-1,1);
-}
-$("#seqSel").onclick=e=>{const b=e.target.closest("button[data-s]");if(b)seqSet(b.dataset.s==="1")};
-$("#seqBtns").onclick=e=>{if(e.target.closest("#seqMais"))return seqAdd();const b=e.target.closest("button[data-i]");if(b)seqGo(+b.dataset.i)};
-$("#seqConf").onclick=seqConfirma;$("#seqLimpa").onclick=seqLimpaFicha;
-$("#seqPubFab").onclick=()=>{if(SEQ.on&&!G.busy)seqPublica()};
-$("#seqDD").onclick=e=>{const b=e.target.closest("button[data-i]");if(b)seqGo(+b.dataset.i)};
-var _tx=null,_ty=null;
-$("#f").addEventListener("touchstart",e=>{if(!SEQ.on||e.touches.length!==1||e.target.closest("input,textarea,select,.rola,.chips,.seqdock")){_tx=null;return}_tx=e.touches[0].clientX;_ty=e.touches[0].clientY},{passive:true});
-$("#f").addEventListener("touchend",e=>{if(_tx===null)return;const t=e.changedTouches[0],dx=t.clientX-_tx,dy=t.clientY-_ty;_tx=null;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6){if(dx<0)seqGo(SEQ.cur+1,1);else seqGo(SEQ.cur-1,-1)}},{passive:true});
-setInterval(()=>{if(SEQ.on&&$("#dlg").open)seqDock()},400);
-function seqPublica(){
-  SEQ.enc[SEQ.cur]=encCap();seqShare();
-  const au=$("#au").value.trim(),L=[];
-  for(let i=0;i<SEQ.enc.length;i++){
-    const e=SEQ.enc[i],t=e.t.trim(),d=e.d.trim();let m="";
-    if(!t||!d)m="preencha o nome e a descrição.";
-    else if(d.length<40)m="conte um pouco mais na descrição.";
-    else if(!e.turmas.length)m="marque ao menos uma turma.";
-    else if(!encOk(e))m="aprove a ilustração.";
-    if(m){seqGo(i);toast("Encontro "+(i+1)+": "+m);return}
-    L.push({turmas:e.turmas,titulo:t,descricao:d,como:e.c.trim(),materiais:matNorm(e.mat).join(", "),autor:au,unidade:e.un,campo:e.ca,imagem:e.G.semImg?"":(e.G.img||""),imagemAprovada:!e.G.semImg,geracoes:e.G.n,t:Date.now()+i,seq:SEQ.id,seqN:i+1});
-  }
-  _pendente=L;
-  $("#cfResumo").innerHTML='<p><b>Sequência didática com '+L.length+' encontros</b></p>'+L.map(o=>'<p><b>Encontro '+o.seqN+':</b> '+esc(o.titulo)+' · '+esc(o.turmas.join(", "))+' · '+esc(o.unidade)+'</p>').join("")+'<p><b>Autoria:</b> '+esc(au||"não informada")+'</p>';
-  $("#cfOk").checked=false;$("#cfPub").disabled=true;$("#cfdlg").showModal();
-}
-$("#dlg").addEventListener("close",()=>seqSet(false));
 $("#fabBt").onclick=()=>$("#dlg").showModal();
 $("#cancel").onclick=()=>{$("#dlg").close();resetGen()};
 $("#fechar").onclick=()=>{$("#dlg").close();resetGen()};
@@ -1551,7 +1323,6 @@ $("#ia").onclick=async()=>{
 })();
 let _pendente=null;
 $("#enviar").onclick=()=>{
-  if(SEQ.on){seqPublica();return}
   if(G.publicada||G.busy)return;
   const t=$("#t").value.trim(),d=$("#d").value.trim();
   if(!t||!d){toast("Preencha o nome e a descrição.");return}
@@ -1562,7 +1333,6 @@ $("#enviar").onclick=()=>{
   const turmas=[...document.querySelectorAll("#tchk .chip.on")].map(c=>c.dataset.t);
   if(!turmas.length){toast("Marque ao menos uma turma onde a atividade foi realizada.");return}
   _pendente={turmas:turmas,titulo:t,descricao:d,como:$("#c").value.trim(),materiais:matNorm($("#mat").value).join(", "),autor:$("#au").value.trim(),unidade:$("#un").value,campo:$("#ca").value,imagem:G.semImg?"":(G.img||""),imagemAprovada:!G.semImg,geracoes:G.n,t:Date.now()};
-  if(SEQ.on){_pendente.seq=SEQ.id;_pendente.seqN=SEQ.n}
   const o=_pendente;
   $("#cfResumo").innerHTML=
     '<p><b>Atividade:</b> '+esc(o.titulo)+'</p>'+
@@ -1572,7 +1342,7 @@ $("#enviar").onclick=()=>{
     '<p><b>Turmas:</b> '+esc(o.turmas.join(", "))+'</p>'+
     '<p><b>Unidade temática:</b> '+esc(o.unidade)+'</p>'+
     '<p><b>Campo de experiência:</b> '+esc(o.campo)+'</p>'+
-    '<p><b>Autoria:</b> '+esc(o.autor||"não informada")+'</p>'+(o.seq?'<p><b>Sequência didática:</b> encontro '+o.seqN+'</p>':'');
+    '<p><b>Autoria:</b> '+esc(o.autor||"não informada")+'</p>';
   $("#cfOk").checked=false;$("#cfPub").disabled=true;
   $("#cfdlg").showModal();
 };
@@ -1583,131 +1353,12 @@ $("#cfPub").onclick=async()=>{
   const o=_pendente;_pendente=null;
   G.publicada=true;$("#cfPub").disabled=true;
   let compartilhado=true;
-  const L=Array.isArray(o)?o:[o];let i=0;try{for(;i<L.length;i++)await store.add(L[i])}catch(e){for(;i<L.length;i++)await local.add(L[i]);compartilhado=false;$("#aviso").hidden=false}
+  try{await store.add(o)}catch(e){await local.add(o);compartilhado=false;$("#aviso").hidden=false}
   $("#cfdlg").close();
-  const msg=compartilhado&&store.live?"Atividade publicada com sucesso! 🧡":"Atividade salva só neste aparelho (modo de teste).";
-  $("#f").reset();resetGen();$("#dCnt").textContent="";$("#dlg").close();if(window.rascLimpa)window.rascLimpa();toast(msg);$("#lista").scrollIntoView();
+  $("#f").reset();resetGen();$("#dCnt").textContent="";$("#dlg").close();
+  toast(compartilhado&&store.live?"Atividade publicada com sucesso! 🧡":"Atividade salva só neste aparelho (modo de teste).");
+  $("#lista").scrollIntoView();
 };
-
-/* ===== Rascunho automático da ficha (inclui sequência didática) =====
-   Guarda os textos no aparelho (localStorage) enquanto o professor digita e devolve tudo ao reabrir a página.
-   Só os textos e escolhas são salvos; a ilustração gerada por IA não é guardada (é pesada e precisa ser aprovada de novo). */
-(function(){
-  const CHAVE="cp_rascunho_v1", VALIDADE=14*24*3600*1000; /* rascunhos com mais de 14 dias são descartados */
-  let timer=null, restaurando=false;
-  const txt=e=>({t:e.t||"",d:e.d||"",c:e.c||"",mat:e.mat||"",un:e.un||"",ca:e.ca||"",turmas:Array.isArray(e.turmas)?e.turmas:[]});
-  const vazio=e=>!(e.t.trim()||e.d.trim()||e.c.trim()||e.mat.trim());
-  function foto(){
-    const atual=encCap();
-    if(SEQ.on){
-      const L=SEQ.enc.map(txt);L[SEQ.cur]=txt(atual);
-      return{seq:true,cur:SEQ.cur,enc:L,au:$("#au").value,t:Date.now()};
-    }
-    return{seq:false,cur:0,enc:[txt(atual)],au:$("#au").value,t:Date.now()};
-  }
-  function salva(){
-    if(restaurando)return;
-    try{
-      const f=foto();
-      if(f.enc.every(vazio)&&!f.au.trim()){localStorage.removeItem(CHAVE);return}
-      localStorage.setItem(CHAVE,JSON.stringify(f));
-    }catch(e){}
-  }
-  function agenda(){clearTimeout(timer);timer=setTimeout(salva,400)}
-  window.rascLimpa=function(){clearTimeout(timer);try{localStorage.removeItem(CHAVE)}catch(e){}};
-  function le(){
-    try{
-      const r=JSON.parse(localStorage.getItem(CHAVE)||"null");
-      if(!r||!Array.isArray(r.enc)||!r.enc.length)return null;
-      if(Date.now()-(r.t||0)>VALIDADE){localStorage.removeItem(CHAVE);return null}
-      if(r.enc.every(vazio)&&!(r.au||"").trim())return null;
-      return r;
-    }catch(e){return null}
-  }
-  function restaura(r){
-    restaurando=true;
-    try{
-      const L=r.enc.map(e=>Object.assign(txt(e),{G:G0()}));
-      if(r.seq&&L.length>0){
-        SEQ.on=true;SEQ.id="s"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-        SEQ.enc=L;SEQ.cur=Math.min(Math.max(0,r.cur|0),L.length-1);
-        encAplica(SEQ.enc[SEQ.cur]);seqUi();
-      }else{
-        encAplica(L[0]);
-      }
-      $("#au").value=r.au||"";
-    }finally{restaurando=false}
-  }
-  /* O aviso some 5 segundos depois que o professor começa a digitar */
-  let sumirTimer=null, sumirArmado=false;
-  function armaSumir(b){
-    clearTimeout(sumirTimer);sumirArmado=true;
-    const f=document.getElementById("f");
-    const aoDigitar=()=>{
-      if(!sumirArmado)return;
-      sumirArmado=false;f.removeEventListener("input",aoDigitar);
-      sumirTimer=setTimeout(()=>{b.hidden=true;mostraLimpar(false)},5000);
-    };
-    f.addEventListener("input",aoDigitar);
-  }
-  /* Aviso discreto dentro da ficha, com opção de descartar */
-  function aviso(r){
-    let b=document.getElementById("rascAviso");
-    if(!b){
-      b=document.createElement("div");b.id="rascAviso";
-      b.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;padding:10px 12px;border-radius:12px;background:var(--soft,#fff3e0);border:1px solid var(--line,#eee);font-size:.85rem;line-height:1.35";
-      const f=document.getElementById("f");f.insertBefore(b,f.children[1]||null);
-    }
-    const n=r.enc.length;
-    b.innerHTML='<span>📝 Recuperamos o que você tinha escrito'+(n>1?' ('+n+' encontros)':'')+'.</span><button type="button" class="btn sec" id="rascDesc" style="padding:6px 10px;font-size:.8rem;white-space:nowrap">Descartar</button>';
-    b.hidden=false;
-    mostraLimpar(true);
-    armaSumir(b);
-    document.getElementById("rascDesc").onclick=()=>{
-      if(!confirm("Descartar o texto recuperado e começar uma ficha em branco?"))return;
-      restaurando=true;
-      try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
-      window.rascLimpa();b.hidden=true;mostraLimpar(false);
-    };
-  }
-  /* Botão "Limpar ficha": aparece só junto com o aviso "Recuperamos o que você tinha escrito" (texto resgatado) */
-  const LB=document.getElementById("limparFicha");
-  function mostraLimpar(m){if(!LB)return;LB.classList.toggle("on",!!m);LB.setAttribute("aria-hidden",m?"false":"true");LB.tabIndex=m?0:-1}
-  if(LB){
-    LB.onclick=()=>{
-      if(!confirm("Limpar a ficha inteira e começar do zero? O texto digitado será apagado."))return;
-      restaurando=true;
-      try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
-      window.rascLimpa();
-      const av=document.getElementById("rascAviso");if(av)av.hidden=true;
-      mostraLimpar(false);
-      toast("Ficha limpa. Pode começar do zero.");
-    };
-  }
-  /* Salva a cada alteração nos campos da ficha */
-  const F=document.getElementById("f");
-  ["input","change"].forEach(ev=>F.addEventListener(ev,agenda));
-  F.addEventListener("click",e=>{if(e.target.closest("#tchk .chip,#seqSel,#seqBtns,#seqDD"))setTimeout(agenda,0)});
-  /* Também salva ao sair/atualizar a página ou trocar de aba */
-  addEventListener("pagehide",salva);
-  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")salva()});
-  /* Fechar a ficha sem publicar NÃO apaga o rascunho: o texto continua guardado para a próxima vez */
-  /* Ao abrir a ficha: se estiver vazia e houver rascunho, devolve o texto */
-  const D=document.getElementById("dlg");
-  const antes=D.showModal.bind(D);
-  D.showModal=function(){
-    antes();
-    const r=le();
-    mostraLimpar(false);
-    if(!r)return;
-    const e=encCap();
-    const ficaVazia=vazio(txt(e))&&!SEQ.on&&!$("#au").value.trim();
-    if(ficaVazia){restaura(r);aviso(r)}
-  };
-  /* O fechamento do diálogo chama seqSet(false), que zera os encontros na memória; o rascunho já está guardado. */
-  /* Garante que o salvamento automático não apague o rascunho quando a ficha é fechada */
-  D.addEventListener("close",()=>{clearTimeout(timer)});
-})();
 let vistaDados="pct";
 let vistaVar="pct";
 let vistaCor="pct";
@@ -1840,8 +1491,12 @@ function painelMat(pool){
   const bt=m=>'<button type="button" class="mini" data-mat="'+esc(m)+'">Ver atividades</button>';
   const linha=m=>'<div class="bl"><span>'+esc(matNome(m))+'</span><b>'+c[m]+' ativ.</b><i style="width:'+Math.max(3,c[m]/mx*100)+'%"></i><small class="nt">'+bt(m)+'</small></div>';
   const rank=L.slice(0,8).map(linha).join("")+(L.length>8?'<details><summary>Ver lista completa ('+L.length+' materiais)</summary>'+L.slice(8).map(linha).join("")+'</details>':"");
-  let h=abaG("mat-top","Materiais mais usados","Do mais ao menos usado nas atividades desta seleção. Cada atividade conta uma vez por material.",rank);
-    h+=blk("Tenho este material","Escreva o material que você tem (por exemplo: bastão, corda, bambolê) e veja que atividades da plataforma usam ele.",'<form class="mbusca" onsubmit="return false"><input id="matQ" type="search" placeholder="Ex.: bastão" autocomplete="off" value="'+esc(matQ)+'"><button type="button" class="btn" id="matGo">Ver atividades</button></form><div id="matSug" class="chips" style="margin-top:10px">'+matSugere(matQ,L,c)+'</div>');
+  let h=blk("Materiais mais usados","Do mais ao menos usado nas atividades desta seleção. Cada atividade conta uma vez por material.",rank);
+  const kit=[];let rest=N.slice();
+  while(kit.length<4&&rest.length){let b=null,bn=0;L.forEach(m=>{if(kit.includes(m))return;const n=rest.filter(a=>actMats(a).includes(m)).length;if(n>bn){bn=n;b=m}});if(!b)break;kit.push(b);rest=rest.filter(a=>!actMats(a).includes(b))}
+  const feitas=N.length-rest.length;
+  h+=blk("Materiais essenciais","Uma dica, não uma lista de compras: com estes materiais você consegue realizar "+feitas+" das "+N.length+" atividades da plataforma que informam materiais ("+Math.round(feitas/N.length*100)+"%). Toque em um deles para ver as atividades.",'<div class="chips">'+kit.map(m=>'<button type="button" class="chip" data-mat="'+esc(m)+'">'+esc(matNome(m))+' ('+c[m]+')</button>').join("")+'</div>');
+  h+=blk("Tenho este material","Escreva o material que você tem (por exemplo: bastão, corda, bambolê) e veja que atividades da plataforma usam ele.",'<form class="mbusca" onsubmit="return false"><input id="matQ" type="search" placeholder="Ex.: bastão" autocomplete="off" value="'+esc(matQ)+'"><button type="button" class="btn" id="matGo">Ver atividades</button></form><div id="matSug" class="chips" style="margin-top:10px">'+matSugere(matQ,L,c)+'</div>');
   return h;
 }
 $("#stats").addEventListener("click",e=>{const b=e.target.closest("[data-mat]");if(!b)return;matSel=b.dataset.mat;filt=null;q="";$("#q").value="";if(typeof marcaChips=="function")marcaChips();ir("atividades");render()});
@@ -1937,7 +1592,7 @@ function visAtualiza(){const c=document.getElementById("visCorpo");if(!c)return;
 setInterval(()=>{if(document.visibilityState!=="hidden")visAtualiza()},20000);
 /* ===== Abas fechadas para os gráficos: título e texto ficam à mostra; o gráfico abre ao tocar ===== */
 const ABG=()=>window.__abg||(window.__abg=new Set());
-function abaG(id,t,s,c){return '<div class="pf-b"><details class="abg" data-abg="'+id+'"'+(ABG().has(id)?' open':'')+'><summary><span class="abg-h"><h3>'+t+'</h3>'+(s?'<p class="pf-s2">'+s+'</p>':'')+'</span><span class="abg-a" aria-hidden="true">⌄</span></summary><div class="abg-c">'+c+'<button type="button" class="abg-x" data-abgx="'+id+'">Fechar ▲</button></div></details></div>'}
+function abaG(id,t,s,c){return '<div class="pf-b"><h3>'+t+'</h3>'+(s?'<p class="pf-s2">'+s+'</p>':'')+'<details class="abg" data-abg="'+id+'"'+(ABG().has(id)?' open':'')+'><summary><span class="abg-t"></span><span class="abg-a" aria-hidden="true">⌄</span></summary><div class="abg-c">'+c+'<button type="button" class="abg-x" data-abgx="'+id+'">Fechar ▲</button></div></details></div>'}
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.abg){d.open?ABG().add(d.dataset.abg):ABG().delete(d.dataset.abg)}},true);
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-abgx]");if(!b)return;const d=b.closest("details.abg");if(d){d.open=false;const p=d.closest(".pf-b");if(p)p.scrollIntoView({block:"nearest"})}});
 function secao(id,ic,tit,sub,num,corpo,cls){
@@ -2127,13 +1782,10 @@ function cjUpset(d){
 function secConjuntos(){
   const d=cjDados();
   if(!d.n)return "";
-  const resumo='<p class="pf-s2 cjd-r">Uma atividade pode servir a várias turmas, mas aqui ela é contada <b>uma só vez</b>, na região onde as turmas dela se encontram. Toque numa turma lá em cima para colocá-la no centro do diagrama.</p>';
+  const resumo='<p class="pf-s2" style="margin:12px 0 0">Uma atividade pode servir a várias turmas, mas aqui ela é contada <b>uma só vez</b>: fica na região onde as turmas dela se encontram. São <b>'+d.n+'</b> atividade(s) no total.</p>';
   const venn=abaG("cj-venn","Diagrama de conjuntos","Cada círculo é uma turma. Onde os círculos se cruzam, ficam as atividades que servem a todas aquelas turmas ao mesmo tempo. Use o zoom (+ e −) e arraste para olhar de perto.",cjVennHtml(d));
   const up=abaG("cj-up","Barras com pontinhos","Outra forma de ver os mesmos dados: cada linha é uma combinação de turmas, com a quantidade de atividades ao lado.",cjUpset(d));
-  return '<section class="cjd" aria-labelledby="cjdT"><div class="cjd-top"><span class="cjd-selo">✨ Em destaque</span><span class="cjd-n"><b>'+d.n+'</b> '+(d.n===1?"atividade":"atividades")+'</span></div>'
-   +'<h3 class="cjd-t" id="cjdT">🔵 Atividades em comum entre as turmas</h3>'
-   +'<p class="cjd-s">Quantas atividades são só de uma turma e quantas se repetem entre turmas.</p>'
-   +resumo+venn+up+'</section>';
+  return secao("cj","🔵","Atividades em comum entre as turmas","Quantas atividades são só de uma turma e quantas se repetem","<span>"+d.n+(d.n===1?" atividade":" atividades")+"</span>",cjChips()+resumo+venn+up);
 }
 const blk2=(t,s,c)=>'<div class="pf-b"><h3>'+t+'</h3><p class="pf-s2">'+s+'</p>'+c+'</div>';
 
@@ -2174,91 +1826,20 @@ function stats(){
   const grupos=[["Turmas","turmas",TU],["Unidades temáticas","unidade",UN],["Campos de experiência","campo",CA]];
   const aviso=true?'<p class="pf-s2" style="margin:12px 0 0"><b>Gráficos abaixo: '+(turmaDados?"só "+esc(turmaDados):"todas as turmas")+'</b> ('+A.length+' atividade(s)). Toque numa turma acima para filtrar.</p>':"";
   const abas='<div class="vt" role="tablist" aria-label="Forma de ver os dados">'+VISTAS.map(v=>'<button type="button" role="tab" aria-selected="'+(vistaDados===v[0])+'" class="'+(vistaDados===v[0]?"on":"")+'" data-v="'+v[0]+'">'+v[1]+'</button>').join("")+'</div>';
-  const quant=secao("qtd","📊","Análise das atividades","Quais unidades temáticas, campos de experiência e turmas os professores mais usam",abrev(A.length)+(A.length===1?" atividade":" atividades"),aviso+abas+grupos.map(g=>abaG("qtd-"+g[1],esc(g[0]),({turmas:"Quantas atividades cada turma tem. Uma atividade pode servir a mais de uma turma.",unidade:"Quantas atividades foram compartilhadas em cada unidade temática.",campo:"Quantas atividades foram compartilhadas em cada campo de experiência."})[g[1]],vistaGrupo(g))).join("")+secConjuntos());
-  el.innerHTML=painelPref().replace("@@QUANT@@",quant);
+  const quant=secao("qtd","📊","Quantificação das atividades","Quais unidades temáticas, campos de experiência e turmas os professores mais usam",abrev(A.length)+(A.length===1?" atividade":" atividades"),aviso+abas+grupos.map(g=>abaG("qtd-"+g[1],esc(g[0]),({turmas:"Quantas atividades cada turma tem. Uma atividade pode servir a mais de uma turma.",unidade:"Quantas atividades foram compartilhadas em cada unidade temática.",campo:"Quantas atividades foram compartilhadas em cada campo de experiência."})[g[1]],vistaGrupo(g))).join(""));
+  el.innerHTML=painelPref().replace("@@QUANT@@",quant+secConjuntos());
 }
 $("#stats").addEventListener("click",e=>{const b=e.target.closest("[data-vc]");if(!b||b.dataset.vc===vistaCor)return;vistaCor=b.dataset.vc;stats()});
 $("#stats").addEventListener("click",e=>{const b=e.target.closest("[data-vv]");if(!b||b.dataset.vv===vistaVar)return;vistaVar=b.dataset.vv;stats()});
 $("#stats").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b||b.dataset.v===vistaDados)return;vistaDados=b.dataset.v;stats()});
 $("#stats").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b||b.dataset.t===turmaDados)return;const c=$("#stats .pf-c"),x=c?c.scrollLeft:0;const ord=[""].concat(TU),dir=ord.indexOf(b.dataset.t)>ord.indexOf(turmaDados)?1:-1;turmaDados=b.dataset.t;stats();const w=$("#wc");if(w)w.classList.add(dir>0?"slR":"slL");const n=$("#stats .pf-c");if(n)n.scrollLeft=x});
+$("#csv").onclick=async()=>{try{const d=await claude.use("downloads");if(!d)throw 0;const r=[["titulo","turmas","unidade","campo","coracoes"]].concat(acts.map(a=>[a.titulo,(a.turmas||[]).join("; "),a.unidade,a.campo,counts[a.id]||0]));await d.save({filename:"colabora-prof.csv",data:r.map(x=>x.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n")})}catch(e){toast("Não consegui baixar agora.")}};
 $("#csv2").onclick=async()=>{try{const d=await claude.use("downloads");if(!d)throw 0;
   const L=avs.filter(x=>(repsA[x.id]||0)<LIMITE_DEN);
   if(!L.length){toast("Ainda não há respostas para baixar.");return}
   const cab=["data"].concat(PERG.map(p=>p[1])).concat(["o_que_modificar_ou_acrescentar","necessidades_nao_atendidas"]);
   const r=[cab].concat(L.map(x=>[x.t?new Date(x.t).toLocaleDateString("pt-BR"):""].concat(PERG.map(p=>x[p[0]]==null?"":p[2][x[p[0]]])).concat([x.m||"",x.n||""])));
   await d.save({filename:"colabora-prof-experiencia.csv",data:r.map(x=>x.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n")})}catch(e){toast("Não consegui baixar agora.")}};
-
-/* ===== Baixar material: um botão só, com as planilhas de cada análise ===== */
-(function(){
-  const modal=$("#baixaModal");if(!modal)return;
-  const csvTx=l=>"\ufeff"+l.map(x=>x.map(v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"').join(",")).join("\n");
-  const ativas=()=>acts.filter(a=>(reps[a.id]||0)<LIMITE_DEN);
-  const juntar=v=>(v||[]).join("; ");
-  const abre=()=>{modal.hidden=false;document.body.style.overflow="hidden"};
-  const fecha=()=>{modal.hidden=true;document.body.style.overflow=""};
-  const GER={
-    cor(){
-      const L=ativas().slice().sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0));
-      if(!L.length)return null;
-      const t=L.reduce((q,a)=>q+(counts[a.id]||0),0);
-      const l=[["atividade","turmas","unidade_tematica","campo_de_experiencia","coracoes"]];
-      L.forEach(a=>l.push([a.titulo,juntar(a.turmas),a.unidade,a.campo,counts[a.id]||0]));
-      l.push([]);l.push(["TOTAL DE CORACOES","","","",t]);
-      l.push([]);l.push(["unidade_tematica","","","","coracoes"]);
-      UN.forEach(x=>l.push([x,"","","",L.filter(a=>tem(a,"unidade",x)).reduce((q,a)=>q+(counts[a.id]||0),0)]));
-      l.push([]);l.push(["campo_de_experiencia","","","","coracoes"]);
-      CA.forEach(x=>l.push([x,"","","",L.filter(a=>tem(a,"campo",x)).reduce((q,a)=>q+(counts[a.id]||0),0)]));
-      return {nome:"colabora-prof-analise-dos-coracoes.csv",dados:csvTx(l),aviso:"Planilha da análise dos corações baixada."}
-    },
-    ati(){
-      const L=ativas();
-      if(!L.length)return null;
-      const l=[["grupo","item","quantidade_de_atividades"]];
-      TU.forEach(x=>l.push(["Turma",x,L.filter(a=>tem(a,"turmas",x)).length]));
-      UN.forEach(x=>l.push(["Unidade temática",x,L.filter(a=>tem(a,"unidade",x)).length]));
-      CA.forEach(x=>l.push(["Campo de experiência",x,L.filter(a=>tem(a,"campo",x)).length]));
-      const comb={};
-      L.forEach(a=>{const k=TU.filter(x=>tem(a,"turmas",x)).join(" + ");if(k)comb[k]=(comb[k]||0)+1});
-      Object.keys(comb).sort((x,y)=>comb[y]-comb[x]||x.localeCompare(y)).forEach(k=>l.push(["Atividades em comum entre as turmas",k,comb[k]]));
-      l.push([]);l.push(["TOTAL DE ATIVIDADES","",L.length]);
-      return {nome:"colabora-prof-analise-das-atividades.csv",dados:csvTx(l),aviso:"Planilha da análise das atividades baixada."}
-    },
-    var(){
-      const L=ativas();
-      if(!L.length)return null;
-      const n=a=>varCount(a.id);
-      const O=L.slice().sort((a,b)=>n(b)-n(a)||String(a.titulo).localeCompare(String(b.titulo)));
-      if(!O.some(a=>n(a)>0))return null;
-      const l=[["atividade","turmas","unidade_tematica","campo_de_experiencia","variacoes"]];
-      O.forEach(a=>l.push([a.titulo,juntar(a.turmas),a.unidade,a.campo,n(a)]));
-      l.push([]);l.push(["TOTAL DE VARIACOES","","","",O.reduce((q,a)=>q+n(a),0)]);
-      return {nome:"colabora-prof-analise-das-variacoes.csv",dados:csvTx(l),aviso:"Planilha da análise das variações baixada."}
-    },
-    mat(){
-      const L=ativas();
-      if(!L.some(a=>actMats(a).length))return null;
-      const r=materiaisPorTurma(L,20);
-      const l=[["turma","posicao","material","em_quantas_atividades"]];
-      TU.forEach(tu=>r[tu].forEach((m,i)=>l.push([tu,i+1,m.nome,m.n])));
-      return {nome:"colabora-prof-lista-de-materiais.csv",dados:csvTx(l),aviso:"Lista de materiais baixada."}
-    }
-  };
-  const VAZIO={cor:"Ainda não há atividades para baixar.",ati:"Ainda não há atividades para baixar.",var:"Ainda não há variações para baixar.",mat:"Ainda não há materiais cadastrados para listar."};
-  document.addEventListener("click",async e=>{
-    if(e.target.closest("#baixaAbre")){abre();return}
-    if(e.target.closest("#baixaX")||e.target===modal){fecha();return}
-    const b=e.target.closest&&e.target.closest("[data-bx]");if(!b||!modal.contains(b))return;
-    const k=b.dataset.bx;
-    try{
-      const d=await claude.use("downloads");if(!d)throw 0;
-      const r=GER[k]();
-      if(!r){toast(VAZIO[k]);return}
-      await d.save({filename:r.nome,data:r.dados});
-      toast(r.aviso);fecha();
-    }catch(err){toast("Não consegui baixar agora.")}
-  });
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal.hidden)fecha()});
-})();
 
 /* ===== Lista de materiais por turma (os 20 mais citados) ===== */
 function materiaisPorTurma(lista,topN){
@@ -2279,6 +1860,18 @@ function materiaisPorTurma(lista,topN){
   });
   return res;
 }
+$("#csvMat").onclick=async()=>{
+  try{
+    const d=await claude.use("downloads");if(!d)throw 0;
+    const L=acts.filter(a=>(reps[a.id]||0)<LIMITE_DEN);
+    if(!L.some(a=>actMats(a).length)){toast("Ainda não há materiais cadastrados para listar.");return}
+    const r=materiaisPorTurma(L,20);
+    const linhas=[["turma","posicao","material","em_quantas_atividades"]];
+    TU.forEach(tu=>r[tu].forEach((m,i)=>{linhas.push([tu,i+1,m.nome,m.n])}));
+    await d.save({filename:"colabora-prof-materiais-por-turma.csv",data:"\ufeff"+linhas.map(x=>x.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n")});
+    toast("Lista de materiais baixada.");
+  }catch(e){toast("Não consegui baixar agora.")}
+};
 addEventListener("scroll",()=>{if(document.body.classList.contains("home"))document.body.classList.toggle("sc",scrollY>220)},{passive:true});
 function chuva(x,y){
   for(let i=0;i<6;i++){const e=document.createElement("span");e.className="mini-c";e.textContent="❤";e.style.color="#e03131";
@@ -3339,21 +2932,4 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
   if(window.matchMedia){var mq=window.matchMedia("(max-width:600px)");(mq.addEventListener?mq.addEventListener("change",aplica):mq.addListener(aplica))}
 })();
 </script>
-<div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
-  <div class="mdl-box">
-    <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
-    <h2 id="varT">Variações</h2>
-    <p class="var-sub" id="varSub"></p>
-    <div class="var-alerta" role="note"><span class="va-i" aria-hidden="true">💡</span><div><b>Antes de sugerir uma variação:</b> ela serve para <b>pequenas modificações</b> da atividade original. A faixa etária, os materiais e a dinâmica <b>não são herdados</b> da atividade-mãe. Se a sua ideia muda bastante a atividade (outra turma, outros materiais ou outra dinâmica), vale mais a pena <b>criar uma ficha nova</b>. Mas fique à vontade: a decisão é sempre sua. 🧡</div></div>
-    <div id="varLista" class="var-chat"></div>
-    <div id="varForm" hidden>
-      <label>Sua variação<textarea id="varTx" maxlength="500" placeholder="Ex.: Em vez de correr, as crianças vão engatinhando, para os bebês."></textarea></label>
-      <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="varNm" maxlength="60" placeholder="Ex.: CEI Ana Amélia Bezerra de Menezes"></label>
-      <p class="mdl-aviso">Não escreva nomes de crianças.</p>
-      <div class="mdl-acoes"><button class="btn" id="varEnv" type="button">Enviar</button><button class="btn sec" id="varCancela" type="button">Cancelar</button></div>
-    </div>
-    <div class="mdl-acoes"><button class="btn" id="varNova" type="button">Sugerir variação</button></div>
-  </div>
-</div>
-
 </body></html>
