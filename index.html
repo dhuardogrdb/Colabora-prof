@@ -5,10 +5,18 @@ var CFG={apiKey:"AIzaSyBvZoAr0o02TaqpNz5MJbc-wT1xpIY1eDQ",authDomain:"colabora-p
 var MODELO_TEXTO="gemini-3.5-flash-lite";
 var MODELO_IMAGEM="gemini-nano-banana-2.1";
 var B="https://www.gstatic.com/firebasejs/11.10.0/",fb=null;
-function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js"),import(B+"firebase-ai.js")]).then(function(m){
+var fbErro=null;
+function load(){return fb||(fb=Promise.all([import(B+"firebase-app.js"),import(B+"firebase-firestore.js")]).then(function(m){
   var app=m[0].initializeApp(CFG);
-  return{F:m[1],AI:m[2],db:m[1].getFirestore(app),ai:m[2].getAI(app,{backend:(m[2].AgentPlatformBackend?new m[2].AgentPlatformBackend("global"):new m[2].VertexAIBackend("global"))})};
-}))}
+  var c={F:m[1],AI:null,ai:null,db:m[1].getFirestore(app)};
+  /* a IA carrega à parte: se ela falhar, o banco de fichas continua funcionando */
+  c.iaPronta=import(B+"firebase-ai.js").then(function(a){
+    c.AI=a;c.ai=a.getAI(app,{backend:(a.AgentPlatformBackend?new a.AgentPlatformBackend("global"):new a.VertexAIBackend("global"))});return c
+  }).catch(function(e){c.iaErro=e;throw e});
+  c.iaPronta.catch(function(){});
+  return c;
+}).catch(function(e){fbErro=e;window.__fbErro=e;throw e}))}
+function carregaIA(){return load().then(function(c){return c.iaPronta})}
 function col(c,name,cons){
   var F=c.F,ref=F.collection(c.db,name),q=function(){return cons.length?F.query.apply(null,[ref].concat(cons)):ref};
   return{
@@ -27,7 +35,7 @@ window.claude={use:async function(n){
   if(n==="db"){var c=await load();return{collection:function(x){return col(c,x,[])}}}
   if(n==="user"){return{can:async function(){return true}}}
   if(n==="image"){return{gerar:async function(p){
-    var c=await load();
+    var c=await carregaIA();
     var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_IMAGEM,generationConfig:{responseModalities:[c.AI.ResponseModality.TEXT,c.AI.ResponseModality.IMAGE]}});
     var r;
     try{r=await m.generateContent(p)}
@@ -44,7 +52,7 @@ window.claude={use:async function(n){
       throw new Error("sem imagem na resposta "+motivo)}
     return "data:"+im[0].inlineData.mimeType+";base64,"+im[0].inlineData.data}}}
   if(n==="sample"){return{json:async function(p){
-    var c=await load();
+    var c=await carregaIA();
     var m=c.AI.getGenerativeModel(c.ai,{model:MODELO_TEXTO,generationConfig:{responseMimeType:"application/json"}});
     var r=await m.generateContent(p),t=r.response.text().replace(/```json|```/g,"").trim();
     return JSON.parse(t)}}}
@@ -1165,7 +1173,7 @@ async function apagaFicha(id){
 async function init(){
   try{
     if(window.claude&&claude.use){
-      const [db,user,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);
+      const [db,user,sm]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("sample")]);window.__dbOk=true;
       sample=sm;if(sample){$("#ia").hidden=false;$("#melhd").hidden=false}
       const cw=user?await user.can("data.write"):null;
       if(db&&cw!==false){
@@ -1197,7 +1205,8 @@ async function init(){
           sugAdd:o=>SG.add(o)};
       }
     }
-  }catch(e){}
+  }catch(e){window.__erroInit=e;try{console.error("Colabora Prof: falha ao conectar no Firebase",e)}catch(_){}
+    try{var av=document.querySelector("#aviso");if(av){var det=document.createElement("div");det.style.cssText="margin-top:6px;font-size:.8rem;word-break:break-word;opacity:.9";det.textContent="Detalhe técnico: "+String((e&&e.code?e.code+" - ":"")+((e&&e.message)||e));av.appendChild(det)}}catch(_){}}
   if(!store){store=local;acts=ls("cp_acts")||[];if(DEMO_ON){const ja=new Set(acts.map(x=>x.id));DEMO.forEach(d=>{if(!ja.has(d.id))acts.push(Object.assign({demo:true},d))})}{const ja2=new Set(acts.map(x=>x.id));FICHAS_TESTE.forEach(d=>{if(!ja2.has(d.id))acts.push(Object.assign({},d))})}mine=new Set(ls("cp_votes")||[]);acts.forEach(a=>{if(a.demo)counts[a.id]=DEMO_H[a.id]||0});mine.forEach(a=>counts[a]=(DEMO_H[a]||0)+1);minhasRep=new Set(ls("cp_reps")||[]);reps=ls("cp_repn")||{};avs=ls("cp_avs")||[];minhasRepA=new Set(ls("cp_ravs")||[]);repsA=ls("cp_ravn")||{};vars=ls("cp_vars")||[];minhasRepV=new Set(ls("cp_rvars")||[]);repsV=ls("cp_rvarn")||{};sugs=ls("cp_sugs")||[];$("#aviso").hidden=false;
     videoAplicaCfg(ls("cp_video")||"");
     visitas=ls("cp_vis")||[];
