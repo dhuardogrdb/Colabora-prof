@@ -744,6 +744,33 @@ body:not(.home) #qrbloco{display:none}
 </style>
 <header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="menu" aria-label="Menu">Menu</button></span></header>
 <div class="voo" aria-hidden="true"><span class="nv n1"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n2"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n3"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n4"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="av a1"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a2 r"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a3"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span></div>
+<div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
+  <div class="mdl-box">
+    <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
+    <h2 id="varT">Variações</h2>
+    <p class="var-sub" id="varSub"></p>
+    <div class="var-herda" role="note"><b>Atenção:</b> uma variação herda as características da atividade principal, como os alunos (turma), os materiais e o ambiente. Ela é só uma característica a mais. Se a mudança for muito grande, <b>crie uma ficha nova</b> em vez de uma variação.</div>
+    <div id="varLista" class="var-chat"></div>
+    <div id="varForm" hidden>
+      <label>Sua variação<textarea id="varTx" maxlength="500" placeholder="Ex.: Em vez de correr, as crianças vão engatinhando, para os bebês."></textarea></label>
+      <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="varNm" maxlength="60" placeholder="Ex.: CEI Ana Amélia Bezerra de Menezes"></label>
+      <p class="mdl-aviso">Lembre: a variação mantém a turma, os materiais e o ambiente da atividade principal. Se mudou muito, crie uma ficha nova.</p>
+      <p class="mdl-aviso">Não escreva nomes de crianças.</p>
+      <div class="mdl-acoes"><button class="btn" id="varEnv" type="button">Enviar</button><button class="btn sec" id="varCancela" type="button">Cancelar</button></div>
+    </div>
+    <div class="mdl-acoes"><button class="btn" id="varNova" type="button">Sugerir variação</button></div>
+  </div>
+</div>
+<div class="mdl" id="sugModal" hidden role="dialog" aria-modal="true" aria-labelledby="sugT">
+  <div class="mdl-box">
+    <button class="mdl-x" id="sugX" type="button" aria-label="Fechar">×</button>
+    <h2 id="sugT">Sugestões para a plataforma</h2>
+    <p class="var-sub">O que você mudaria ou acrescentaria no Colabora, Prof?</p>
+    <label>Deixe sua sugestão<textarea id="sugTx" maxlength="500" placeholder="Ex.: Seria bom poder filtrar por tempo de duração."></textarea></label>
+    <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="sugNm" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"></label>
+    <div class="mdl-acoes"><button class="btn" id="sugEnv" type="button">Enviar</button></div>
+  </div>
+</div>
 <div class="wrap">
 <section class="hero">
   <div class="brand">Colabora,<br><b>Prof</b></div>
@@ -795,7 +822,7 @@ body:not(.home) #qrbloco{display:none}
     <div class="row dir"><button class="mini" id="vd">📊 Ver análise de dados</button></div>
   </div>
   <div class="note" id="aviso" hidden>Modo de teste: o que você publicar aqui fica salvo só neste aparelho. Para compartilhar entre professores, é preciso ligar o armazenamento coletivo.</div>
-  <div class="bar"><h2>Atividades</h2><div class="vcols" id="vcols" role="radiogroup" aria-label="Quantas fichas mostrar por linha"><span class="vcols-t">Ver fichas</span><button type="button" role="radio" data-cols="1" aria-checked="false" aria-label="Uma ficha por linha" title="1 ficha por linha"><i></i><b>1</b></button><button type="button" role="radio" data-cols="2" aria-checked="false" aria-label="Duas fichas por linha" title="2 fichas por linha"><i></i><i></i><b>2</b></button><button type="button" role="radio" data-cols="3" aria-checked="false" aria-label="Três fichas por linha" title="3 fichas por linha"><i></i><i></i><i></i><b>3</b></button><button type="button" role="radio" data-cols="4" aria-checked="false" aria-label="Quatro fichas por linha" title="4 fichas por linha"><i></i><i></i><i></i><i></i><b>4</b></button></div><span id="fl"></span></div>
+  <div class="bar"><h2>Atividades</h2><div class="vcols" id="vcols"><button type="button" id="vcolsBtn" aria-label="Fichas por linha: toque para mudar" title="Mudar quantas fichas aparecem por linha"></button></div><span id="fl"></span></div>
   <div id="sug" class="sug" hidden></div>
   <div id="lista"></div>
 </section>
@@ -838,6 +865,8 @@ body:not(.home) #qrbloco{display:none}
 .mdl-box textarea{min-height:110px}
 .mdl-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
+.var-herda{background:#fff4e6;color:#7a3a00;border:1px solid #ffd8a8;border-left:4px solid var(--pri2,#e8590c);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:.86rem;line-height:1.4}
+:root[data-theme="dark"] .var-herda{background:#3a2a14;color:#ffd8a8;border-color:#6b4a1f}
 .mdl-aviso{font-size:.8rem;color:var(--mut);margin:6px 0 0}
 #mhModal{border:0;border-radius:20px;padding:0;width:min(680px,95vw);max-height:94vh;max-height:94dvh;background:var(--card);color:var(--ink);overflow:hidden}
 #mhModal::backdrop{background:rgba(20,16,26,.72)}
@@ -870,31 +899,8 @@ body:not(.home) #qrbloco{display:none}
     </div>
   </div>
 </dialog>
-<div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
-  <div class="mdl-box">
-    <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
-    <h2 id="varT">Variações</h2>
-    <p class="var-sub" id="varSub"></p>
-    <div id="varLista" class="var-chat"></div>
-    <div id="varForm" hidden>
-      <label>Sua variação<textarea id="varTx" maxlength="500" placeholder="Ex.: Em vez de correr, as crianças vão engatinhando, para os bebês."></textarea></label>
-      <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="varNm" maxlength="60" placeholder="Ex.: CEI Ana Amélia Bezerra de Menezes"></label>
-      <p class="mdl-aviso">Não escreva nomes de crianças.</p>
-      <div class="mdl-acoes"><button class="btn" id="varEnv" type="button">Enviar</button><button class="btn sec" id="varCancela" type="button">Cancelar</button></div>
-    </div>
-    <div class="mdl-acoes"><button class="btn" id="varNova" type="button">Sugerir variação</button></div>
-  </div>
-</div>
-<div class="mdl" id="sugModal" hidden role="dialog" aria-modal="true" aria-labelledby="sugT">
-  <div class="mdl-box">
-    <button class="mdl-x" id="sugX" type="button" aria-label="Fechar">×</button>
-    <h2 id="sugT">Sugestões para a plataforma</h2>
-    <p class="var-sub">O que você mudaria ou acrescentaria no Colabora, Prof?</p>
-    <label>Deixe sua sugestão<textarea id="sugTx" maxlength="500" placeholder="Ex.: Seria bom poder filtrar por tempo de duração."></textarea></label>
-    <label><span>Seu nome ou escola <small>(opcional)</small></span><input id="sugNm" maxlength="60" autocomplete="off" autocorrect="off" spellcheck="false"></label>
-    <div class="mdl-acoes"><button class="btn" id="sugEnv" type="button">Enviar</button></div>
-  </div>
-</div>
+
+
 <footer>
   <p class="f-prod"><b>Colabora, Prof</b> é um Produto Educacional, desenvolvido como parte da dissertação de Mestrado do <b>ProEF/IFCE – Caucaia</b>.</p>
   <p class="f-aut">Criado por <b>Eduardo Gonçalves Ramos de Brito</b></p>
@@ -906,6 +912,13 @@ body:not(.home) #qrbloco{display:none}
 .aj{display:block;font-weight:400;font-size:.82rem;color:var(--mut);line-height:1.35}
 .aj.dc{color:var(--pri);font-weight:600}
 .aj.cnt{text-align:right}
+#d.d-curta,#d.d-curta:focus{border-color:#e03131;box-shadow:0 0 0 3px rgba(224,49,49,.16)}
+#d.d-ok,#d.d-ok:focus{border-color:#2f9e44;box-shadow:0 0 0 3px rgba(47,158,68,.2)}
+#d.d-pulo{animation:dPulo .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes dPulo{0%{transform:none}35%{transform:translateY(-7px) scale(1.025)}65%{transform:translateY(0) scale(.992)}100%{transform:none}}
+.aj.cnt.curta{color:#e03131}
+.aj.cnt.ok{color:#2f9e44;font-weight:700}
+@media (prefers-reduced-motion:reduce){#d.d-pulo{animation:none}}
 .dica{background:var(--soft);border-radius:12px;padding:10px 12px;color:var(--ink)}
 .ex{border:1px dashed var(--pri);border-radius:12px;padding:8px 12px;background:var(--bg)}
 .ex summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--pri)}
@@ -1199,24 +1212,24 @@ async function init(){
 const txtDen=f=>f?"🚩 Denunciada ✕ retirar":"🚩 Denunciar";
 let _sigLista=null;
 function atualizaBolinhas(){
-  document.querySelectorAll("#lista .vbolha,#sug .vbolha").forEach(b=>{
+  document.querySelectorAll("#lista .vbolha,#sug .vbolha,#fichaCorpo .vbolha").forEach(b=>{
     const n=varCount(b.dataset.vb),ant=b.dataset.n===undefined?null:+b.dataset.n;
     b.dataset.n=n;b.hidden=!n;const t=String(n);if(b.textContent!==t)b.textContent=t;
     if(ant!==null&&n>ant){b.classList.remove("pulsa");void b.offsetWidth;b.classList.add("pulsa")}
   })}
 function atualizaCoracoes(){
   atualizaBolinhas();
-  document.querySelectorAll("#lista .heart,#sug .heart").forEach(h=>{
+  document.querySelectorAll("#lista .heart,#sug .heart,#fichaCorpo .heart").forEach(h=>{
     const id=h.dataset.h,on=mine.has(id),n=counts[id]||0;
     h.classList.toggle("on",on);
     const t="♥ "+n; if(h.textContent!==t)h.textContent=t;
   });
-  document.querySelectorAll("#lista .den,#sug .den").forEach(b=>{
+  document.querySelectorAll("#lista .den,#sug .den,#fichaCorpo .den").forEach(b=>{
     const f=minhasRep.has(b.dataset.d);b.classList.toggle("feita",f);
     const t=txtDen(f);if(b.textContent!==t)b.textContent=t;
   });
 }
-function render(){if(varAtual)varDesenha();stats();xp();matAtalhos();if(typeof sugRedesenha==="function")sugRedesenha();
+function render(){try{atualizaCoracoes()}catch(e){}if(varAtual)varDesenha();stats();xp();matAtalhos();if(typeof sugRedesenha==="function")sugRedesenha();
   const key=mode==="un"?"unidade":"campo";
   const list=acts.filter(a=>(reps[a.id]||0)<LIMITE_DEN&&(!filt||a[key]===filt)&&(!turma||(Array.isArray(a.turmas)&&a.turmas.includes(turma)))&&(!matSel||actMats(a).includes(matSel))&&(!q||buscaOk(a,q)));
   $("#fl").innerHTML=(matSel?'<button class="filt" id="xm">Material: '+esc(matSel)+' ✕</button> ':"")+(filt?'<button class="filt" id="x">'+esc(filt)+' ✕</button> ':"")+(turma?'<button class="filt" id="xt">'+esc(turma)+' ✕</button>':"");
@@ -1302,6 +1315,7 @@ async function clicaCard(e){
     if(!un)chuva(r.left+r.width/2,r.top+r.height/2);}
 }
 $("#lista").onclick=clicaCard;$("#sug").onclick=clicaCard;
+document.addEventListener("click",e=>{if(e.target.closest("#fichaCorpo"))clicaCard(e)});
 $("#cfNao").onclick=()=>{denId=null;$("#conf").close()};
 $("#cfSim").onclick=async()=>{
   const id=denId;denId=null;$("#conf").close();if(!id)return;
@@ -1315,6 +1329,21 @@ const UNH={"Brincadeiras e jogos":"Ex.: pega-pega, esconde-esconde, brincadeiras
 const CAH={"O eu, o outro e o nós":"Ex.: conviver, cooperar, respeitar regras e colegas.","Corpo, gestos e movimentos":"Ex.: correr, pular, equilibrar, imitar gestos.","Traços, sons, cores e formas":"Ex.: música, ritmo, cores e formas na brincadeira.","Escuta, fala, pensamento e imaginação":"Ex.: ouvir, cantar, contar, imaginar, faz de conta.","Espaços, tempos, quantidades, relações e transformações":"Ex.: contar, comparar tamanhos, perto e longe, antes e depois."};
 function dica(){$("#unH").textContent=UNH[$("#un").value]||"";$("#caH").textContent=CAH[$("#ca").value]||""}
 $("#d").addEventListener("input",()=>{const n=$("#d").value.trim().length;$("#dCnt").textContent=n<40?"Conte um pouco mais ("+n+" de pelo menos 40 letras)":"✓ Boa descrição"});
+(function(){
+  /* Borda da descrição: vermelha enquanto é curta demais para a IA, verde (com um pulinho) ao chegar em 40 letras */
+  const d=$("#d"),cnt=$("#dCnt"),MIN=40;
+  function borda(animar){
+    const n=d.value.trim().length,curta=n>0&&n<MIN,ja=d.classList.contains("d-ok");
+    d.classList.toggle("d-curta",curta);cnt.classList.toggle("curta",curta);
+    if(n>=MIN){
+      d.classList.add("d-ok");cnt.classList.add("ok");
+      if(!ja&&animar){d.classList.remove("d-pulo");void d.offsetWidth;d.classList.add("d-pulo")}
+    }else{d.classList.remove("d-ok","d-pulo");cnt.classList.remove("ok")}
+  }
+  d.addEventListener("input",e=>borda(e.isTrusted));
+  d.addEventListener("animationend",()=>d.classList.remove("d-pulo"));
+  $("#f").addEventListener("reset",()=>setTimeout(()=>borda(false),0));
+})();
 $("#un").onchange=dica;$("#ca").onchange=dica;dica();
 $("#novo").onclick=()=>$("#dlg").showModal();
 var SEQ={on:false,id:null,n:1,cur:0,enc:[]};
@@ -3154,6 +3183,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 })();
 </script>
 
+
+
 <div class="mdl" id="fichaModal" hidden role="dialog" aria-modal="true" aria-label="Ficha da atividade">
   <div class="mdl-box">
     <button class="mdl-x" id="fichaX" type="button" aria-label="Fechar">×</button>
@@ -3162,14 +3193,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 </div>
 <style id="vcolsCss">
 /* ===== Seletor de fichas por linha (1 a 4) ===== */
-.vcols{display:inline-flex;align-items:center;gap:6px;margin-left:auto}
-.vcols-t{font-size:.8rem;color:var(--mut);font-weight:600;margin-right:2px}
-.vcols button{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:46px;min-height:44px;padding:5px 6px 4px;border:1px solid var(--line);background:var(--bg);color:var(--mut);border-radius:12px;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
-.vcols button{display:inline-grid;grid-auto-flow:column;grid-template-rows:14px auto;gap:2px 2px;align-content:center;justify-content:center}
-.vcols button i{display:block;width:8px;height:14px;border-radius:2px;background:currentColor;opacity:.55}
-.vcols button b{grid-column:1/-1;font-size:.72rem;line-height:1;text-align:center}
-.vcols button[aria-checked="true"]{background:var(--pri);color:#fff;border-color:var(--pri)}
-.vcols button[aria-checked="true"] i{opacity:.95}
+.vcols{display:inline-flex;align-items:center;margin-left:auto}
+.vcols button{display:inline-flex;align-items:center;justify-content:center;gap:3px;width:48px;height:48px;padding:0;border:1px solid var(--line);background:var(--bg);color:var(--pri);border-radius:12px;cursor:pointer;transition:transform .15s,background .2s}
+.vcols button:active{transform:scale(.92)}
+.vcols button i{display:block;width:7px;height:22px;border-radius:2px;background:currentColor}
 .vcols button:focus-visible{outline:3px solid var(--pri2);outline-offset:2px}
 #fl{flex-basis:100%}
 #fl:empty{display:none}
@@ -3224,12 +3251,6 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 #lista.c4 .vbtn{margin:0;border-right:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:.72rem}
 #lista.c4 .by{font-size:.68rem;margin-top:6px}
 
-/* Em celular estreito o professor ainda pode escolher, mas 3 e 4 ficam bem pequenas: o botão avisa só pelo tamanho, sem esconder opções */
-@media(max-width:430px){
-  .vcols{gap:4px}
-  .vcols-t{display:none}
-  .vcols button{min-width:42px}
-}
 
 /* ===== Modo resumido: imagem mais baixa e descrição curta nas colunas estreitas ===== */
 #lista.c3 .pic,#lista.c3 .pic.has{aspect-ratio:16/10}
@@ -3240,26 +3261,29 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 #lista.c4 .card p{-webkit-line-clamp:3;line-clamp:3}
 /* o texto cortado continua disponível no modo de 1 ou 2 fichas */
 
-/* ===== Celular: só 1 ou 2 fichas por linha (3 e 4 ficam pequenas demais) ===== */
+/* ===== Celular: 1, 2 ou 3 fichas por linha. Com 3, a ficha fica enxuta e abre inteira numa janela ===== */
 @media(max-width:600px){
-  .vcols button[data-cols="3"],.vcols button[data-cols="4"]{display:none}
-  #lista.c3,#lista.c4{--cols:2!important}
-  #lista.c3 .card h4,#lista.c4 .card h4{font-size:1.05rem}
-  #lista.c3 .in,#lista.c4 .in{padding:0 12px 12px}
-  #lista.c3 .card p,#lista.c4 .card p{font-size:.92rem;-webkit-line-clamp:unset;line-clamp:unset;display:block}
-  #lista.c3 .tag,#lista.c4 .tag{font-size:.75rem;padding:3px 10px}
-  #lista.c3 .btn-sh,#lista.c4 .btn-sh{width:38px;height:38px;top:8px;right:8px}
-  #lista.c3 .heart,#lista.c3 .den,#lista.c4 .heart,#lista.c4 .den{padding:6px 10px;font-size:.82rem}
-  #lista.c3 .vbtn,#lista.c4 .vbtn{margin-right:-12px;border-right:0;border-radius:999px 0 0 999px;padding:6px 14px 6px 10px;font-size:.82rem}
-  #lista.c3 .row,#lista.c4 .row{gap:6px}
+  #lista.c2 .card h4{font-size:1rem}
   #lista.c2 .vbtn{margin-right:0;border-right:1px solid var(--line);border-radius:999px}
-  #lista.c3 .vbtn,#lista.c4 .vbtn{margin-right:0;border-right:1px solid var(--line)}
   #lista.c2 .heart,#lista.c2 .den{padding:6px 9px;font-size:.8rem}
   #lista.c2 .tag{font-size:.7rem;padding:2px 8px}
+  #lista.gcols.c3{gap:8px}
+  #lista.c3 .card h4{font-size:.8rem;line-height:1.2}
+  #lista.c3 .in{padding:0 7px 8px}
+  #lista.c3 .card p{font-size:.7rem;line-height:1.3;-webkit-line-clamp:3;line-clamp:3}
+  #lista.c3 .tag{font-size:.58rem;padding:2px 5px}
+  #lista.c3 .btn-sh{width:26px;height:26px;top:4px;right:4px;border-radius:8px}
+  #lista.c3 .btn-sh svg{width:14px;height:14px}
+  #lista.c3 .row{gap:3px;margin-top:5px}
+  #lista.c3 .heart,#lista.c3 .den{padding:3px 6px;font-size:.66rem}
+  #lista.c3 .vbtn{margin:0;border-right:1px solid var(--line);border-radius:999px;padding:3px 6px;font-size:.66rem}
+  #lista.c3 .by{font-size:.62rem;margin-top:5px}
   .wrap:has(#busca.on.wide){max-width:760px}
 }
 
 /* ===== Janela com a ficha inteira (modo resumido) ===== */
+#fichaModal{z-index:9990}
+#varModal,#sugModal,#baixaModal{z-index:10000}
 #fichaModal .mdl-box{max-width:min(560px,100%);padding:0;overflow-y:auto}
 #fichaModal .mdl-x{position:absolute;top:10px;right:10px;float:none;margin:0;z-index:5}
 #fichaModal .btn-sh{display:none}
@@ -3278,34 +3302,38 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
 #lista.c3 .card,#lista.c4 .card{cursor:pointer}
 #lista.c3 .card:focus-visible,#lista.c4 .card:focus-visible{outline:3px solid var(--pri2);outline-offset:2px}
 #lista.c3 .in::after,#lista.c4 .in::after{content:"Toque para ler tudo";display:block;margin-top:6px;font-size:.68rem;color:var(--pri);font-weight:700}
-@media(max-width:600px){#lista.c3 .in::after,#lista.c4 .in::after{display:none}#lista.c3 .card,#lista.c4 .card{cursor:default}}
+@media(max-width:600px){#lista.c3 .in::after{font-size:.6rem;margin-top:4px}}
 </style>
 <script id="vcolsJs">
 (function(){
-  var KEY="cp_cols",lista=document.getElementById("lista"),box=document.getElementById("vcols"),busca=document.getElementById("busca");
-  if(!lista||!box)return;
-  function ler(){var v=1;try{v=parseInt(JSON.parse(localStorage.getItem(KEY)),10)}catch(e){v=1}return(v>=1&&v<=4)?v:1}
-  var atual=ler();
+  var lista=document.getElementById("lista"),box=document.getElementById("vcols"),btn=document.getElementById("vcolsBtn"),busca=document.getElementById("busca");
+  if(!lista||!box||!btn)return;
+  /* Celular: 1 a 3 fichas. Tablet: 2 a 4. Computador: 3 a 4. Sempre começa na menor. */
+  var mqCel=window.matchMedia("(max-width:600px)"),mqPc=window.matchMedia("(min-width:1024px)");
+  function faixa(){return mqCel.matches?[1,3]:(mqPc.matches?[3,4]:[2,4])}
+  var atual=faixa()[0];
+  var NOMES=["","uma ficha","duas fichas","três fichas","quatro fichas"];
   function aplica(){
+    var f=faixa();if(atual<f[0]||atual>f[1])atual=f[0];
     lista.classList.remove("c1","c2","c3","c4");
     lista.classList.add("gcols","c"+atual);
     lista.style.setProperty("--cols",atual);
     if(busca)busca.classList.toggle("wide",atual>=3);
-    var efetivo=(window.matchMedia&&window.matchMedia("(max-width:600px)").matches&&atual>2)?2:atual;
-    box.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-checked",String(+b.dataset.cols===efetivo))});
+    var h="";for(var k=0;k<atual;k++)h+="<i></i>";
+    btn.innerHTML=h;
+    var t="Mostrando "+NOMES[atual]+" por linha. Toque para mudar.";
+    btn.setAttribute("aria-label",t);btn.setAttribute("title",t);
   }
-  box.addEventListener("click",function(e){
-    var b=e.target.closest("button[data-cols]");if(!b)return;
-    atual=+b.dataset.cols;
-    try{localStorage.setItem(KEY,JSON.stringify(atual))}catch(err){}
+  btn.addEventListener("click",function(){
+    var f=faixa();atual=atual>=f[1]?f[0]:atual+1;
     aplica();
   });
   aplica();
 
-  /* ===== Abrir a ficha inteira numa janela (só nas colunas 3 e 4 no tablet/computador) ===== */
+  /* ===== Abrir a ficha inteira numa janela (quando há 3 ou 4 fichas por linha) ===== */
   var modal=document.getElementById("fichaModal"),corpo=document.getElementById("fichaCorpo"),xBtn=document.getElementById("fichaX"),voltaFoco=null;
   function estreito(){return window.matchMedia&&window.matchMedia("(max-width:600px)").matches}
-  function resumido(){return !estreito()&&atual>=3}
+  function resumido(){return atual>=3}
   function abre(cardEl){
     var id=(cardEl.querySelector("[data-h]")||{dataset:{}}).dataset.h,a=null;
     try{a=acts.find(function(x){return x.id===id})}catch(e){a=null}
@@ -3341,7 +3369,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b
   /* se o professor trocar para 1 ou 2 fichas com a janela aberta, ela fecha */
   box.addEventListener("click",function(){fecha();marcaFoco()});
   marcaFoco();
-  if(window.matchMedia){var mq=window.matchMedia("(max-width:600px)");(mq.addEventListener?mq.addEventListener("change",aplica):mq.addListener(aplica))}
+  function mudouAparelho(){atual=faixa()[0];fecha();aplica();marcaFoco()}
+  [mqCel,mqPc].forEach(function(m){m.addEventListener?m.addEventListener("change",mudouAparelho):m.addListener(mudouAparelho)});
 })();
 </script>
 </body></html>
