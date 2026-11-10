@@ -566,7 +566,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--pri);box
 footer{animation:cardIn .8s var(--suave) .3s backwards}
 /* respeita quem prefere menos movimento */
 @media (prefers-reduced-motion:reduce){
-  body.home .hero>*,.brand b,.cycle .ar,.panel,.sug,.note,.empty,.card,#lista h3,#fl .filt,.kpis b,.bl i,dialog[open],#conf[open],dialog[open]::backdrop,.gen,.gen .opts button.on,#corr,footer{animation:none!important}
+  body.home .hero>*,.brand b,.cycle .ar,.panel,.sug,.note,.empty,.card,#lista h3,#fl .filt,.kpis b,.bl i,dialog[open],#conf[open],#limpDlg[open],dialog[open]::backdrop,.gen,.gen .opts button.on,#corr,footer{animation:none!important}
   .chip:hover,.card:hover,.btn:hover,.ico button:hover,.hlogo:hover{transform:none!important}
 }
 
@@ -595,12 +595,12 @@ footer{animation:cardIn .8s var(--suave) .3s backwards}
 .den{border:1px solid var(--line);background:var(--bg);color:var(--mut);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.82rem;transition:color .25s ease,border-color .25s ease,background .25s ease}
 .den:hover:not(.feita){color:#c92a2a;border-color:#c92a2a}
 .den.feita{color:#c92a2a;border-color:#c92a2a;cursor:pointer}
-#conf{border:0;border-radius:20px;padding:0;width:min(420px,92vw);background:var(--card);color:var(--ink)}
-#conf::backdrop{background:rgba(0,0,0,.5)}
-#conf .cf{padding:22px;display:grid;gap:12px}
-#conf h2{font-size:1.15rem}
-#conf p{margin:0;color:var(--mut);font-size:.92rem}
-#conf[open]{animation:dlgIn .4s var(--suave)}
+#conf,#limpDlg{border:0;border-radius:20px;padding:0;width:min(420px,92vw);background:var(--card);color:var(--ink)}
+#conf::backdrop,#limpDlg::backdrop{background:rgba(0,0,0,.5)}
+#conf .cf,#limpDlg .cf{padding:22px;display:grid;gap:12px}
+#conf h2,#limpDlg h2{font-size:1.15rem}
+#conf p,#limpDlg p{margin:0;color:var(--mut);font-size:.92rem}
+#conf[open],#limpDlg[open]{animation:dlgIn .4s var(--suave)}
 
 /* ===== Botão flutuante: publicar atividade ===== */
 #fab{display:none;position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:25;align-items:center;gap:10px}
@@ -1017,6 +1017,13 @@ body:not(.home) #qrbloco{display:none}
     <div class="row"><button class="btn" id="cfSim" type="button">Sim, denunciar</button><button class="btn sec" id="cfNao" type="button">Cancelar</button></div>
   </div>
 </dialog>
+<dialog id="limpDlg">
+  <div class="cf">
+    <h2>🧹 Limpar a ficha?</h2>
+    <p>Todo o texto digitado nesta ficha será apagado e você começa do zero. Isso não pode ser desfeito.</p>
+    <div class="row"><button class="btn" id="limpSim" type="button">Sim, limpar a ficha</button><button class="btn sec" id="limpNao" type="button">Cancelar</button></div>
+  </div>
+</dialog>
 <nav id="mn" hidden>
   <button data-go="atividades">📚 Coleção de atividades</button>
   <button data-go="dados">📊 Dados do planejamento docente</button>
@@ -1342,7 +1349,7 @@ $("#d").addEventListener("input",()=>{const n=$("#d").value.trim().length;$("#dC
   }
   d.addEventListener("input",e=>borda(e.isTrusted));
   d.addEventListener("animationend",()=>d.classList.remove("d-pulo"));
-  $("#f").addEventListener("reset",()=>setTimeout(()=>borda(false),0));
+  $("#f").addEventListener("reset",()=>setTimeout(()=>{cnt.textContent="";borda(false)},0));
 })();
 $("#un").onchange=dica;$("#ca").onchange=dica;dica();
 $("#novo").onclick=()=>$("#dlg").showModal();
@@ -1647,7 +1654,7 @@ $("#cfPub").onclick=async()=>{
       localStorage.setItem(CHAVE,JSON.stringify(f));
     }catch(e){}
   }
-  function agenda(){clearTimeout(timer);timer=setTimeout(salva,400)}
+  function agenda(){atualizaLimpar();clearTimeout(timer);timer=setTimeout(salva,400)}
   window.rascLimpa=function(){clearTimeout(timer);try{localStorage.removeItem(CHAVE)}catch(e){}};
   function le(){
     try{
@@ -1672,51 +1679,26 @@ $("#cfPub").onclick=async()=>{
       $("#au").value=r.au||"";
     }finally{restaurando=false}
   }
-  /* O aviso some 5 segundos depois que o professor começa a digitar */
-  let sumirTimer=null, sumirArmado=false;
-  function armaSumir(b){
-    clearTimeout(sumirTimer);sumirArmado=true;
-    const f=document.getElementById("f");
-    const aoDigitar=()=>{
-      if(!sumirArmado)return;
-      sumirArmado=false;f.removeEventListener("input",aoDigitar);
-      sumirTimer=setTimeout(()=>{b.hidden=true;mostraLimpar(false)},5000);
-    };
-    f.addEventListener("input",aoDigitar);
-  }
-  /* Aviso discreto dentro da ficha, com opção de descartar */
-  function aviso(r){
-    let b=document.getElementById("rascAviso");
-    if(!b){
-      b=document.createElement("div");b.id="rascAviso";
-      b.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;padding:10px 12px;border-radius:12px;background:var(--soft,#fff3e0);border:1px solid var(--line,#eee);font-size:.85rem;line-height:1.35";
-      const f=document.getElementById("f");f.insertBefore(b,f.children[1]||null);
-    }
-    const n=r.enc.length;
-    b.innerHTML='<span>📝 Recuperamos o que você tinha escrito'+(n>1?' ('+n+' encontros)':'')+'.</span><button type="button" class="btn sec" id="rascDesc" style="padding:6px 10px;font-size:.8rem;white-space:nowrap">Descartar</button>';
-    b.hidden=false;
-    mostraLimpar(true);
-    armaSumir(b);
-    document.getElementById("rascDesc").onclick=()=>{
-      if(!confirm("Descartar o texto recuperado e começar uma ficha em branco?"))return;
-      restaurando=true;
-      try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
-      window.rascLimpa();b.hidden=true;mostraLimpar(false);
-    };
-  }
-  /* Botão "Limpar ficha": aparece só junto com o aviso "Recuperamos o que você tinha escrito" (texto resgatado) */
+  /* Botão "Limpar ficha": aparece quando há algo escrito na ficha e pede confirmação antes de apagar tudo */
   const LB=document.getElementById("limparFicha");
   function mostraLimpar(m){if(!LB)return;LB.classList.toggle("on",!!m);LB.setAttribute("aria-hidden",m?"false":"true");LB.tabIndex=m?0:-1}
+  function temConteudo(){const e=txt(encCap());return !vazio(e)||!!SEQ.on||$("#au").value.trim()!==""||e.turmas.length>0}
+  function atualizaLimpar(){mostraLimpar(temConteudo())}
+  function limpaTudo(){
+    restaurando=true;
+    try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
+    window.rascLimpa();
+    atualizaLimpar();
+    toast("Ficha limpa. Pode começar do zero.");
+  }
   if(LB){
     LB.onclick=()=>{
-      if(!confirm("Limpar a ficha inteira e começar do zero? O texto digitado será apagado."))return;
-      restaurando=true;
-      try{seqSet(false);$("#f").reset();resetGen();$("#dCnt").textContent="";if(typeof dica==="function")dica()}finally{restaurando=false}
-      window.rascLimpa();
-      const av=document.getElementById("rascAviso");if(av)av.hidden=true;
-      mostraLimpar(false);
-      toast("Ficha limpa. Pode começar do zero.");
+      const m=document.getElementById("limpDlg");
+      if(m&&m.showModal)m.showModal();
+      else if(confirm("Limpar a ficha inteira e começar do zero? O texto digitado será apagado."))limpaTudo();
     };
+    document.getElementById("limpNao").onclick=()=>document.getElementById("limpDlg").close();
+    document.getElementById("limpSim").onclick=()=>{document.getElementById("limpDlg").close();limpaTudo()};
   }
   /* Salva a cada alteração nos campos da ficha */
   const F=document.getElementById("f");
@@ -1732,11 +1714,12 @@ $("#cfPub").onclick=async()=>{
   D.showModal=function(){
     antes();
     const r=le();
-    mostraLimpar(false);
-    if(!r)return;
-    const e=encCap();
-    const ficaVazia=vazio(txt(e))&&!SEQ.on&&!$("#au").value.trim();
-    if(ficaVazia){restaura(r);aviso(r)}
+    if(r){
+      const e=encCap();
+      const ficaVazia=vazio(txt(e))&&!SEQ.on&&!$("#au").value.trim();
+      if(ficaVazia)restaura(r);
+    }
+    atualizaLimpar();
   };
   /* O fechamento do diálogo chama seqSet(false), que zera os encontros na memória; o rascunho já está guardado. */
   /* Garante que o salvamento automático não apague o rascunho quando a ficha é fechada */
