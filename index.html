@@ -899,6 +899,24 @@ body.home:not(.sc) #menu.aberto{color:var(--pri2)}
 .como-box b{font-size:.88rem;line-height:1.15;margin:0}
 .como-box #comoFunc{padding:6px 16px;font-size:.88rem;line-height:1.2;margin:0}
 body.home .hero{padding-bottom:10px}
+/* ===== Fundo (nuvens/aviões) e bonecos independentes: nada reinicia a animação do fundo ===== */
+.voo{contain:strict;transform:translateZ(0)}
+.voo .nv,.voo .av{animation-play-state:running!important}
+.duo-palco,.pers,.como-prof{contain:layout style}
+.pers{backface-visibility:hidden}
+
+/* ===== Todos os quadros (avaliação, compartilhar, sugestões, vídeo...): firmes no centro, sem arrastar ===== */
+dialog[open]{position:fixed;inset:0;margin:auto;max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;animation:dlgFade .18s ease both!important;transform:none}
+dialog[open]::backdrop{animation:none!important}
+@keyframes dlgFade{from{opacity:0}to{opacity:1}}
+#qdlg{max-height:90vh;max-height:90dvh}
+/* enquanto há um quadro aberto, o fundo animado (nuvens, aviões, bonecos) fica parado: libera o aparelho para o quadro */
+body:has(dialog[open]) .voo,body:has(dialog[open]) .pers,body:has(dialog[open]) .como-prof{visibility:hidden}
+body:has(dialog[open]) .voo *,body:has(dialog[open]) .duo-palco *{animation-play-state:paused!important}
+html:has(dialog[open]),body:has(dialog[open]){overflow:hidden!important;overscroll-behavior:none}
+/* quadros próprios do site (.mdl) também congelam o fundo */
+body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.mdl:not([hidden])) .como-prof{visibility:hidden}
+
 .hero .slogan b{font-weight:800;color:var(--pri)}
 /* slogan em duas linhas certinhas: fonte menor, sem quebrar no meio */
 .hero .slogan{font-size:clamp(.58rem,3.1vw,1rem);line-height:1.3}
@@ -3230,9 +3248,13 @@ const VIDEO_URL="https://www.youtube.com/watch?v=jNQXAC9IVRw";
   function marca(){try{localStorage.setItem(KEYN,"1")}catch(e){}}
   if(jaViu()){prof.remove();return}
   var vis=false,fim=false,timer=null,aguardando=false;
+  var ultTop=null;
   function posiciona(){
     var r=box.getBoundingClientRect();
-    prof.style.top=Math.round(r.top+r.height/2-prof.offsetHeight/2+8)+"px";prof.style.marginTop="0";
+    var tp=Math.round(r.top+r.height/2-prof.offsetHeight/2+8);
+    if(tp===ultTop) return;
+    ultTop=tp;
+    prof.style.top=tp+"px";prof.style.marginTop="0";
   }
   function dentro(){
     var r=box.getBoundingClientRect(),h=window.innerHeight;
@@ -3677,13 +3699,17 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgFecha("cpgEsc");
     if(p.lpE){ p.lpE.style.display=o.eye?"":"none"; }
     if(p.lpH){ p.lpH.style.display=o.eye?"none":""; }
   }
-  function ajusta(){
+  var ultW=-1;
+  function ajusta(force){
+    var cw=document.documentElement.clientWidth;
+    if(!force && cw===ultW && palco.style.width) return;
+    ultW=cw;
     var pr=palco.parentElement.getBoundingClientRect();
     palco.style.width=document.documentElement.clientWidth+"px";
     palco.style.marginLeft=(parseFloat(palco.style.marginLeft||0)-pr.left-(palco.getBoundingClientRect().left-pr.left-(parseFloat(palco.style.marginLeft||0))))+"px";
     var d=palco.getBoundingClientRect().left; if(Math.abs(d)>0.5) palco.style.marginLeft=(parseFloat(palco.style.marginLeft||0)-d)+"px";
   }
-  addEventListener("resize",function(){ if(palco.offsetParent!==null) ajusta(); });
+  addEventListener("resize",function(){ if(palco.offsetParent!==null) ajusta(true); });
   function centro(id){var b=document.getElementById(id).getBoundingClientRect(),r=palco.getBoundingClientRect();return b.left+b.width/2-r.left}
   function alvoLado(lado){
     var cy=document.querySelector(".cicloBox .cycle"); if(!cy) return lado>0?palco.clientWidth-90:90;
@@ -3694,6 +3720,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgFecha("cpgEsc");
   }
   function podeRodar(){
     var m=document.getElementById("vidModal");
+    if(document.querySelector("dialog[open]")||document.querySelector(".mdl:not([hidden])")) return false;
     return document.body.classList.contains("home") && palco.offsetParent!==null && (!m||m.hidden) && !document.getElementById("intro");
   }
   function ator(p,cfg,fim){
@@ -3724,7 +3751,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgFecha("cpgEsc");
   }
   function cena(){
     if(rodando||!podeRodar()) return;
-    ajusta();
+    ajusta(true);
     var Wp=palco.clientWidth; if(Wp<200){rodando=false;return}
     rodando=true;
     ator(M,{ini:Wp+60,alvo:alvoLado(1),dir:-1,saida:1,tempo:4800,txt:"Achei! As atividades são aqui!",
@@ -3749,6 +3776,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgFecha("cpgEsc");
       setTimeout(esperar,500);
     })();
   }
+  /* se um quadro fechar enquanto a cena estava parada, retoma só o boneco, depois de um respiro */
+  document.addEventListener("close",function(){ if(!rodando) setTimeout(function(){ if(podeRodar()) cena(); },2500); },true);
   if(window.__introAcabou||!document.getElementById("intro")) setTimeout(inicio,1400);
   else window.addEventListener("intro-fim",function(){setTimeout(inicio,1400)},{once:true});
 })();
