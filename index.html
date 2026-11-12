@@ -882,6 +882,23 @@ body:not(.home) #qrbloco{display:none}
 .cj-up .cj-bar{height:16px;border-radius:0 8px 8px 0;background:var(--pri)}
 .cj-up .cj-bn{font-weight:700;font-variant-numeric:tabular-nums;font-size:.85rem;padding-left:6px}
 @media (prefers-reduced-motion:reduce){.cj-vp .cj-c,.cj-leg button,.cj-ctl button{transition:none}}
+
+/* ===== Topo da home: só o botão Menu (pastilha branca) até rolar a página ===== */
+body.home:not(.sc) #top{background:transparent;border-bottom-color:transparent;box-shadow:none;pointer-events:none}
+body.home:not(.sc) #top .hlogo{pointer-events:none}
+#top{transition:background .45s var(--suave),border-color .4s ease,box-shadow .4s ease}
+#top .ico,#top .ico button{pointer-events:auto}
+#menu{background:transparent;border-radius:999px;padding:8px 18px;transition:background .45s var(--suave),box-shadow .45s var(--suave),transform .3s var(--pula),color .2s}
+body.home:not(.sc) #menu{background:#fff;color:var(--pri);box-shadow:0 2px 10px rgba(0,0,0,.14)}
+body.home:not(.sc) #menu.aberto{color:var(--pri2)}
+@media (prefers-reduced-motion:reduce){#top,#menu{transition:none!important}}
+
+/* ===== "Como funciona": quadrado mais fininho e colado (economiza espaço) ===== */
+.como-wrap{margin-top:8px!important;margin-bottom:0!important}
+.como-wrap .como-box{margin:0!important;padding:5px 12px!important;gap:2px!important;border-width:1.5px;border-radius:14px}
+.como-box b{font-size:.88rem;line-height:1.15;margin:0}
+.como-box #comoFunc{padding:6px 16px;font-size:.88rem;line-height:1.2;margin:0}
+body.home .hero{padding-bottom:10px}
 </style>
 <header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="menu" aria-label="Menu">Menu</button></span></header>
 <div class="voo" aria-hidden="true"><span class="nv n1"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n2"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n3"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n4"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="av a1"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a2 r"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a3"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span></div>
