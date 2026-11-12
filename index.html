@@ -251,7 +251,7 @@ body:not(.home) .rolar{display:none}
   function bracoA(g,a){g.setAttribute("transform","translate(16,-70) rotate("+a+")")}
   function bracoB(g,a){g.setAttribute("transform","translate(-16,-70) rotate("+a+")")}
   var TW=300, TH=150, FL=1500, JP=600, FIM=250;
-  var tIni=null, ATRASO=1600;
+  var tIni=null, ATRASO=1600, vAnt=-1, fAnt=null;
   function quadro(t){
     if(fim) return;
     if(tIni===null) tIni=t;
@@ -266,7 +266,7 @@ body:not(.home) .rolar{display:none}
     var pt=rota_pt(k);
     av.setAttribute("transform","translate("+pt[0]+","+pt[1]+") rotate("+pt[2]+")");
     prog.setAttribute("stroke-dashoffset", L*(1-k));
-    var v=Math.round(k*100); fill.style.width=v+"%"; pct.textContent=v+"%";
+    var v=Math.round(k*100); if(v!==vAnt){ vAnt=v; fill.style.width=v+"%"; pct.textContent=v+"%"; }
     var m=cl((k-.55)/.45), aMA=lerp(10,-140,m), aMB=lerp(-10,140,m), aWB=-10;
     var apos=fly-FL;
     if(apos>=0){
@@ -279,14 +279,18 @@ body:not(.home) .rolar{display:none}
     bracoA(wA,aW); bracoB(wB,aWB); bracoA(mA,aMA); bracoB(mB,aMB);
     W.setAttribute("transform","translate(62,"+(170-(feliz?jump*.6:0))+") scale(1,1)");
     M.setAttribute("transform","translate(298,"+(170-jump)+") scale(-1,1)");
-    $("mMs").style.display=feliz?"none":""; $("mMo").style.display=feliz?"":"none";
-    $("wMs").style.display=feliz?"none":""; $("wMo").style.display=feliz?"":"none";
+    if(feliz!==fAnt){ fAnt=feliz;
+      $("mMs").style.display=feliz?"none":""; $("mMo").style.display=feliz?"":"none";
+      $("wMs").style.display=feliz?"none":""; $("wMo").style.display=feliz?"":"none";
+    }
     if(apos>=JP+FIM){ sair(); return; }
     requestAnimationFrame(quadro);
   }
+  var NT=240, tbl=null;
   function rota_pt(k){
-    var l=k*L, a=prog.getPointAtLength(l), b=prog.getPointAtLength(Math.min(L,l+2));
-    return [a.x,a.y,Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI];
+    if(!tbl){ tbl=[]; for(var i=0;i<=NT;i++){ var l=i/NT*L, a=prog.getPointAtLength(l), b=prog.getPointAtLength(Math.min(L,l+2)); tbl.push([a.x,a.y,Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI]); } }
+    var f=Math.max(0,Math.min(NT,k*NT)), i0=Math.floor(f), i1=Math.min(NT,i0+1), u=f-i0, A=tbl[i0], B=tbl[i1];
+    return [A[0]+(B[0]-A[0])*u, A[1]+(B[1]-A[1])*u, A[2]+(B[2]-A[2])*u];
   }
   setTimeout(function(){ requestAnimationFrame(quadro); },ATRASO);
   el.addEventListener("click",sair);
@@ -662,7 +666,7 @@ footer{animation:cardIn .8s var(--suave) .3s backwards}
 #intro{position:fixed;inset:0;z-index:100000;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .7s ease,visibility .7s}
 #intro.sai{opacity:0;visibility:hidden;pointer-events:none}
 #intro .ib{font:700 clamp(2.4rem,13vw,4.6rem)/.95 "Fredoka","Trebuchet MS",system-ui,sans-serif;text-align:center;transition:transform .8s cubic-bezier(.6,0,.2,1),opacity .7s ease}
-#intro.sai .ib{transform:translateY(-34vh) scale(.8)}
+#intro.sai .ib{transform:translateY(-8vh) scale(.92)}
 #intro .ib span{display:block;opacity:0;transform:translateY(14px)}
 #intro .ib .a{color:var(--pri);animation:introIn .6s ease .3s forwards}
 #intro .ib .b{color:var(--pri2);animation:introIn .6s ease 1s forwards}
@@ -3125,14 +3129,14 @@ init();
 .como-box small{font-size:.72rem;letter-spacing:.08em;font-weight:700;color:var(--mut)}
 .como-box b{font-size:.95rem}
 /* ===== Professora pendurada na borda direita da tela, apontando para o vídeo ===== */
-.como-wrap{position:relative;margin:56px auto 0;width:fit-content;max-width:100%}
+.como-wrap{position:relative;margin:22px auto 0;width:fit-content;max-width:100%}
 /* tela inicial compacta: os dois botões cabem na primeira tela, sem rolar */
 .hero .slogan{margin:8px 0 12px;max-width:none;width:100%;font-size:clamp(.95rem,4.2vw,1.2rem);font-weight:600;text-transform:none;letter-spacing:.01em;line-height:1.3}
 .hero h1{margin:.15em 0 .3em}
 .hero .cycle{margin-bottom:10px}
-@media (max-height:780px){.hero{padding-top:62px;padding-bottom:20px}.hero .brand{font-size:clamp(3rem,16vw,6rem)}.hero .cycle{width:min(190px,52vw)}.duo-tit{margin-bottom:8px}.duo-b{min-height:104px;padding:10px 10px}.duo-b .duo-ic{font-size:1.8rem}.duo-b .duo-t{font-size:1rem}}
+@media (max-height:780px){.hero{padding-top:56px;padding-bottom:20px}.hero .brand{font-size:clamp(3.4rem,19vw,7rem)}.hero .cycle{width:min(190px,52vw)}.duo-tit{margin-bottom:8px}.duo-b{min-height:104px;padding:10px 10px}.duo-b .duo-ic{font-size:1.8rem}.duo-b .duo-t{font-size:1rem}}
 @media (max-height:700px){.duo-b .duo-s{display:none}.duo-b{min-height:84px}.hero .slogan{font-size:.9rem}}
-@media (max-height:640px){.hero .cycle{width:min(140px,40vw)}.hero{padding-top:54px}.hero .brand{font-size:clamp(2.6rem,14vw,4.6rem)}}
+@media (max-height:640px){.hero .cycle{width:min(140px,40vw)}.hero{padding-top:50px}.hero .brand{font-size:clamp(3rem,17vw,5.4rem)}}
 .como-wrap .como-box{margin:0}
 .como-prof{position:fixed;right:0;top:50%;margin-top:-20px;width:150px;height:123px;z-index:30;pointer-events:none;overflow:visible;transform:translateX(105%);opacity:0;transition:transform 1.1s cubic-bezier(.22,.8,.3,1),opacity .4s ease}
 .como-prof svg{display:block;overflow:visible;margin-right:-34px}
