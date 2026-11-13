@@ -972,7 +972,7 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
 .hero .slogan .sl1,.hero .slogan b{display:block;white-space:nowrap}
 @media (max-height:700px){.hero .slogan{font-size:clamp(.58rem,3.1vw,.9rem)}}
 </style>
-<header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="menu" aria-label="Menu">Menu</button></span></header>
+<header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="lupa" type="button" aria-label="Buscar atividades" aria-expanded="false" hidden>🔎</button><button id="menu" aria-label="Menu">Menu</button></span></header>
 <div class="voo" aria-hidden="true"><span class="nv n1"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n2"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n3"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n4"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="av a1"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a2 r"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a3"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span></div>
 <div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
   <div class="mdl-box">
@@ -1052,7 +1052,7 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
 </section>
 
 <section id="busca" class="tela">
-  <div class="search"><input id="q" type="search" placeholder="Buscar atividade, brincadeira ou material…" autocomplete="off"></div>
+  <div class="search" id="buscaBox"><input id="q" type="search" placeholder="Buscar atividade, brincadeira ou material…" autocomplete="off" enterkeyhint="search"><button type="button" id="buscaX" aria-label="Fechar busca">×</button></div>
   <div class="panel" id="panel">
     <div class="seg" id="seg"><span class="gota" id="gota"></span><button id="m1" class="on">Unidade temática</button><button id="m2">Campo de experiência</button></div>
     <div class="rola"><div class="chips" id="chips"></div><button type="button" class="seta" aria-label="Ver mais opções ao lado" tabindex="-1">›</button></div>
@@ -1061,7 +1061,7 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
     <div class="row dir"><button class="mini" id="vd">📊 Ver análise de dados</button></div>
   </div>
   <div class="note" id="aviso" hidden>Modo de teste: o que você publicar aqui fica salvo só neste aparelho. Para compartilhar entre professores, é preciso ligar o armazenamento coletivo.</div>
-  <div class="bar"><h2>Atividades</h2><div class="vcols" id="vcols"><button type="button" id="vcolsBtn" aria-label="Fichas por linha: toque para mudar" title="Mudar quantas fichas aparecem por linha"></button></div><span id="fl"></span></div>
+  <div class="bar"><h2 id="tituloLista">Atividades</h2><div class="vcols" id="vcols"><button type="button" id="vcolsBtn" aria-label="Fichas por linha: toque para mudar" title="Mudar quantas fichas aparecem por linha"></button></div><span id="fl"></span></div>
   <div id="sug" class="sug" hidden></div>
   <div id="lista"></div>
 </section>
@@ -1479,17 +1479,30 @@ function atualizaCoracoes(){
 function render(){try{atualizaCoracoes()}catch(e){}if(varAtual)varDesenha();stats();xp();matAtalhos();if(typeof sugRedesenha==="function")sugRedesenha();
   const key=mode==="un"?"unidade":"campo";
   const list=acts.filter(a=>(reps[a.id]||0)<LIMITE_DEN&&(!filt||a[key]===filt)&&(!turma||(Array.isArray(a.turmas)&&a.turmas.includes(turma)))&&(!matSel||actMats(a).includes(matSel))&&(!q||buscaOk(a,q)));
+  /* Título que se adapta aos filtros: "Brincadeiras e jogos" -> "Brincadeiras e jogos do Infantil 1" */
+  (function(){
+    const h=$("#tituloLista");if(!h)return;
+    const art={"Berçário":"do","Infantil 1":"do","Infantil 2":"do","Infantil 3":"do","Infantil 4":"do","Infantil 5":"do"};
+    let t="Atividades";
+    if(filt)t=filt;
+    if(turma)t=(filt?t:"Atividades")+" "+(art[turma]||"do")+" "+turma;
+    if(matSel)t+=" com "+matSel;
+    if(h.textContent!==t)h.textContent=t;
+  })();
   $("#fl").innerHTML=(matSel?'<button class="filt" id="xm">Material: '+esc(matSel)+' ✕</button> ':"")+(filt?'<button class="filt" id="x">'+esc(filt)+' ✕</button> ':"")+(turma?'<button class="filt" id="xt">'+esc(turma)+' ✕</button>':"");
   if(!acts.filter(a=>(reps[a.id]||0)<LIMITE_DEN).length){_sigLista=null;$("#lista").innerHTML='<div class="empty">Ainda não há atividades por aqui.<br>Que tal ser a primeira pessoa a colaborar? 🌱</div>';return}
   if(!list.length){_sigLista=null;$("#lista").innerHTML='<div class="empty">Nenhuma atividade encontrada com esse filtro.</div>';return}
-  const sig=key+"|"+(filt||"")+"|"+(turma||"")+"|"+q+"|"+list.map(a=>a.id).join(",");
+  const sig=key+"|"+(filt||"")+"|"+(turma||"")+"|"+(matSel||"")+"|"+q+"|"+list.map(a=>a.id).join(",");
   if(sig===_sigLista&&$("#lista").children.length){atualizaCoracoes();return}
   _sigLista=sig;
   const SQ={};list.forEach(a=>{if(a.seq)(SQ[a.seq]=SQ[a.seq]||[]).push(a)});
   Object.keys(SQ).forEach(k=>SQ[k].sort((x,y)=>(x.seqN||0)-(y.seqN||0)));
   const list2=list.filter(a=>!a.seq||SQ[a.seq][0]===a);
-  const g={};list2.forEach(a=>(g[a[key]||"Sem categoria"]=g[a[key]||"Sem categoria"]||[]).push(a));
-  $("#lista").innerHTML=Object.keys(g).sort().map(k=>"<h3>"+esc(k)+"</h3>"+g[k].sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0)).map(a=>a.seq&&SQ[a.seq]?cardSeq(SQ[a.seq]):card(a)).join("")).join("");
+  /* Sem divisão por categoria: lista única, ordenada só pelos corações.
+     Numa sequência didática vale o encontro mais curtido. */
+  const _hc=a=>a.seq&&SQ[a.seq]?Math.max.apply(null,SQ[a.seq].map(x=>counts[x.id]||0)):(counts[a.id]||0);
+  list2.sort((a,b)=>_hc(b)-_hc(a));
+  $("#lista").innerHTML=list2.map(a=>a.seq&&SQ[a.seq]?cardSeq(SQ[a.seq]):card(a)).join("");
 }
 function cardSeq(m){
   return '<div class="seq"><div class="seq-h"><span class="seq-selo">🔗 Sequência didática</span><span class="seq-n">'+m.length+(m.length===1?" encontro":" encontros")+'</span></div><div class="seq-t" role="region" aria-label="Encontros da sequência didática, deslize para o lado">'
@@ -4058,7 +4071,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgEsconde("cpgEsc"
 .ap-prof.on svg *{pointer-events:auto}
 .ap-prof.sai svg *{pointer-events:none}
 /* balões de fala: um de cada vez, abrindo para o lado oposto ao botão */
-.ap-bal{position:absolute;bottom:calc(100% + 4px);width:max-content;max-width:min(230px,calc(100vw - 24px));text-align:center;background:#fff;border:2px solid #e8590c;border-radius:14px;padding:8px 12px;font:700 .8rem/1.3 system-ui,sans-serif;color:#2a2430;box-shadow:0 4px 14px rgba(0,0,0,.16);opacity:0;transform:scale(.6);transition:opacity .3s ease,transform .45s cubic-bezier(.34,1.5,.5,1)}
+.ap-bal{position:absolute;bottom:calc(100% + 4px);width:max-content;max-width:min(250px,calc(100vw - 24px));text-align:center;background:#fff;border:2px solid #e8590c;border-radius:14px;padding:8px 12px;font:700 .8rem/1.3 system-ui,sans-serif;color:#2a2430;box-shadow:0 4px 14px rgba(0,0,0,.16);opacity:0;transform:scale(.6);transition:opacity .3s ease,transform .45s cubic-bezier(.34,1.5,.5,1)}
 .ap-prof.ld .ap-bal{right:calc(50% - 14px);transform-origin:right bottom}
 .ap-prof.le .ap-bal{left:calc(50% - 14px);transform-origin:left bottom}
 .ap-bal::after{content:"";position:absolute;bottom:-7px;width:10px;height:10px;background:#fff;border:2px solid #e8590c;border-left:0;border-top:0;transform:rotate(45deg)}
@@ -4068,6 +4081,11 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgEsconde("cpgEsc"
 .ap-prof.fala1 #apBal1,.ap-prof.fala2 #apBal2{opacity:1;transform:scale(1)}
 /* destaque suave no botão de compartilhar: halo claro que "respira" devagar, sem piscar nem crescer */
 .btn-sh.ap-alvo{background:rgba(232,120,40,.92)!important;border-color:rgba(255,255,255,.8)!important;transition:background .6s ease}
+.heart.ap-alvo,.vbtn.ap-alvo{box-shadow:0 0 0 3px rgba(232,120,40,.55);transition:box-shadow .5s ease}
+.den.ap-alvo{position:relative;color:#c92a2a;border-color:#c92a2a;box-shadow:0 0 0 3px rgba(201,42,42,.28)}
+.den.ap-alvo::after{content:"!";position:absolute;top:-11px;right:-7px;width:22px;height:22px;border-radius:50%;background:#e03131;color:#fff;font:800 .95rem/22px system-ui,sans-serif;text-align:center;box-shadow:0 2px 8px rgba(201,42,42,.5);animation:apPisca 1s ease-in-out infinite}
+@keyframes apPisca{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.15;transform:scale(.85)}}
+@media (prefers-reduced-motion:reduce){.den.ap-alvo::after{animation:none}}
 .ap-sol{position:fixed;left:0;top:0;width:72px;height:72px;z-index:39;pointer-events:none;opacity:0;transition:opacity .8s ease;border-radius:50%}
 .ap-sol.on{opacity:1}
 .ap-sol::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,196,110,.55) 0 3deg,transparent 3deg 22.5deg);-webkit-mask:radial-gradient(circle,transparent 0 24px,#000 26px 34px,transparent 36px);mask:radial-gradient(circle,transparent 0 24px,#000 26px 34px,transparent 36px);animation:apGira 24s linear infinite,apRespira 3.6s ease-in-out infinite}
@@ -4085,36 +4103,36 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
   <div class="ap-bal" id="apBal2"><b>Aqui você gera o seu planejamento diário</b> da Educação Infantil.</div>
   <svg id="apSvg" viewBox="-60 -125 120 175" aria-hidden="true">
     <!-- pernas -->
-    <g id="apLE" transform="translate(-8,-24) rotate(4)"><line y2="36" stroke="#4a4560" stroke-width="11" stroke-linecap="round"/><ellipse cx="0" cy="40" rx="8" ry="4.6" fill="#2e2a3a"/></g>
-    <g id="apLD" transform="translate(8,-24) rotate(-4)"><line y2="36" stroke="#4a4560" stroke-width="11" stroke-linecap="round"/><ellipse cx="0" cy="40" rx="8" ry="4.6" fill="#2e2a3a"/></g>
+    <g id="apLE" transform="translate(-8,-24) rotate(4)"><line y2="36" stroke="#8d5524" stroke-width="9" stroke-linecap="round"/><ellipse cx="0" cy="40" rx="8" ry="4.6" fill="#7b2d4f"/></g>
+    <g id="apLD" transform="translate(8,-24) rotate(-4)"><line y2="36" stroke="#8d5524" stroke-width="9" stroke-linecap="round"/><ellipse cx="0" cy="40" rx="8" ry="4.6" fill="#7b2d4f"/></g>
     <!-- tronco -->
-    <rect x="-17" y="-81" width="34" height="62" rx="11" fill="#e8590c"/>
-    <path d="M-6 -81L0 -64L6 -81" stroke="#444" stroke-width="1.6" fill="none"/>
-    <rect x="-3.5" y="-64" width="7" height="5" rx="2" fill="#f5c518" stroke="#444"/>
+    <rect x="-17" y="-81" width="34" height="62" rx="11" fill="#f2b705"/><path d="M-19 -40L19 -40L24 -18L-24 -18Z" fill="#0f8b8d"/>
+    <path d="M-6 -81Q0 -72 6 -81" stroke="#b8860b" stroke-width="1.6" fill="none"/>
+    <circle cx="0" cy="-62" r="3.2" fill="#d9480f"/>
     <!-- cabeça -->
-    <ellipse cx="14" cy="-90" rx="6" ry="12" transform="rotate(-12 14 -90)" fill="#5a3a22"/>
-    <circle cx="10" cy="-99" r="3" fill="#e8590c"/>
-    <circle cx="0" cy="-98" r="21" fill="#ffd9b3"/>
-    <path d="M-21 -100A21 21 0 0 1 21 -100Q8 -113 -21 -100Z" fill="#5a3a22"/>
-    <circle cx="-12" cy="-98" r="2.6" fill="#222"/><circle cx="2" cy="-98" r="2.6" fill="#222"/>
-    <circle cx="-16" cy="-91" r="3.5" fill="#ff9aa2" opacity=".55"/><circle cx="8" cy="-91" r="3.5" fill="#ff9aa2" opacity=".55"/>
-    <path d="M-12 -90Q-5 -80 2 -90Z" fill="#7a2230"/>
+    <g fill="#1f130c"><circle cx="-18" cy="-104" r="10"/><circle cx="-10" cy="-114" r="11"/><circle cx="2" cy="-118" r="11"/><circle cx="14" cy="-113" r="11"/><circle cx="21" cy="-102" r="10"/><circle cx="-22" cy="-92" r="7"/><circle cx="23" cy="-91" r="7"/></g>
+    <circle cx="0" cy="-98" r="21" fill="#8d5524"/>
+    <path d="M-21 -102A21 21 0 0 1 21 -102Q12 -112 0 -111Q-12 -112 -21 -102Z" fill="#1f130c"/>
+    <path d="M-23 -106Q0 -121 23 -106L21 -100Q0 -112 -21 -100Z" fill="#d9480f"/>
+    <circle cx="-12" cy="-98" r="2.6" fill="#1a1a1a"/><circle cx="2" cy="-98" r="2.6" fill="#1a1a1a"/>
+    <circle cx="-16" cy="-91" r="3.5" fill="#e0605a" opacity=".5"/><circle cx="8" cy="-91" r="3.5" fill="#e0605a" opacity=".5"/>
+    <path d="M-12 -90Q-5 -80 2 -90Z" fill="#6b1f2a"/>
     <!-- braço do lado esquerdo da tela: ombro, cotovelo e mão -->
     <g id="apAE" transform="translate(-15,-72) rotate(35)">
-      <line y2="17" stroke="#c94a08" stroke-width="10" stroke-linecap="round"/>
+      <line y2="17" stroke="#d99a00" stroke-width="10" stroke-linecap="round"/>
       <g id="apFE" transform="translate(0,17) rotate(-72)">
-        <line y2="17" stroke="#ffd9b3" stroke-width="7" stroke-linecap="round"/>
-        <circle cy="19" r="4.8" fill="#ffd9b3"/>
-        <line id="apDE" x1="0" y1="21" x2="0" y2="29" stroke="#ffd9b3" stroke-width="4" stroke-linecap="round" style="display:none"/>
+        <line y2="17" stroke="#8d5524" stroke-width="7" stroke-linecap="round"/>
+        <circle cy="19" r="4.8" fill="#8d5524"/>
+        <line id="apDE" x1="0" y1="21" x2="0" y2="29" stroke="#8d5524" stroke-width="4" stroke-linecap="round" style="display:none"/>
       </g>
     </g>
     <!-- braço do lado direito da tela -->
     <g id="apAD" transform="translate(15,-72) rotate(-35)">
-      <line y2="17" stroke="#c94a08" stroke-width="10" stroke-linecap="round"/>
+      <line y2="17" stroke="#d99a00" stroke-width="10" stroke-linecap="round"/>
       <g id="apFD" transform="translate(0,17) rotate(72)">
-        <line y2="17" stroke="#ffd9b3" stroke-width="7" stroke-linecap="round"/>
-        <circle cy="19" r="4.8" fill="#ffd9b3"/>
-        <line id="apDD" x1="0" y1="21" x2="0" y2="29" stroke="#ffd9b3" stroke-width="4" stroke-linecap="round" style="display:none"/>
+        <line y2="17" stroke="#8d5524" stroke-width="7" stroke-linecap="round"/>
+        <circle cy="19" r="4.8" fill="#8d5524"/>
+        <line id="apDD" x1="0" y1="21" x2="0" y2="29" stroke="#8d5524" stroke-width="4" stroke-linecap="round" style="display:none"/>
       </g>
     </g>
     <circle id="apOE" cx="-15" cy="-72" r="1" fill="none"/><circle id="apOD" cx="15" cy="-72" r="1" fill="none"/>
@@ -4144,6 +4162,31 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
   var ativo=false,saindo=false,raf=0,sessao=0,alvo=null,andando=false,tAnd=0,durAnd=1500,tNow=0;
   var tIni=0,ultAgora=0,ultEsc=0,PW=96,PH=140,SX=0,SY=0,X0=0,turns=3;
   var T1=0,T2=0,T3=0,T4=0,T5=0,f1=false,f2=false,pointing=false,ladoBraco=true;
+  /* roteiro: cada passo tem a fala e o botão para onde ela aponta; o tempo de cada fala acompanha o tamanho do texto */
+  var passo=-1,proxT=0,cartao=null;
+  var PASSOS=[
+    {t:"Eita, vim correndo pra te avisar!",min:2800},
+    {t:"<b>Aqui você gera o seu planejamento diário</b> da Educação Infantil.",sel:"#lista .btn-sh",min:4200},
+    {t:"Tocando no <b>coração</b>, você ajuda a melhorar o posicionamento das atividades.",sel:"#lista .heart",min:4500},
+    {t:"Gostou da atividade e teve uma ideia de <b>variação</b>? Toque aqui e sugira a sua!",sel:"#lista .vbtn",min:4500},
+    {t:function(){var n=(typeof LIMITE_DEN!=="undefined")?LIMITE_DEN:5;return "<b>Ei, você viu alguma coisa de errado?</b> Aqui o ambiente é colaborativo: toque em <b>denunciar</b>. Com <b>"+n+" denúncias</b>, a atividade é excluída automaticamente."},sel:"#lista .den",min:7500}
+  ];
+  var SEL=PASSOS[1].sel;
+  function achaCartao(el,sel){var n=el;while(n&&n!==document.body){if(n.querySelector&&n.querySelector(sel))return n;n=n.parentElement}return null}
+  function vaiPasso(t){
+    var s=sessao,prev=alvo,p,txt;
+    passo++;
+    if(passo>=PASSOS.length){sai();return}
+    p=PASSOS[passo];txt=(typeof p.t==="function")?p.t():p.t;
+    proxT=t+Math.max(p.min,txt.replace(/<[^>]+>/g,"").length*62);
+    prof.classList.remove("fala1","fala2");
+    if(passo===0){prof.classList.add("fala1");pointing=false;return}
+    $("apBal2").innerHTML=txt;
+    SEL=p.sel;
+    cartao=(passo>=2&&prev)?achaCartao(prev,p.sel):null;
+    setAlvo(null);pointing=true;
+    setTimeout(function(){if(s===sessao&&ativo&&!saindo)prof.classList.add("fala2")},passo===1?0:350);
+  }
 
   function mix(a,b,u){var o={},k;for(k in a)o[k]=a[k]+(b[k]-a[k])*u;return o}
   function ease(u){return u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2}
@@ -4164,7 +4207,7 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
   }
   /* botões de compartilhar que estão na tela */
   function visiveis(){
-    var bs=document.querySelectorAll("#lista .btn-sh"),h=innerHeight,o=[],i,r;
+    var bs=((cartao&&cartao.isConnected)?cartao:document).querySelectorAll(SEL),h=innerHeight,o=[],i,r;
     for(i=0;i<bs.length;i++){
       r=bs[i].getBoundingClientRect();
       if(r.width===0||r.top<70||r.bottom>h-10)continue;
@@ -4247,9 +4290,8 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
       for(k in p)cur[k]=p[k];
     }else{
       /* parado em pé: fala, e depois aponta */
-      if(!f1){f1=true;prof.classList.add("fala1")}
-      if(!f2&&t>=T5+2500){f2=true;prof.classList.remove("fala1");prof.classList.add("fala2");pointing=true}
-      if(!saindo&&t>=T5+2500+16000){sai()}
+      if(!f1){f1=true;vaiPasso(t)}
+      else if(!saindo&&t>=proxT)vaiPasso(t);
       var des={le:HIP.le,ld:HIP.ld,ae:HIP.ae,fe:HIP.fe,ad:HIP.ad,fd:HIP.fd};
       var usaD=null,alvoOk=false;
       if(pointing&&!saindo){
@@ -4296,7 +4338,7 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
     prof.classList.remove("sai","fala1","fala2","ld","le");
     prof.classList.add(lado==="d"?"ld":"le","on");
     for(k in HIP)cur[k]=HIP[k];
-    f1=false;f2=false;pointing=false;ladoBraco=(lado==="d");alvo=null;tIni=0;ultEsc=0;andando=false;
+    f1=false;f2=false;pointing=false;ladoBraco=(lado==="d");alvo=null;passo=-1;proxT=0;cartao=null;SEL=PASSOS[1].sel;tIni=0;ultEsc=0;andando=false;
     setPose(cur);
     raf=requestAnimationFrame(frame);
     return true;
@@ -4450,4 +4492,111 @@ body:has(#aldModal:not([hidden])) .ap-prof,body:has(#aldModal:not([hidden])) .ap
 </script>
 <!-- ===== FIM da janela "Uma aldeia inteira" ===== -->
 
+
+<style id="buscaBolinhaCss">
+/* ===== Busca em forma de bolinha no topo ===== */
+#lupa{display:none;width:44px;height:44px;padding:0!important;margin-right:4px;border-radius:50%!important;border:2px solid var(--pri)!important;background:var(--soft)!important;color:var(--pri);font-size:1.1rem!important;line-height:1;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(15,139,141,.22);transition:transform .3s var(--pula),background .25s ease,box-shadow .25s ease}
+body.ativ #lupa{display:inline-flex}
+#lupa:hover{transform:scale(1.1)!important}
+#lupa:active{transform:scale(.9)!important}
+#lupa.tem{background:var(--pri)!important;color:#fff}
+#lupa.tem::after{content:"";position:absolute;top:4px;right:4px;width:10px;height:10px;border-radius:50%;background:var(--pri2);border:2px solid var(--bg)}
+#lupa{position:relative}
+.ico{display:inline-flex;align-items:center}
+/* barra de busca: escondida por padrão, desce do topo quando a bolinha é tocada */
+body.ativ .search{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:19;margin:0;padding:8px 14px 10px;background:var(--bg);box-shadow:0 8px 18px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px;transform:translateY(-130%);opacity:0;pointer-events:none;transition:transform .35s var(--suave),opacity .25s ease}
+body.ativ.busca-aberta .search{transform:none;opacity:1;pointer-events:auto}
+body.ativ .search input{flex:1;min-width:0;width:auto;padding:12px 18px;font-size:1rem}
+body.ativ .search input:focus{transform:none}
+#buscaX{display:none;flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--mut);font-size:1.4rem;line-height:1;padding:0 0 3px}
+body.ativ #buscaX{display:block}
+/* deixa o seletor de modo mais "arrastável" */
+.seg{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#chips{overscroll-behavior-x:contain}
+@media (prefers-reduced-motion:reduce){body.ativ .search{transition:none}#lupa{transition:none}}
+</style>
+<script id="buscaBolinhaJs">
+(function(){
+  var lupa=document.getElementById("lupa"),q=document.getElementById("q"),x=document.getElementById("buscaX");
+  if(!lupa||!q)return;
+  lupa.hidden=false;
+  function aberta(){return document.body.classList.contains("busca-aberta")}
+  function marca(){lupa.classList.toggle("tem",!!q.value.trim())}
+  function abre(){document.body.classList.add("busca-aberta");lupa.setAttribute("aria-expanded","true");setTimeout(function(){try{q.focus()}catch(e){}},120)}
+  function fecha(){document.body.classList.remove("busca-aberta");lupa.setAttribute("aria-expanded","false");try{q.blur()}catch(e){}marca()}
+  lupa.addEventListener("click",function(e){e.stopPropagation();aberta()?fecha():abre()});
+  x.addEventListener("click",function(){
+    if(q.value){q.value="";q.dispatchEvent(new Event("input",{bubbles:true}));q.focus()}else fecha()
+  });
+  q.addEventListener("input",marca);
+  q.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key==="Escape"){e.preventDefault();fecha()}});
+  q.addEventListener("search",function(){if(!q.value)marca()});
+  /* tocar fora da barra fecha */
+  document.addEventListener("pointerdown",function(e){
+    if(!aberta())return;
+    if(e.target.closest(".search")||e.target.closest("#lupa"))return;
+    fecha();
+  },true);
+  /* ao sair da tela de atividades, fecha a barra */
+  new MutationObserver(function(){if(!document.body.classList.contains("ativ")&&aberta())fecha()}).observe(document.body,{attributes:true,attributeFilter:["class"]});
+})();
+
+/* ===== Arrastar para o lado: troca Unidade temática <-> Campo de experiência ===== */
+(function(){
+  var seg=document.getElementById("seg"),panel=document.getElementById("panel"),chips=document.getElementById("chips");
+  if(!seg||!panel)return;
+  var x0=null,y0=null,t0=0,vai=false,alvo=null;
+  function modoAtual(){return seg.classList.contains("ca")?"ca":"un"}
+  function ini(e){
+    if(e.touches.length!==1){x0=null;return}
+    /* nas bordas da tela o gesto de voltar/avançar tem prioridade */
+    var t=e.touches[0];
+    if(t.clientX<=28||t.clientX>=window.innerWidth-28){x0=null;return}
+    /* a lista de turmas rola sozinha: não interferir */
+    if(e.target.closest("#turmas"))
+{x0=null;return}
+    x0=t.clientX;y0=t.clientY;t0=Date.now();vai=false;
+  }
+  function move(e){
+    if(x0===null)return;
+    var t=e.touches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+    if(!vai){
+      if(Math.abs(dy)>14&&Math.abs(dy)>Math.abs(dx)){x0=null;return}
+      if(Math.abs(dx)>16&&Math.abs(dx)>Math.abs(dy)*1.4)vai=true;else return;
+    }
+  }
+  function fim(e){
+    if(x0===null){return}
+    var t=e.changedTouches&&e.changedTouches[0];
+    var dx=t?t.clientX-x0:0,dy=t?t.clientY-y0:0,rapido=Date.now()-t0<400;
+    var ok=vai&&Math.abs(dx)>=(rapido?42:68)&&Math.abs(dx)>Math.abs(dy)*1.4;
+    x0=null;vai=false;
+    if(!ok)return;
+    var m=modoAtual();
+    /* arrastar para a esquerda avança (Campo de experiência); para a direita volta (Unidade temática) */
+    if(dx<0&&m==="un")alvo="m2";
+    else if(dx>0&&m==="ca")alvo="m1";
+    else return;
+    var b=document.getElementById(alvo);
+    if(b){b.click();if(navigator.vibrate){try{navigator.vibrate(12)}catch(_){}}}
+  }
+  panel.addEventListener("touchstart",ini,{passive:true});
+  panel.addEventListener("touchmove",move,{passive:true});
+  panel.addEventListener("touchend",fim,{passive:true});
+  panel.addEventListener("touchcancel",function(){x0=null;vai=false},{passive:true});
+
+  /* mouse / caneta (computador): arrastar também funciona */
+  var mx=null,my=null,mt=0;
+  seg.addEventListener("pointerdown",function(e){if(e.pointerType==="touch")return;mx=e.clientX;my=e.clientY;mt=Date.now()});
+  addEventListener("pointerup",function(e){
+    if(mx===null||e.pointerType==="touch"){mx=null;return}
+    var dx=e.clientX-mx,dy=e.clientY-my;mx=null;
+    if(Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy)*1.4)return;
+    var m=modoAtual(),b=null;
+    if(dx<0&&m==="un")b=document.getElementById("m2");
+    else if(dx>0&&m==="ca")b=document.getElementById("m1");
+    if(b)b.click();
+  });
+})();
+</script>
 </body></html>
