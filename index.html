@@ -4377,7 +4377,15 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
 #aldModal p.ald-prov{margin:0;text-align:center;padding:12px 16px 4px;font-size:1.08rem;line-height:1.35;font-style:italic;font-weight:700;text-align:center}
 #aldModal p.ald-autor{margin:0;text-align:right;padding:0 16px 10px;text-align:right;font-weight:400;font-size:.85rem}
 #aldModal .ald-ia{position:relative;margin-top:12px;padding:12px 14px;border-radius:16px;border:2px solid transparent;color:#2a2430;background:linear-gradient(#f5f3ff,#f5f3ff) padding-box,conic-gradient(from var(--gAng),#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4) border-box;animation:geminiGira 5s linear infinite;box-shadow:0 4px 14px rgba(107,91,214,.18)}
-#aldModal .ald-cre{color:#6b5bd6}
+#aldModal .ald-cre-card{display:flex;align-items:center;gap:8px;margin:12px 0 8px;padding:8px 12px;border-radius:12px;background:#ede9fe;border:2px solid #6b5bd6;color:#4a3aa8;font-weight:700;font-size:.92rem;line-height:1.25}
+#aldModal .ald-cre-card .ic{font-size:1.2rem;flex:none}
+#aldModal .ald-cre-card{box-shadow:0 0 14px rgba(155,114,203,.35);animation:aldGlow 3s ease-in-out infinite}
+#aldModal .ald-cre-card .ic{animation:geminiPulsa 2.4s ease-in-out infinite}
+#aldModal .ald-cre-card .brilho{background:linear-gradient(90deg,#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4);background-size:300% 100%;animation:geminiFlui 6s linear infinite;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+@keyframes aldGlow{0%,100%{box-shadow:0 0 8px rgba(155,114,203,.25)}50%{box-shadow:0 0 18px rgba(155,114,203,.6)}}
+#aldModal .ald-ia{font-size:.92rem;line-height:1.45;padding:10px 12px}
+#aldModal .ald-ia b{font-weight:700}
+#aldModal .ald-cre-card+.ald-ia{margin-top:0}
 @keyframes aldPulinho{0%,55%,100%{transform:translateY(0) scale(1)}65%{transform:translateY(-6px) scale(1.07)}75%{transform:translateY(0) scale(1)}85%{transform:translateY(-3px) scale(1.03)}}
 #aldModal .ald-ia .g{display:inline-block;vertical-align:-4px;width:20px;height:20px;margin-right:6px;animation:geminiPulsa 2.6s ease-in-out infinite}
 #aldModal .ald-dec{position:absolute;font-size:1.5rem;opacity:.55;pointer-events:none;animation:aldFlutua 5s ease-in-out infinite}
@@ -4389,7 +4397,7 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
 @keyframes aldFlutua{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(6deg)}}
 .f-sobre{margin:8px 0 0;text-align:center}
 .f-sobre a{color:var(--pri);font-weight:600;font-size:.85rem}
-@media (prefers-reduced-motion:reduce){#aldModal.surge,#aldModal.surge .vid-box,#aldModal .ald-marca span,#aldModal .ald-dec,#aldModal .ald-ia,#aldModal .ald-ia .g,#aldModal .ald-cre,#aldOk.ok{animation:none}}
+@media (prefers-reduced-motion:reduce){#aldModal.surge,#aldModal.surge .vid-box,#aldModal .ald-marca span,#aldModal .ald-dec,#aldModal .ald-ia,#aldModal .ald-ia .g,#aldModal .ald-cre,#aldModal .ald-cre-card,#aldModal .ald-cre-card .ic,#aldModal .ald-cre-card .brilho,#aldOk.ok{animation:none}}
 /* o bonequinho do vídeo de demonstração fica por cima do fundo escuro e continua visível */
 body:has(#aldModal:not([hidden])) .como-prof{visibility:visible!important;z-index:10001}
 body:has(#aldModal:not([hidden])) .ap-prof,body:has(#aldModal:not([hidden])) .ap-sol{visibility:hidden}
@@ -4407,14 +4415,15 @@ body:has(#aldModal:not([hidden])) .ap-prof,body:has(#aldModal:not([hidden])) .ap
     </div>
     <p class="ald-j" lang="pt-BR">O <b style="color:var(--pri)">Colabora,</b> <b style="color:var(--pri2)">Prof</b> nasceu da ideia de que professores também produzem conhecimento, e de que a experiência de uma sala de aula pode inspirar outra.</p>
     <p class="ald-j" lang="pt-BR"><b>Compartilhar não é copiar.</b> Conhecer o que deu certo com outras turmas amplia o seu repertório e provoca novas criações, do jeito da sua turma.</p>
-    <p class="ald-ia ald-j" lang="pt-BR"><svg class="g" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="aldG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285f4"/><stop offset=".55" stop-color="#9b72cb"/><stop offset="1" stop-color="#d96570"/></linearGradient></defs><path d="M12 1C12.6 7.4 16.6 11.4 23 12 16.6 12.6 12.6 16.6 12 23 11.4 16.6 7.4 12.6 1 12 7.4 11.4 11.4 7.4 12 1Z" fill="url(#aldG)"/></svg>As ferramentas de <b>inteligência artificial</b> do site são apoio, nunca substitutas. Eu, idealizador do site, reconheço o desafio: a IA pode gerar dependência, e planejar é parte essencial do ofício de ensinar. Mas <b class="ald-cre">eu acredito no potencial de cada professor</b> e sei que você vai usá-la com critério, lendo, conferindo e adaptando, para compartilhar ideias que se espalhem por toda a rede. Acredito que essa colaboração serve para <b>ampliar os saberes</b>, fortalecer as nossas relações e fortalecer o respeito entre nós. <b>A decisão pedagógica é sempre sua.</b></p>
-    <div class="vid-acoes"><button class="btn" id="aldOk" type="button">Eu compreendo e farei a minha parte</button></div>
+    <div class="ald-cre-card"><span class="ic" aria-hidden="true">✨</span><span class="brilho">Eu reconheço o desafio, mas acredito no potencial do professor!</span></div>
+    <p class="ald-ia ald-j" lang="pt-BR"><svg class="g" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="aldG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285f4"/><stop offset=".55" stop-color="#9b72cb"/><stop offset="1" stop-color="#d96570"/></linearGradient></defs><path d="M12 1C12.6 7.4 16.6 11.4 23 12 16.6 12.6 12.6 16.6 12 23 11.4 16.6 7.4 12.6 1 12 7.4 11.4 11.4 7.4 12 1Z" fill="url(#aldG)"/></svg>As ferramentas de <b>inteligência artificial</b> do site são apoio, nunca substitutas. Eu, idealizador do site, sei que a IA pode gerar dependência, e que planejar é parte essencial do ofício de ensinar. Mas eu acredito no potencial de cada professor e sei que você vai usá-la com critério, lendo, conferindo e adaptando, para compartilhar ideias que se espalhem por toda a rede. Acredito que essa colaboração serve para <b>ampliar os saberes</b>, fortalecer as nossas relações e fortalecer o respeito entre nós. <b>A decisão pedagógica é sempre sua.</b></p>
+    <div class="vid-acoes"><button class="btn" id="aldOk" type="button">Eu compreendo e irei colaborar</button></div>
   </div>
 </div>
 <script>
 /* Abre sozinha na primeira visita (depois da introdução). Só fecha quando o professor toca no botão de aceite. */
 (function(){
-  var KEY="colabora_aldeia",m=document.getElementById("aldModal"),ok=document.getElementById("aldOk"),TXT="Eu compreendo e farei a minha parte",t=null;
+  var KEY="colabora_aldeia",m=document.getElementById("aldModal"),ok=document.getElementById("aldOk"),TXT="Eu compreendo e irei colaborar",t=null;
   if(!m||!ok)return;
   function lido(){try{return !!localStorage.getItem(KEY)}catch(e){return true}}
   function grava(v){try{localStorage.setItem(KEY,v)}catch(e){}}
