@@ -381,7 +381,7 @@ button{font:inherit;cursor:pointer}
 .btn.ia-g:disabled{opacity:.6}
 .btn:disabled{opacity:.6}
 .opc{display:inline-block;vertical-align:middle;margin-left:6px;padding:3px 10px;border-radius:999px;background:#fff;color:#4a3aa8;font-size:.72rem;font-weight:800;letter-spacing:.06em;line-height:1.2;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-@media (prefers-reduced-motion:reduce){.btn.ia-g,.aviso-ia,.aviso-ia .ai-ic,.aviso-ia>div>b:first-child{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.btn.ia-g,.aviso-ia,.aviso-ia .ai-ic,.aviso-ia summary>b{animation:none!important}}
 .search{margin:6px 0 10px}
 .search input{width:100%;font:inherit;padding:16px 22px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
 .search input:focus{outline:none;border-color:var(--pri)}
@@ -974,6 +974,22 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
 </style>
 <header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="lupa" type="button" aria-label="Buscar atividades" aria-expanded="false" hidden>🔎</button><button id="menu" aria-label="Menu">Menu</button></span></header>
 <div class="voo" aria-hidden="true"><span class="nv n1"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n2"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n3"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n4"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="av a1"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a2 r"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a3"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span></div>
+<dialog class="mdl exdlg" id="exModal" aria-labelledby="exT">
+  <div class="mdl-box">
+    <button class="mdl-x" id="exX" type="button" aria-label="Fechar">×</button>
+    <h2 id="exT">Exemplo de ficha preenchida</h2>
+    <div class="exb exb-m">
+      <p class="aj">Escreva do seu jeito, com frases completas, sem abreviações, e use vírgulas para separar os itens.</p>
+      <p><b>Nome:</b> Tartaruguinha 1, 2, 3</p>
+      <p><b>Descrição:</b> As crianças caminham pela sala enquanto toca a música da tartaruga. Quando a música para, o professor diz o comando “Tartaruga, 1, 2, 3!” e todos se abaixam, com a cabeça baixa, formando uma tartaruga. Então o professor cobre um colega com um pano grande e convida os outros a descobrir quem está embaixo do pano. Quando acertarem, a música volta e todos retomam a caminhada.</p>
+      <p><b>Informações complementares:</b> 15 minutos, na sala de aula.</p>
+      <p><b>Materiais:</b> pano, caixa de som</p>
+      <p><b>Turmas:</b> Infantil 3, Infantil 4</p>
+      <p><b>Unidade temática:</b> Brincadeiras e jogos · <b>Campo:</b> Corpo, gestos e movimentos</p>
+    </div>
+    <div class="mdl-acoes"><button class="btn" id="exOk" type="button">Entendi</button></div>
+  </div>
+</dialog>
 <div class="mdl" id="varModal" hidden role="dialog" aria-modal="true" aria-labelledby="varT">
   <div class="mdl-box">
     <button class="mdl-x" id="varX" type="button" aria-label="Fechar">×</button>
@@ -1167,16 +1183,62 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
 #limparFicha{flex:none;white-space:nowrap;font-size:.85rem;overflow:hidden;box-sizing:border-box;width:0;max-width:0;padding:9px 0;margin-left:0;border-width:0;opacity:0;pointer-events:none;transition:max-width .45s ease,width .45s ease,margin-left .45s ease,padding .45s ease,opacity .35s ease .45s}
 #limparFicha.on{width:auto;max-width:200px;padding:9px 14px;margin-left:10px;border-width:1px;opacity:1;pointer-events:auto}
 @media (prefers-reduced-motion:reduce){#limparFicha{transition:none}}
-.aviso-ia{display:flex;gap:12px;align-items:flex-start;border:2px solid transparent;background:linear-gradient(#f5f3ff,#f5f3ff) padding-box,conic-gradient(from var(--gAng),#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4) border-box;animation:geminiGira 5s linear infinite;color:#2a2430;border-radius:16px;padding:14px 16px;margin:10px 0 12px;box-shadow:0 4px 14px rgba(107,91,214,.18)}
+.aviso-ia{display:block;border:2px solid transparent;background:linear-gradient(#f5f3ff,#f5f3ff) padding-box,conic-gradient(from var(--gAng),#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4) border-box;animation:geminiGira 5s linear infinite;color:#2a2430;border-radius:16px;padding:14px 16px;margin:10px 0 12px;box-shadow:0 4px 14px rgba(107,91,214,.18)}
 .aviso-ia .ai-ic{animation:geminiPulsa 2.4s ease-in-out infinite}
-.aviso-ia>div>b:first-child{background:linear-gradient(90deg,#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4);background-size:300% 100%;animation:geminiFlui 6s linear infinite;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.aviso-ia summary>b{background:linear-gradient(90deg,#4285f4,#6b5bd6,#9b72cb,#d96570,#9b72cb,#6b5bd6,#4285f4);background-size:300% 100%;animation:geminiFlui 6s linear infinite;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 .aviso-ia .ai-ic{font-size:2rem;line-height:1;flex:none}
 .aviso-ia b{display:block;font-size:1.05rem;margin-bottom:4px;color:var(--ink)}
 .aviso-ia p{margin:0;font-size:.95rem;line-height:1.45;color:#2a2430}
 .aviso-ia p+p{margin-top:6px}
+.aviso-ia summary{display:flex;align-items:center;gap:12px;cursor:pointer;list-style:none;-webkit-tap-highlight-color:transparent}
+.aviso-ia summary::-webkit-details-marker{display:none}
+.aviso-ia summary>b{flex:1;margin:0;font-size:1rem;line-height:1.3}
+.aviso-ia .ai-ic{font-size:1.6rem}
+.aviso-ia .ai-seta{flex:none;font-size:1.6rem;line-height:1;font-weight:700;color:#6b5bd6;transition:transform .35s var(--suave,ease)}
+.aviso-ia[open] .ai-seta{transform:rotate(90deg)}
+.aviso-ia .ai-corpo{margin-top:10px;padding-top:10px;border-top:1px solid rgba(107,91,214,.2)}
+.aviso-ia[open] .ai-corpo{animation:painelIn .45s var(--suave,ease)}
+.aviso-ia summary:focus-visible{outline:3px solid #9b72cb;outline-offset:4px;border-radius:10px}
+@media (prefers-reduced-motion:reduce){.aviso-ia .ai-seta{transition:none}.aviso-ia[open] .ai-corpo{animation:none}}
 .exb{margin-top:8px;font-size:.88rem}.exb p{margin:0 0 6px}
+
+/* "Veja um exemplo de ficha": a professora do tutorial aponta para um botãozinho de documento; o balão fica acima da cabeça */
+.ex-cena{position:relative;display:inline-flex;align-items:flex-end;gap:2px;padding-top:44px;max-width:100%}
+.ex-prof{display:block;overflow:visible;flex:none}
+.ex-bal{position:absolute;top:0;left:0;width:max-content;max-width:min(220px,calc(100vw - 48px));text-align:center;background:#fff;border:2px solid #e8590c;border-radius:14px;padding:5px 10px;font:700 .74rem/1.2 system-ui,sans-serif;color:#2a2430;box-shadow:0 4px 12px rgba(0,0,0,.14)}
+.ex-bal::after{content:"";position:absolute;left:17px;bottom:-7px;width:10px;height:10px;background:#fff;border:2px solid #e8590c;border-left:0;border-top:0;transform:rotate(45deg)}
+.exBraco{animation:exAponta 1.8s ease-in-out infinite}
+@keyframes exAponta{0%,100%{transform:translate(15px,-72px) rotate(0)}50%{transform:translate(15px,-72px) rotate(6deg)}}
+.ex-doc-btn{flex:none;align-self:center;display:grid;place-items:center;width:46px;height:46px;margin-bottom:14px;border-radius:14px;border:1px dashed var(--pri);background:var(--bg);color:var(--pri);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .3s ease,transform .3s var(--suave,ease)}
+.ex-doc-btn:hover{background:var(--soft)}
+.ex-doc-btn:active{transform:scale(.94)}
+.ex-doc-btn:focus-visible{outline:3px solid var(--pri);outline-offset:3px}
+.exb-m{margin-top:6px;font-size:.92rem}
+.exb-m p{margin:0 0 8px}
+@media (prefers-reduced-motion:reduce){.exBraco{animation:none}.ex-doc-btn{transition:none}}
 .mbx{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:6px}
 .mrow{display:flex;gap:8px;align-items:center}.mrow input{flex:1}.mrow .btn{white-space:nowrap}
+
+/* ===== Linha "exemplo de ficha" + "Limpar ficha": tudo alinhado, sem espaço em branco ===== */
+.exlinha{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 6px;width:100%;min-width:0;box-sizing:border-box}
+.ex-cena{position:relative;display:flex;align-items:center;gap:6px;padding:0;flex:1 1 230px;min-width:0;max-width:none}
+.ex-bal{position:relative;top:auto;left:auto;order:1;flex:0 1 auto;align-self:center;width:auto;min-width:0;max-width:38%;margin:0 8px 0 0;padding:5px 8px;font-size:.7rem;line-height:1.2;text-align:left}
+.ex-bal::after{left:auto;right:-7px;bottom:auto;top:50%;margin-top:-5px;border:2px solid #e8590c;border-left:0;border-bottom:0;transform:rotate(45deg)}
+.ex-prof{order:2;flex:none;width:44px;height:64px;align-self:flex-end;margin-bottom:-2px}
+.ex-doc-btn{order:3;flex:1 1 0;min-width:0;align-self:center;width:auto;height:44px;margin:0;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;border-radius:999px;font-family:inherit;font-weight:700;font-size:.8rem;line-height:1.1;text-align:left}
+.ex-doc-btn svg{flex:none}
+.ex-doc-btn span{min-width:0}
+#limparFicha{flex:none;align-self:center;height:44px;box-sizing:border-box;line-height:1;display:inline-flex;align-items:center;justify-content:center}
+#limparFicha.on{padding:0 14px;margin-left:0}
+/* celular: com o "Limpar ficha" visível, ele ocupa a largura toda embaixo, da mesma altura, alinhado às bordas */
+@media (max-width:560px){#limparFicha.on{flex:1 1 100%;width:100%;max-width:none}}
+@media (max-width:380px){.ex-bal{font-size:.66rem;padding:4px 6px}.ex-doc-btn{padding:0 8px;font-size:.76rem;gap:4px}.ex-doc-btn svg{width:18px;height:18px}}
+/* quadro de exemplo: <dialog> de verdade, fica na frente do formulário */
+dialog.exdlg{width:min(560px,94vw);padding:0;border:0;background:transparent;overflow:visible;max-height:none}
+dialog.exdlg::backdrop{background:rgba(20,16,26,.72)}
+dialog.exdlg:not([open]){display:none!important}
+dialog.exdlg[open]{position:fixed;inset:0;margin:auto;display:block;overflow:visible;max-height:none}
+dialog.exdlg .mdl-box{max-width:none;max-height:calc(100dvh - 32px)}
 </style>
 <dialog id="dlg">
 <div id="genOv" hidden role="status" aria-live="polite"><div aria-hidden="true" style="font-size:3.4rem;line-height:1"><span class="amp">⏳</span></div><div id="genOvT"></div><div id="genOvS"></div><div id="genBar" aria-hidden="true"><i id="genBarI"></i></div></div>
@@ -1185,31 +1247,24 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
   <h2>Formulário de compartilhamento de atividades</h2>
   <div class="seqsel" id="seqSel" role="radiogroup" aria-label="Tipo de ficha"><span class="seqth"></span><button type="button" role="radio" aria-checked="true" data-s="0">Atividade única</button><button type="button" role="radio" aria-checked="false" data-s="1">Sequência didática</button></div>
   <div class="seqtop" id="seqTop" hidden><div class="encsel" id="seqEnc" role="tablist" aria-label="Encontros da sequência"><div class="encin"><span class="encth" id="seqDrop"></span><div id="seqBtns" style="display:contents"></div></div></div></div>
-  <div class="aviso-ia" role="note">
-    <span class="ai-ic" aria-hidden="true">✨</span>
-    <div>
-      <b>Este formulário conta com a ajuda de Inteligência Artificial, mas o uso é opcional</b>
+  <details class="aviso-ia" role="note">
+    <summary>
+      <span class="ai-ic" aria-hidden="true">✨</span>
+      <b>Este formulário conta com inteligência artificial para ajudar você, mas o uso é opcional</b>
+      <span class="ai-seta" aria-hidden="true">›</span>
+    </summary>
+    <div class="ai-corpo">
       <p>Você pode preencher a ficha inteira do seu jeito, sem usar a IA. Se quiser, ela pode ajudar a organizar a sua escrita e a sugerir as categorias da atividade.</p>
       <p><b style="display:inline;font-size:inherit">A sua opinião vem em primeiro lugar:</b> este formulário valoriza o olhar de quem conhece a prática. A IA só sugere, nada muda sem a sua aprovação, e <b style="display:inline;font-size:inherit">a decisão final é sempre sua.</b></p>
     </div>
-  </div>
-  <div class="exlinha"><details class="ex"><summary>👀 Ver um exemplo de ficha preenchida</summary>
-    <div class="exb">
-      <p class="aj">Escreva do seu jeito, com frases completas, sem abreviações, e use vírgulas para separar os itens.</p>
-      <p><b>Nome:</b> Tartaruguinha 1, 2, 3</p>
-      <p><b>Descrição:</b> As crianças ficam em fila numa ponta do pátio e andam bem devagar, como tartarugas, até a linha de chegada. Quando a professora diz “1, 2, 3, casco!”, todas param e se agacham. Quem se mexer volta ao início. A brincadeira termina quando todas chegam.</p>
-      <p><b>Informações complementares:</b> 15 minutos, espaço pequeno, crianças que ainda não andam bem podem engatinhar.</p>
-      <p><b>Materiais:</b> tecido, cone, caixa de som</p>
-      <p><b>Turmas:</b> Infantil 3, Infantil 4</p>
-      <p><b>Unidade temática:</b> Brincadeiras e jogos · <b>Campo:</b> Corpo, gestos e movimentos</p>
-    </div>
-  </details><button type="button" class="btn sec" id="limparFicha" aria-hidden="true" tabindex="-1" title="Apagar tudo e começar uma ficha do zero">🧹 Limpar ficha</button></div>
+  </details>
+  <div class="exlinha"><div class="ex-cena"><div class="ex-bal" aria-hidden="true">Veja um exemplo de ficha preenchida</div><svg class="ex-prof" viewBox="-40 -126 120 176" width="50" height="73" aria-hidden="true"><g id="exLE" transform="translate(-8,-24) rotate(4)"><line y2="36" stroke="#8d5524" stroke-width="9" stroke-linecap="round"/><ellipse cx="0" cy="40" rx="8" ry="4.6" fill="#7b2d4f"/></g><g transform="translate(8,-24) rotate(-4)"><line y2="36" stroke="#8d5524" stroke-width="9" stroke-linecap="round"/><ellipse cx="0" cy="40" rx="8" ry="4.6" fill="#7b2d4f"/></g><g transform="translate(-15,-72) rotate(12)"><line y2="17" stroke="#d99a00" stroke-width="10" stroke-linecap="round"/><g transform="translate(0,17) rotate(-8)"><line y2="17" stroke="#8d5524" stroke-width="7" stroke-linecap="round"/><circle cy="19" r="4.8" fill="#8d5524"/></g></g><rect x="-17" y="-81" width="34" height="62" rx="11" fill="#f2b705"/><path d="M-19 -40L19 -40L24 -18L-24 -18Z" fill="#0f8b8d"/><path d="M-6 -81Q0 -72 6 -81" stroke="#b8860b" stroke-width="1.6" fill="none"/><circle cx="0" cy="-62" r="3.2" fill="#d9480f"/><g fill="#1f130c"><circle cx="-18" cy="-104" r="10"/><circle cx="-10" cy="-114" r="11"/><circle cx="2" cy="-118" r="11"/><circle cx="14" cy="-113" r="11"/><circle cx="21" cy="-102" r="10"/><circle cx="-22" cy="-92" r="7"/><circle cx="23" cy="-91" r="7"/></g><circle cx="0" cy="-98" r="21" fill="#8d5524"/><path d="M-21 -102A21 21 0 0 1 21 -102Q12 -112 0 -111Q-12 -112 -21 -102Z" fill="#1f130c"/><path d="M-23 -106Q0 -121 23 -106L21 -100Q0 -112 -21 -100Z" fill="#d9480f"/><circle cx="-2" cy="-98" r="2.6" fill="#1a1a1a"/><circle cx="12" cy="-98" r="2.6" fill="#1a1a1a"/><circle cx="-8" cy="-91" r="3.5" fill="#e0605a" opacity=".5"/><circle cx="18" cy="-91" r="3.5" fill="#e0605a" opacity=".5"/><path d="M-2 -90Q5 -80 12 -90Z" fill="#6b1f2a"/><g class="exBraco" transform="translate(15,-72)"><g transform="rotate(-80)"><line y2="17" stroke="#d99a00" stroke-width="10" stroke-linecap="round"/><g transform="translate(0,17) rotate(-6)"><line y2="17" stroke="#8d5524" stroke-width="7" stroke-linecap="round"/><circle cy="19" r="4.8" fill="#8d5524"/><line x1="0" y1="21" x2="0" y2="29" stroke="#8d5524" stroke-width="4" stroke-linecap="round"/></g></g></g></svg><button type="button" class="ex-doc-btn" id="exBtn" aria-haspopup="dialog" aria-controls="exModal" aria-label="Veja um exemplo de ficha preenchida" title="Veja um exemplo de ficha preenchida"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><path d="M9 13h7M9 16.5h7M9 9.5h2.5"/></svg><span>Ver exemplo da ficha</span></button></div><button type="button" class="btn sec" id="limparFicha" aria-hidden="true" tabindex="-1" title="Apagar tudo e começar uma ficha do zero">🧹 Limpar ficha</button></div>
   <div id="fichaSlide">
   <div class="cats camposIA" id="camposIA">
   <label>Nome da atividade<input id="t" maxlength="80" required placeholder="Ex.: Corrida do saco"></label>
-  <label>Descrição breve da atividade<textarea id="d" maxlength="500" required placeholder="Ex.: As crianças ficam em roda. Uma é o pegador e corre atrás das outras. Quem for tocado vira o novo pegador."></textarea><span class="aj cnt" id="dCnt"></span></label>
-  <label><span>Informações complementares <small>(opcional)</small></span><textarea id="c" maxlength="500" placeholder="Ex.: 15 minutos, espaço pequeno, pode ser feita sentada"></textarea></label>
-  <label><span>Materiais <small>(opcional)</small></span><input id="mat" maxlength="200" placeholder="Ex.: tecido, cone, caixa de som"></label>
+  <label>Descrição breve da atividade<textarea id="d" maxlength="500" required placeholder="Ex.: As crianças ficam em fila, cada uma dentro de um saco, e pulam até a linha de chegada. Quem cair volta ao início e tenta de novo. A brincadeira termina quando todas chegam."></textarea><span class="aj cnt" id="dCnt"></span></label>
+  <label><span>Informações complementares <small>(opcional)</small></span><textarea id="c" maxlength="500" placeholder="Ex.: 15 minutos, pátio ou quadra, crianças que ainda não pulam bem podem andar dentro do saco."></textarea></label>
+  <label><span>Materiais <small>(opcional)</small></span><input id="mat" maxlength="200" placeholder="Ex.: sacos de pano ou de estopa, cones, giz"></label>
     <div class="veu" id="veuCampos" aria-hidden="true"></div>
   </div>
   <button type="button" class="btn sec ia-g" id="melhd" hidden>✍️ Melhorar o preenchimento com IA <span class="opc">OPCIONAL</span></button>
@@ -1238,7 +1293,7 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
     </div>
     <div id="corr" hidden>
       <label>O que a inteligência artificial precisa corrigir ou melhorar nesta ilustração?
-        <textarea id="ct" maxlength="500" placeholder="Ex.: A atividade foi feita com linhas no chão, e as crianças caminhavam sobre elas. A imagem mostrou crianças pulando obstáculos."></textarea>
+        <textarea id="ct" maxlength="500" placeholder="Ex.: As crianças estavam dentro de sacos, e não segurando os sacos. A imagem mostrou crianças correndo sem saco."></textarea>
       </label>
       <button type="button" class="btn sec ia-g" id="nova" style="margin-top:8px">Gerar nova ilustração</button>
     </div>
@@ -3875,7 +3930,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgEsconde("cpgEsc"
       return;
     }
     /* quadros próprios: usa o botão de fechar de cada um, que já limpa o estado certo */
-    var mapa={fichaModal:"fichaX",varModal:"varX",baixaModal:"baixaX",vidModal:"vidX"};
+    var mapa={fichaModal:"fichaX",varModal:"varX",baixaModal:"baixaX",vidModal:"vidX",exModal:"exX"};
     var bt=document.getElementById(mapa[id]); if(bt){bt.click();return}
     e.hidden=true;
   }
@@ -4755,6 +4810,62 @@ body.ativ #buscaX{display:block}
   function sync(){p.classList.toggle("ca",seg.classList.contains("ca"))}
   new MutationObserver(sync).observe(seg,{attributes:true,attributeFilter:["class"]});
   sync();
+})();
+</script>
+<script id="exFichaJs">
+(function(){
+  var b=document.getElementById("exBtn"),m=document.getElementById("exModal"),x=document.getElementById("exX"),ok=document.getElementById("exOk");
+  if(!b||!m)return;
+  function abre(){if(m.showModal){if(!m.open)m.showModal()}else m.hidden=false;try{x.focus()}catch(e){}}
+  function fecha(){if(m.close){if(m.open)m.close()}else m.hidden=true;try{b.focus()}catch(e){}}
+  m.addEventListener("click",function(e){if(e.target===m)fecha()});
+  b.addEventListener("click",abre);
+  x.addEventListener("click",fecha);
+  if(ok)ok.addEventListener("click",fecha);
+})();
+</script>
+<script id="phDuasLinhas">
+/* Textos de exemplo (placeholder) dos campos: no máximo duas linhas, terminando em "..." quando forem longos */
+(function(){
+  var ORI=new WeakMap(),canvas=document.createElement("canvas").getContext("2d");
+  function larguraUtil(el){
+    var cs=getComputedStyle(el),w=el.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    var ph=getComputedStyle(el,"::placeholder");
+    var fw=(ph.fontWeight&&ph.fontWeight!=="normal")?ph.fontWeight:cs.fontWeight;
+    canvas.font=(cs.fontStyle||"normal")+" "+fw+" "+cs.fontSize+" "+cs.fontFamily;
+    return w*0.94;
+  }
+  function quebra(txt,w){
+    var pal=txt.split(/\s+/),linhas=[""],i=0;
+    for(i=0;i<pal.length;i++){
+      var atual=linhas[linhas.length-1],t=atual?atual+" "+pal[i]:pal[i];
+      if(!atual||canvas.measureText(t).width<=w)linhas[linhas.length-1]=t;else linhas.push(pal[i]);
+    }
+    return linhas;
+  }
+  function ajusta(el){
+    if(!ORI.has(el))ORI.set(el,el.getAttribute("placeholder")||"");
+    var txt=ORI.get(el);if(!txt)return;
+    var w=larguraUtil(el);if(!(w>40))return;
+    var ehArea=el.tagName==="TEXTAREA",max=ehArea?2:1,L=quebra(txt,w),novo=txt;
+    if(L.length>max){
+      var u=L[max-1];
+      while(u.length&&canvas.measureText(u+"...").width>w)u=u.replace(/\s*\S+$/,"");
+      novo=L.slice(0,max-1).concat([(u||"")+"..."]).join(" ");
+    }
+    if(el.getAttribute("placeholder")!==novo)el.setAttribute("placeholder",novo);
+  }
+  function todos(){
+    var l=document.querySelectorAll("textarea[placeholder],input[placeholder]");
+    for(var i=0;i<l.length;i++){if(l[i].offsetParent!==null||l[i].closest("dialog[open]"))ajusta(l[i])}
+  }
+  var t=null;function agenda(){clearTimeout(t);t=setTimeout(todos,60)}
+  window.addEventListener("resize",agenda);
+  document.addEventListener("click",agenda,true);
+  document.addEventListener("transitionend",agenda,true);
+  new MutationObserver(function(m){for(var i=0;i<m.length;i++){if(m[i].attributeName==="placeholder")continue;agenda();return}}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","hidden","class"]});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(agenda);
+  agenda();
 })();
 </script>
 </body></html>
