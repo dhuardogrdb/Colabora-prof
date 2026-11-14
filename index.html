@@ -1056,12 +1056,12 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
   <div class="panel" id="panel">
     <div class="seg" id="seg"><span class="gota" id="gota"></span><button id="m1" class="on">Unidade temática</button><button id="m2">Campo de experiência</button></div>
     <div class="rola"><div class="chips" id="chips"></div><button type="button" class="seta" aria-label="Ver mais opções ao lado" tabindex="-1">›</button></div>
-    <h3 class="pt">Turma</h3>
+    <h3 class="pt" id="ptTurma">Turma</h3>
     <div class="rola"><div class="chips tur" id="turmas"></div><button type="button" class="seta" aria-label="Ver mais opções ao lado" tabindex="-1">›</button></div>
-    <div class="row dir"><button class="mini" id="vd">📊 Ver análise de dados</button></div>
   </div>
+  <div class="tit-cab"><h2 id="tituloLista" class="tit-lista" aria-live="polite">Atividades</h2><div class="vcols" id="vcols"><button type="button" id="vcolsBtn" aria-label="Fichas por linha: toque para mudar" title="Mudar quantas fichas aparecem por linha"></button></div></div>
   <div class="note" id="aviso" hidden>Modo de teste: o que você publicar aqui fica salvo só neste aparelho. Para compartilhar entre professores, é preciso ligar o armazenamento coletivo.</div>
-  <div class="bar"><h2 id="tituloLista">Atividades</h2><div class="vcols" id="vcols"><button type="button" id="vcolsBtn" aria-label="Fichas por linha: toque para mudar" title="Mudar quantas fichas aparecem por linha"></button></div><span id="fl"></span></div>
+  <div class="bar bar-fl"><span id="fl"></span></div>
   <div id="sug" class="sug" hidden></div>
   <div id="lista"></div>
 </section>
@@ -1488,6 +1488,7 @@ function render(){try{atualizaCoracoes()}catch(e){}if(varAtual)varDesenha();stat
     if(turma)t=(filt?t:"Atividades")+" "+(art[turma]||"do")+" "+turma;
     if(matSel)t+=" com "+matSel;
     if(h.textContent!==t)h.textContent=t;
+    if(typeof corTitulo==="function")corTitulo(h);
   })();
   $("#fl").innerHTML=(matSel?'<button class="filt" id="xm">Material: '+esc(matSel)+' ✕</button> ':"")+(filt?'<button class="filt" id="x">'+esc(filt)+' ✕</button> ':"")+(turma?'<button class="filt" id="xt">'+esc(turma)+' ✕</button>':"");
   if(!acts.filter(a=>(reps[a.id]||0)<LIMITE_DEN).length){_sigLista=null;$("#lista").innerHTML='<div class="empty">Ainda não há atividades por aqui.<br>Que tal ser a primeira pessoa a colaborar? 🌱</div>';return}
@@ -1538,7 +1539,7 @@ $("#q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();rende
 $("#m1").onclick=()=>troca("un");
 $("#m2").onclick=()=>troca("ca");
 $("#chips").onclick=e=>{const c=e.target.closest("[data-c]");if(!c)return;filt=(filt===c.dataset.c)?null:c.dataset.c;marcaChips();render()};
-function marcaChips(){document.querySelectorAll("#chips .chip").forEach(c=>c.classList.toggle("on",c.dataset.c===filt))}
+function marcaChips(){document.querySelectorAll("#chips .chip").forEach(c=>c.classList.toggle("on",c.dataset.c===filt));if(typeof pintaChips==="function")pintaChips()}
 function matAtalhos(){
   const box=$("#matBox");if(!box)return;
   const c={};acts.filter(a=>!turma||(Array.isArray(a.turmas)&&a.turmas.includes(turma))).forEach(a=>actMats(a).forEach(m=>{c[m]=(c[m]||0)+1}));
@@ -1554,6 +1555,7 @@ function matAtalhos(){
 document.addEventListener("click",e=>{const b=e.target.closest("[data-mat2]");if(!b)return;matSel=(matSel===b.dataset.mat2)?"":b.dataset.mat2;q="";$("#q").value="";render()});
 function turmasBusca(){
   $("#turmas").innerHTML=TU.map(t=>'<button class="chip'+(turma===t?" on":"")+'" data-t="'+esc(t)+'">'+esc(t)+'</button>').join("");
+  if(typeof pintaChips==="function")pintaChips();
 }
 $("#turmas").onclick=e=>{const c=e.target.closest("[data-t]");if(!c)return;turma=(turma===c.dataset.t)?null:c.dataset.t;turmasBusca();render()};
 $("#tchk").innerHTML=TU.map(t=>'<button type="button" class="chip" data-t="'+esc(t)+'" style="opacity:1;animation:none">'+esc(t)+'</button>').join("");
@@ -2770,7 +2772,7 @@ window.addEventListener("popstate",function(e){
   document.addEventListener("touchcancel",function(){ if(drag){drag=false;x0=null;centro()} },{passive:true});
 })();
 $("#buscar").onclick=()=>{ir("atividades")};
-$("#vd").onclick=()=>ir("dados");
+if($("#vd"))$("#vd").onclick=()=>ir("dados");
 document.body.classList.add("home");
 /* ===== Ilustração: fluxo de geração e aprovação ===== */
 const MAX_GER=3,ENV_TXT=$("#enviar").textContent;
@@ -4597,6 +4599,162 @@ body.ativ #buscaX{display:block}
     else if(dx>0&&m==="ca")b=document.getElementById("m1");
     if(b)b.click();
   });
+})();
+</script>
+
+<style id="coresFiltroCss">
+/* ===== Cores por unidade temática, campo de experiência e turma ===== */
+.chip.cor{border-color:var(--cc);color:#fff;background:var(--cc);font-weight:700}
+.chip.cor:hover{background:var(--cc);box-shadow:0 6px 14px var(--cs)}
+/* o que não está escolhido fica mais claro; o escolhido fica cheio e destacado */
+#chips.tem-sel .chip.cor:not(.on),#turmas.tem-sel .chip.cor:not(.on){opacity:.55}
+.chip.cor.on{box-shadow:0 0 0 3px var(--cs),0 4px 12px rgba(0,0,0,.18)}
+/* pisca quando selecionado */
+.chip.cor.pisca{animation:piscaCor .9s ease 2}
+@keyframes piscaCor{
+  0%{box-shadow:0 0 0 0 var(--cc);transform:scale(1)}
+  35%{box-shadow:0 0 0 9px transparent;transform:scale(1.12)}
+  60%{box-shadow:0 0 0 0 var(--cc);transform:scale(.97)}
+  100%{box-shadow:0 0 0 0 transparent;transform:scale(1)}
+}
+/* título acompanha a cor do item escolhido */
+#tituloLista{transition:color .5s ease}
+#tituloLista.cor{color:var(--tc)}
+#tituloLista.pisca{animation:piscaTit .9s ease 2}
+@keyframes piscaTit{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.chip.cor.pisca,#tituloLista.pisca{animation:none}#tituloLista{transition:none}}
+</style>
+<script id="coresFiltroJs">
+(function(){
+  /* paleta do site: unidades=verde-azulado, campos=laranja, turmas=verde-azulado escuro */
+  var UNc=["#0f8b8d","#e3f3f2"],CAc=["#e8590c","#fde8da"],TUc=["#0b6264","#d3ecec"];
+  var P={};
+  ["Brincadeiras e jogos","Esportes","Ginásticas","Danças","Lutas","Práticas corporais de aventura"].forEach(function(n){P[n]=UNc});
+  ["O eu, o outro e o nós","Corpo, gestos e movimentos","Traços, sons, cores e formas","Escuta, fala, pensamento e imaginação","Espaços, tempos, quantidades, relações e transformações"].forEach(function(n){P[n]=CAc});
+  ["Berçário","Infantil 1","Infantil 2","Infantil 3","Infantil 4","Infantil 5"].forEach(function(n){P[n]=TUc});
+  function par(n){return P[n]||null}
+  var antes={};
+  /* pinta todos os chips (sempre com a cor do próprio item) e pisca o que acabou de ser selecionado */
+  window.pintaChips=function(){
+    document.querySelectorAll("#chips .chip,#turmas .chip").forEach(function(c){
+      var n=c.dataset.c||c.dataset.t,p=par(n);if(!p)return;
+      c.classList.add("cor");c.style.setProperty("--cc",p[0]);c.style.setProperty("--cs",p[1]);
+      var on=c.classList.contains("on"),k=(c.dataset.c?"c:":"t:")+n;
+      if(on&&!antes[k]){c.classList.remove("pisca");void c.offsetWidth;c.classList.add("pisca")}
+      if(!on)c.classList.remove("pisca");
+      antes[k]=on;
+    });
+  };
+  /* cor do título: segue o item selecionado (unidade/campo primeiro; senão a turma) */
+  var ultimo="";
+  window.corTitulo=function(h){
+    var n=(typeof filt!=="undefined"&&filt)||(typeof turma!=="undefined"&&turma)||"",p=n?par(n):null;
+    var cab=h.closest(".tit-cab");
+    if(p){h.classList.add("cor");h.style.setProperty("--tc",p[0]);if(cab){cab.classList.add("cor");cab.style.setProperty("--tc",p[0])}}
+    else{h.classList.remove("cor");h.style.removeProperty("--tc");if(cab){cab.classList.remove("cor");cab.style.removeProperty("--tc")}}
+    if(n&&n!==ultimo){h.classList.remove("pisca");void h.offsetWidth;h.classList.add("pisca")}
+    if(!n)h.classList.remove("pisca");
+    ultimo=n;
+  };
+  /* repinta quando os chips são recriados (troca de modo, nova lista de turmas) */
+  ["chips","turmas"].forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    new MutationObserver(function(){window.pintaChips()}).observe(el,{childList:true});
+  });
+  window.pintaChips();
+  function marcaSel(){["chips","turmas"].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle("tem-sel",!!el.querySelector(".chip.on"))})}
+  var _p=window.pintaChips;window.pintaChips=function(){_p();marcaSel()};
+  window.pintaChips();
+})();
+</script>
+
+<style id="cabecalhoCss">
+/* ===== Cabeçalho da busca: cores e fonte do Colabora, Prof ===== */
+#panel{position:relative;padding:16px;overflow:visible;--cm:var(--pri);--cms:var(--soft)}
+#panel.ca{--cm:var(--pri2);--cms:#fde8da}
+#panel::before{content:none}
+#panel #tituloLista{margin:0 0 12px;font:700 1.45rem/1.15 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri);text-wrap:balance}
+#panel #tituloLista.cor{color:var(--tc)}
+/* seletor: a gota e o texto seguem o modo (verde-azulado = unidade, laranja = campo) */
+#panel .seg{background:var(--cms);transition:background .5s ease}
+#panel .gota{background:var(--cm);transition:background .5s ease,transform .9s cubic-bezier(.45,.05,.2,1)}
+#panel .seg button{color:var(--cm);font:700 .9rem "Fredoka","Trebuchet MS",system-ui,sans-serif}
+#panel .seg button.on{color:#fff}
+#panel .pt{display:block;margin:14px 0 8px;font:700 1rem "Fredoka","Trebuchet MS",system-ui,sans-serif;color:#0b6264;letter-spacing:.01em}
+#panel .pt::before{content:none}
+#panel .chip{font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif}
+.bar:has(>#vcols:first-child){margin-top:4px;justify-content:flex-end}
+
+/* ===== Ajuste: barra do seletor sempre verde; título grande abaixo do quadro ===== */
+#panel,#panel.ca{--cm:var(--pri);--cms:var(--soft)}
+#panel .seg{background:var(--soft)}
+#panel .gota{background:var(--pri)}
+#panel .seg button{color:var(--pri)}
+#panel .seg button.on{color:#fff}
+#panel{margin-bottom:6px}
+#tituloLista.tit-lista{
+  margin:22px 2px 12px;
+  font:700 clamp(1.9rem,7.2vw,2.7rem)/1.1 "Fredoka","Trebuchet MS",system-ui,sans-serif;
+  color:var(--pri);text-wrap:balance;letter-spacing:-.005em;
+  padding:0 0 10px;border-bottom:4px solid var(--soft);
+}
+#tituloLista.tit-lista.cor{color:var(--tc);border-bottom-color:var(--tc)}
+@media (min-width:700px){#tituloLista.tit-lista{margin-top:28px}}
+
+/* ===== Ajuste 2: botão de fichas por linha na linha do título; fichas coladas na linha ===== */
+.tit-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:22px 2px 10px;padding:0 0 6px;border-bottom:4px solid var(--soft)}
+.tit-cab:has(#tituloLista.cor){border-bottom-color:var(--tc)}
+.tit-cab #tituloLista.tit-lista{margin:0;padding:0;border-bottom:0;flex:1 1 auto;min-width:0}
+.tit-cab .vcols{flex:none;margin:0 0 2px}
+.tit-cab .vcols button{width:44px;height:44px}
+@media (min-width:700px){.tit-cab{margin-top:28px}}
+/* barra dos filtros ativos: some quando vazia e, quando há filtro, fica enxuta */
+.bar.bar-fl{margin:0 0 6px;min-height:0}
+.bar.bar-fl:has(#fl:empty){display:none}
+/* a lista sobe e encosta na linha do título */
+#busca #aviso{margin:8px 0}
+#busca #sug{margin-top:6px}
+#busca #lista{margin-top:0}
+#busca #lista>:first-child{margin-top:0}
+
+/* ===== Ajuste 3: botões de unidade/campo nunca somem; o escolhido fica em destaque ===== */
+#chips .chip,#chips .chip.cor,#chips .chip.on,#chips .chip.cor.on{opacity:1!important}
+#chips.tem-sel .chip.cor:not(.on){opacity:.55!important}
+/* a animação de piscar não pode esconder o botão: só pulsa o brilho e o tamanho */
+.chip.cor.pisca{animation:piscaCor2 .9s ease 2!important;opacity:1!important}
+@keyframes piscaCor2{
+  0%{box-shadow:0 0 0 0 var(--cc);transform:scale(1)}
+  35%{box-shadow:0 0 0 9px transparent;transform:scale(1.12)}
+  60%{box-shadow:0 0 0 0 var(--cc);transform:scale(.97)}
+  100%{box-shadow:0 0 0 3px var(--cs),0 4px 12px rgba(0,0,0,.18);transform:scale(1)}
+}
+/* selecionado: cheio, com anel e um marcador de visto, para ficar claro que dá para tocar de novo e desmarcar */
+#chips .chip.cor.on{box-shadow:0 0 0 3px var(--cs),0 4px 12px rgba(0,0,0,.18);transform:scale(1.04)}
+#chips .chip.cor.on::after{content:" ✓";font-weight:700}
+
+/* ===== Ajuste 4: linha colorida como o título; sem visto; novo pulo do botão ===== */
+.tit-cab{border-bottom-color:var(--soft);transition:border-color .5s ease}
+.tit-cab.cor{border-bottom-color:var(--tc)}
+#chips .chip.cor.on::after{content:none!important}
+/* um único pulo, com um leve amortecimento no final; só o botão se mexe, sem repetir */
+.chip.cor.pisca{animation:puloChip .6s cubic-bezier(.3,1.4,.5,1) 1!important;opacity:1!important}
+@keyframes puloChip{
+  0%{transform:translateY(0) scale(1)}
+  30%{transform:translateY(-9px) scale(1.06)}
+  60%{transform:translateY(0) scale(.97)}
+  80%{transform:translateY(-2px) scale(1.02)}
+  100%{transform:translateY(0) scale(1.04)}
+}
+#tituloLista.pisca{animation:none!important}
+@media (prefers-reduced-motion:reduce){.chip.cor.pisca{animation:none!important}}
+</style>
+<script id="cabecalhoJs">
+(function(){
+  var p=document.getElementById("panel"),seg=document.getElementById("seg");
+  if(!p||!seg)return;
+  function sync(){p.classList.toggle("ca",seg.classList.contains("ca"))}
+  new MutationObserver(sync).observe(seg,{attributes:true,attributeFilter:["class"]});
+  sync();
 })();
 </script>
 </body></html>
