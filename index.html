@@ -964,7 +964,7 @@ body:has(dialog[open]) .voo,body:has(dialog[open]) .pers,body:has(dialog[open]) 
 body:has(dialog[open]) .voo *,body:has(dialog[open]) .duo-palco *{animation-play-state:paused!important}
 html:has(dialog[open]),body:has(dialog[open]){overflow:hidden!important;overscroll-behavior:none}
 /* quadros próprios do site (.mdl) também congelam o fundo */
-body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.mdl:not([hidden])) .como-prof{visibility:hidden}
+body:has(.mdl:not([hidden]):not(dialog)) .voo,body:has(.mdl:not([hidden]):not(dialog)) .pers,body:has(.mdl:not([hidden]):not(dialog)) .como-prof{visibility:hidden}
 
 .hero .slogan b{font-weight:800;color:var(--pri)}
 /* slogan em duas linhas certinhas: fonte menor, sem quebrar no meio */
@@ -972,7 +972,7 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
 .hero .slogan .sl1,.hero .slogan b{display:block;white-space:nowrap}
 @media (max-height:700px){.hero .slogan{font-size:clamp(.58rem,3.1vw,.9rem)}}
 </style>
-<header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="lupa" type="button" aria-label="Buscar atividades" aria-expanded="false" hidden>🔎</button><button id="menu" aria-label="Menu">Menu</button></span></header>
+<header id="top"><span class="hlogo" id="hl" role="button" tabindex="0">Colabora, <b>Prof</b></span><span class="ico"><button id="lupa" type="button" aria-label="Buscar atividades" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button><button id="menu" aria-label="Menu">Menu</button></span></header>
 <div class="voo" aria-hidden="true"><span class="nv n1"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n2"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n3"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="nv n4"><svg viewBox="0 0 120 50" aria-hidden="true"><path d="M12 44 A10 10 0 0 1 14 25 A16 16 0 0 1 44 16 A20 20 0 0 1 82 18 A14 14 0 0 1 108 30 A7 7 0 0 1 108 44 Z"/></svg></span><span class="av a1"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a2 r"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span><span class="av a3"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M2 20 L62 2 L40 38 L30 24 Z"/><path class="dobra" d="M62 2 L30 24 L28 34"/></svg></span></div>
 <dialog class="mdl exdlg" id="exModal" aria-labelledby="exT">
   <div class="mdl-box">
@@ -1081,8 +1081,8 @@ body:has(.mdl:not([hidden])) .voo,body:has(.mdl:not([hidden])) .pers,body:has(.m
   <div id="sug" class="sug" hidden></div>
   <div id="lista"></div>
 </section>
-<section id="experiencia" class="tela"><div class="bar"><h2 style="color:var(--pri2)">Dados da experiência do usuário</h2><button class="btn" id="avBtn2" type="button">Responder</button></div><div id="xp"></div><div class="row" id="csvrow2"><button class="btn sec" id="csv2">Baixar planilha (CSV)</button></div></section>
-<section id="dados" class="tela"><div class="bar"><h2 style="color:var(--pri2)">Dados do planejamento docente</h2></div><div id="stats"></div><div class="row" id="csvrow"><button class="btn" id="baixaAbre" type="button">⬇️ Baixar material</button></div></section>
+<section id="experiencia" class="tela"><div class="bar xp-bar"><h2 class="dd-tit">Dados da experiência do usuário</h2><button class="btn" id="avBtn2" type="button">Preencher a ficha</button><span class="xp-count" id="xpCount" title="Pessoas que já preencheram a ficha" aria-live="polite"><span class="xc-i" aria-hidden="true">👥</span><b>0</b><span class="xc-t">preencheram</span></span></div><div id="xp"></div><div class="row" id="csvrow2"><button class="btn sec" id="csv2">Baixar planilha (CSV)</button></div></section>
+<section id="dados" class="tela"><div class="bar dd-bar"><h2 class="dd-tit">Dados do planejamento docente</h2></div><div id="stats"></div><div class="row" id="csvrow"><button class="btn" id="baixaAbre" type="button">⬇️ Baixar material</button></div></section>
 <div class="mdl" id="baixaModal" role="dialog" aria-modal="true" aria-labelledby="baixaT" hidden><div class="mdl-box"><button type="button" class="mdl-x" id="baixaX" aria-label="Fechar">×</button><h2 id="baixaT">Baixar material</h2><p class="var-sub">Escolha qual planilha você quer baixar.</p><div class="bx-lista"><button type="button" class="bx-op" data-bx="cor"><span class="bx-i">💖</span><span class="bx-t"><b>Análise dos corações</b><small>Atividades com seus corações, turmas, unidade temática e campo de experiência</small></span><span class="bx-d">⬇</span></button><button type="button" class="bx-op" data-bx="ati"><span class="bx-i">📊</span><span class="bx-t"><b>Análise das atividades</b><small>Quantas atividades há em cada turma, unidade temática e campo de experiência, e as combinações de turmas</small></span><span class="bx-d">⬇</span></button><button type="button" class="bx-op" data-bx="var"><span class="bx-i">💬</span><span class="bx-t"><b>Análise das variações</b><small>Quantas variações cada atividade recebeu</small></span><span class="bx-d">⬇</span></button><button type="button" class="bx-op" data-bx="mat"><span class="bx-i">🛒</span><span class="bx-t"><b>Lista de materiais</b><small>Os materiais mais usados em cada turma</small></span><span class="bx-d">⬇</span></button></div></div></div>
 <div class="sug-plat"><button class="btn sec" id="sugAbre" type="button">💡 Sugestões para a plataforma</button></div>
 <style>
@@ -1319,11 +1319,12 @@ dialog.exdlg .mdl-box{max-width:none;max-height:calc(100dvh - 32px)}
     <div class="row"><button class="btn" id="limpSim" type="button">Sim, limpar a ficha</button><button class="btn sec" id="limpNao" type="button">Cancelar</button></div>
   </div>
 </dialog>
-<nav id="mn" hidden>
-  <button data-go="atividades">📚 Coleção de atividades</button>
-  <button data-go="dados">📊 Dados do planejamento docente</button>
-  <button data-go="experiencia">💬 Experiência do usuário</button>
-  <button data-go="admin">🔒 Administrador</button>
+<nav id="mn" hidden aria-label="Menu">
+  <div class="mn-cab"><span class="mn-marca">Colabora, <b>Prof</b></span><span class="mn-sub">Para onde vamos?</span></div>
+  <button data-go="atividades" style="--ic:#0f8b8d"><span class="mn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></span><span class="mn-t">Coleção de atividades</span><span class="mn-s" aria-hidden="true">›</span></button>
+  <button data-go="dados" style="--ic:#e8590c"><span class="mn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg></span><span class="mn-t">Dados do planejamento docente</span><span class="mn-s" aria-hidden="true">›</span></button>
+  <button data-go="experiencia" style="--ic:#7a4fb5"><span class="mn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14a2 2 0 012 2v8a2 2 0 01-2 2h-7l-4.5 3.5V17H5a2 2 0 01-2-2V7a2 2 0 012-2z"/></svg></span><span class="mn-t">Experiência do usuário</span><span class="mn-s" aria-hidden="true">›</span></button>
+  <button data-go="admin" style="--ic:#2b6fd6"><span class="mn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></span><span class="mn-t">Administrador</span><span class="mn-s" aria-hidden="true">›</span></button>
 </nav>
 <div id="fab"><span class="fl">Publique sua atividade aqui</span><button class="bt" id="fabBt" type="button" aria-label="Publique sua atividade aqui">✍️</button></div>
 <style>
@@ -1386,6 +1387,28 @@ body:not(.home) #avalia{display:none}
 #qdlg h3{margin:16px 0 8px;font-size:1rem}
 #qdlg textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;box-sizing:border-box;background:var(--bg);color:var(--ink)}
 .xq{margin:16px 0 6px;font-weight:700}
+/* ===== Formulário de experiência, com destaque ===== */
+.av-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0}
+.av-head h2{margin:0;font:700 1.25rem/1.2 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri)}
+.av-badge{background:var(--soft);color:var(--pri);font-weight:700;font-size:.82rem;border-radius:999px;padding:6px 12px;white-space:nowrap}
+.av-prog{height:8px;border-radius:999px;background:var(--soft);overflow:hidden;margin:4px 0 14px}
+.av-prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#34c76f,#1fa15a);transition:width .25s ease}
+.av-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
+.av-card .xq{margin:0 0 8px}
+.av-card .chips .chip{font-size:.95rem;padding:10px 16px}
+.av-card .chips .chip.on{background:#1fa15a;border-color:#1fa15a;color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(31,161,90,.3)}
+.av-num{display:inline-block;background:var(--soft);color:var(--pri);font-weight:700;font-size:.78rem;border-radius:999px;padding:3px 10px;margin:0 0 8px}
+.av-card-opc{background:var(--soft)}
+.av-card-opc h3{margin:0 0 8px;font-size:.95rem;color:var(--ink)}
+.av-opt-tag{display:inline-block;background:var(--card);color:var(--mut);font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:999px;padding:2px 10px;margin:0 0 8px}
+.av-send{margin-top:4px}
+.av-btn-ok{font-size:1.05rem;padding:14px 20px;font-weight:700;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+/* ===== Tela de agradecimento do formulario de experiencia ===== */
+#qdlg .av-ok{text-align:center;padding:26px 10px 10px;background:linear-gradient(180deg,#e7f8ec,#d4f1dc);border-radius:18px}
+#qdlg .av-ok-v{width:84px;height:84px;margin:0 auto 12px;border-radius:50%;background:#22a45d;color:#fff;font-size:3rem;line-height:84px;font-weight:700;box-shadow:0 8px 22px rgba(34,164,93,.35)}
+#qdlg .av-ok h2{margin:0 0 6px;color:#14683b}
+#qdlg .av-ok p{margin:0 0 16px;color:#1f7a49;font-size:1.05rem}
+
 .xb{position:relative;margin:6px 0;border-radius:10px;background:var(--soft);overflow:hidden;padding:8px 10px;font-size:.9rem;display:flex;justify-content:space-between;gap:8px}
 .xb i{position:absolute;left:0;top:0;bottom:0;background:var(--pri);opacity:.22}
 .xb span,.xb em{position:relative;font-style:normal}
@@ -1402,7 +1425,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let acts=[],counts={},mine=new Set(),mode="un",filt=null,q="",store=null,sample=null,turma=null,reps={},minhasRep=new Set();
 let vars=[],repsV={},minhasRepV=new Set(),sugs=[],varAtual=null,varFormAberto=false;
-let avs=[],repsA={},minhasRepA=new Set();const LIMITE_DEN=5; /* a partir deste número de denúncias a atividade é excluída */
+let idents=[];let avs=[],repsA={},minhasRepA=new Set();const LIMITE_DEN=5; /* a partir deste número de denúncias a atividade é excluída */
 function ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
 const dev=ls("cp_dev")||Math.random().toString(36).slice(2,10);ls("cp_dev",dev);
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),3200)}
@@ -1420,6 +1443,7 @@ const local={live:false,
     if(reps[id]>=LIMITE_DEN){apagaFichaLocal(id)}render()},
   unreport:async id=>{minhasRep.delete(id);reps[id]=Math.max(0,(reps[id]||0)-1);ls("cp_reps",[...minhasRep]);ls("cp_repn",reps);render()},
   avSend:async o=>{avs=avs.filter(x=>x.id!==dev);avs.push(Object.assign({id:dev},o));ls("cp_avs",avs);render()},
+  idSend:async o=>{idents=idents.filter(x=>x.id!==dev);idents.push(Object.assign({id:dev},o));ls("cp_idav",idents)},
   avRep:async id=>{minhasRepA.add(id);repsA[id]=(repsA[id]||0)+1;ls("cp_ravs",[...minhasRepA]);ls("cp_ravn",repsA);render()},
   avUnrep:async id=>{minhasRepA.delete(id);repsA[id]=Math.max(0,(repsA[id]||0)-1);ls("cp_ravs",[...minhasRepA]);ls("cp_ravn",repsA);render()},
   varAdd:async o=>{vars.unshift(Object.assign({id:"v"+Date.now()},o));ls("cp_vars",vars);render()},
@@ -1465,6 +1489,7 @@ async function init(){
       if(db&&cw!==false){
         const A=db.collection("atividades"),V=db.collection("votos"),R=db.collection("denuncias"),AV=db.collection("avaliacoes"),RA=db.collection("denAval");
         AV.onSnapshot(s=>{avs=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>{});
+        db.collection("identAval").onSnapshot(s=>{idents=s.docs.map(d=>Object.assign({id:d.id},d.data()))},()=>{});
         RA.onSnapshot(s=>{repsA={};minhasRepA=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;repsA[a]=(repsA[a]||0)+1;if(d.id.endsWith("__"+dev))minhasRepA.add(a)});render()},()=>{});
         A.onSnapshot(s=>{acts=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>{});
         V.onSnapshot(s=>{counts={};mine=new Set();s.docs.forEach(d=>{const a=(d.data()||{}).a;counts[a]=(counts[a]||0)+1;if(d.id.endsWith("__"+dev))mine.add(a)});render()},()=>{});
@@ -1483,6 +1508,7 @@ async function init(){
             if((reps[id]||0)+1>=LIMITE_DEN){try{await apagaFicha(id)}catch(e){}}},
           unreport:id=>R.doc(id+"__"+dev).delete(),
           avSend:o=>AV.doc(dev).set(o),
+          idSend:async o=>{const u=await claude.use("user"),uid=await u.id();return db.collection("identAval").doc(uid).set(Object.assign({dev:dev},o))},
           avRep:async id=>{await RA.doc(id+"__"+dev).set({a:id});if((repsA[id]||0)+1>=LIMITE_DEN){try{await AV.doc(id).delete()}catch(e){}}},
           avUnrep:id=>RA.doc(id+"__"+dev).delete(),
           varAdd:o=>VA.add(o),
@@ -1492,7 +1518,7 @@ async function init(){
       }
     }
   }catch(e){}
-  if(!store){store=local;acts=ls("cp_acts")||[];if(DEMO_ON){const ja=new Set(acts.map(x=>x.id));DEMO.forEach(d=>{if(!ja.has(d.id))acts.push(Object.assign({demo:true},d))})}mine=new Set(ls("cp_votes")||[]);acts.forEach(a=>{if(a.demo)counts[a.id]=DEMO_H[a.id]||0});mine.forEach(a=>counts[a]=(DEMO_H[a]||0)+1);minhasRep=new Set(ls("cp_reps")||[]);reps=ls("cp_repn")||{};avs=ls("cp_avs")||[];minhasRepA=new Set(ls("cp_ravs")||[]);repsA=ls("cp_ravn")||{};vars=ls("cp_vars")||[];minhasRepV=new Set(ls("cp_rvars")||[]);repsV=ls("cp_rvarn")||{};sugs=ls("cp_sugs")||[];$("#aviso").hidden=false;
+  if(!store){store=local;idents=ls("cp_idav")||[];acts=ls("cp_acts")||[];if(DEMO_ON){const ja=new Set(acts.map(x=>x.id));DEMO.forEach(d=>{if(!ja.has(d.id))acts.push(Object.assign({demo:true},d))})}mine=new Set(ls("cp_votes")||[]);acts.forEach(a=>{if(a.demo)counts[a.id]=DEMO_H[a.id]||0});mine.forEach(a=>counts[a]=(DEMO_H[a]||0)+1);minhasRep=new Set(ls("cp_reps")||[]);reps=ls("cp_repn")||{};avs=ls("cp_avs")||[];minhasRepA=new Set(ls("cp_ravs")||[]);repsA=ls("cp_ravn")||{};vars=ls("cp_vars")||[];minhasRepV=new Set(ls("cp_rvars")||[]);repsV=ls("cp_rvarn")||{};sugs=ls("cp_sugs")||[];$("#aviso").hidden=false;
     videoAplicaCfg(ls("cp_video")||"");
     visitas=ls("cp_vis")||[];
     store.visit=async()=>{const t=Date.now();visitas.push({dev:dev,d:diaStr(t),t:t});ls("cp_vis",visitas)};
@@ -2511,8 +2537,8 @@ $("#stats").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if
 $("#csv2").onclick=async()=>{try{const d=await claude.use("downloads");if(!d)throw 0;
   const L=avs.filter(x=>(repsA[x.id]||0)<LIMITE_DEN);
   if(!L.length){toast("Ainda não há respostas para baixar.");return}
-  const cab=["data"].concat(PERG.map(p=>p[1])).concat(["o_que_modificar_ou_acrescentar","necessidades_nao_atendidas"]);
-  const r=[cab].concat(L.map(x=>[x.t?new Date(x.t).toLocaleDateString("pt-BR"):""].concat(PERG.map(p=>x[p[0]]==null?"":p[2][x[p[0]]])).concat([x.m||"",x.n||""])));
+  const cab=["data","nome"].concat(PERG.map(p=>p[1])).concat(["o_que_modificar_ou_acrescentar","necessidades_nao_atendidas"]);
+  const nomeDe=id=>{const z=idents.find(q=>(q.dev||q.id)===id);return z?z.nome:"anônimo"};const r=[cab].concat(L.map(x=>[x.t?new Date(x.t).toLocaleDateString("pt-BR"):"",nomeDe(x.id)].concat(PERG.map(p=>x[p[0]]==null?"":p[2][x[p[0]]])).concat([x.m||"",x.n||""])));
   await d.save({filename:"colabora-prof-experiencia.csv",data:r.map(x=>x.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n")})}catch(e){toast("Não consegui baixar agora.")}};
 
 /* ===== Baixar material: um botão só, com as planilhas de cada análise ===== */
@@ -2659,28 +2685,75 @@ const PERG=[
  ["u","A plataforma contribuiu para o seu planejamento?",["Sim, bastante","Parcialmente","Não contribuiu","Ainda não usei"]],
  ["a","Você encontrou atividades que pode usar ou adaptar nas suas turmas?",["Sim, várias","Sim, algumas","Não encontrei adequadas"]],
  ["f","Foi fácil encontrar o que você procurava?",["Muito fácil","Fácil","Razoável","Tive dificuldades"]],
+ ["g","Criar e compartilhar sua atividade na plataforma foi fácil e rápido?",["Sim","Parcialmente","Não"]],
  ["c","A plataforma incentiva você a compartilhar e aprender com outros professores?",["Sim","Parcialmente","Não"]],
  ["r","Você recomendaria o Colabora, Prof a outros professores de Educação Física da educação infantil?",["Sim","Talvez","Não"]]];
-function abreAval(){const d=$("#qdlg"),m=avs.find(x=>x.id===dev)||{};
- d.innerHTML='<h2 style="margin:0">Como está sendo sua experiência?</h2><p style="color:var(--mut);margin:6px 0 0">Responda só o que quiser. É anônimo e leva cerca de 1 minuto.</p>'+
- PERG.map(p=>'<div class="xq">'+p[1]+'</div><div class="chips tur" data-k="'+p[0]+'">'+p[2].map((o,i)=>'<button type="button" class="chip'+(m[p[0]]===i?' on':'')+'" data-i="'+i+'">'+o+'</button>').join('')+'</div>').join('')+
- '<h3>O que você modificaria ou acrescentaria na plataforma? <small>(opcional)</small></h3><textarea id="avM" maxlength="500">'+esc(m.m||'')+'</textarea>'+
- '<h3>Que necessidade do dia a dia pedagógico a plataforma ainda não atende? <small>(opcional)</small></h3><textarea id="avN" maxlength="500">'+esc(m.n||'')+'</textarea>'+
- '<p style="font-size:.85rem;color:var(--mut)">As respostas escritas ficam públicas em Dados e informações. Por favor, não cite nomes de crianças, colegas ou escolas.</p>'+
- '<div class="row"><button class="btn" id="avOk" type="button">Enviar</button> <button class="btn sec" id="avNo" type="button">Agora não</button></div>';
- d.showModal()}
+function avTotalGrupos(){return PERG.length+1}
+function avProgresso(){
+ const d=$("#qdlg");if(!d)return;
+ const gs=d.querySelectorAll(".chips[data-k]");let feitos=0;
+ gs.forEach(g=>{if(g.querySelector(".chip.on"))feitos++});
+ const pct=Math.round(feitos/avTotalGrupos()*100),f=$("#avProg");
+ if(f)f.style.width=pct+"%";
+}
+function abreAval(){const d=$("#qdlg"),m=avs.find(x=>x.id===dev)||{},ja=!!avs.find(x=>x.id===dev);
+ if(ja){d.innerHTML='<div class="av-ok"><div class="av-ok-v">✓</div><h2>Muito obrigado!</h2><p>Você já preencheu o formulário. 😊</p><div class="row"><button class="btn" id="avNo" type="button">Fechar</button></div></div>';d.showModal();return}
+ d.innerHTML='<div class="av-head"><h2>Como está sendo sua experiência?</h2><span class="av-badge">⏱️ Leva de 1 a 2 minutos</span></div>'+
+ '<p style="color:var(--mut);margin:6px 0 14px">Responda só o que quiser. Depois de enviar, não será possível alterar as respostas.</p>'+
+ '<div class="av-prog"><div class="av-prog-fill" id="avProg" style="width:0%"></div></div>'+
+ '<div class="av-card av-id"><div class="xq">Você faz parte do grupo de professores da pesquisa?</div><div class="chips tur" data-k="__id"><button type="button" class="chip" data-i="0">Sim, quero me identificar</button><button type="button" class="chip" data-i="1">Prefiro responder de forma anônima</button></div>'+
+ '<div id="avNomeBox" hidden><div class="xq">Seu nome</div><input id="avNome" type="text" maxlength="80" autocomplete="name" placeholder="Nome completo" style="width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;background:var(--bg);color:var(--ink)"><p style="font-size:.82rem;color:var(--mut);margin:6px 0 0">Seu nome fica guardado separado e não aparece na página pública.</p></div></div>'+
+ PERG.map((p,i)=>'<div class="av-card"><div class="av-num">'+(i+1)+' de '+PERG.length+'</div><div class="xq">'+p[1]+'</div><div class="chips tur" data-k="'+p[0]+'">'+p[2].map((o,j)=>'<button type="button" class="chip" data-i="'+j+'">'+o+'</button>').join('')+'</div></div>').join('')+
+ '<div class="av-card av-card-opc"><span class="av-opt-tag">opcional</span><h3>O que você modificaria ou acrescentaria na plataforma?</h3><textarea id="avM" maxlength="500"></textarea></div>'+
+ '<div class="av-card av-card-opc"><span class="av-opt-tag">opcional</span><h3>Que necessidade do dia a dia pedagógico a plataforma ainda não atende?</h3><textarea id="avN" maxlength="500"></textarea></div>'+
+ '<p style="font-size:.85rem;color:var(--mut)">As respostas escritas ficam públicas em Dados e informações, sem o seu nome. Por favor, não cite nomes de crianças, colegas ou escolas.</p>'+
+ '<div class="row"><button class="btn av-btn-ok" id="avOk" type="button">Enviar respostas</button> <button class="btn sec" id="avNo" type="button">Agora não</button></div>';
+ d.showModal();avProgresso()}
 $("#avBtn").onclick=abreAval;
 $("#qdlg").addEventListener("click",async e=>{
  const c=e.target.closest(".chip");
- if(c){const g=c.parentNode,on=c.classList.contains("on");g.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));if(!on)c.classList.add("on");return}
+ if(c){const g=c.parentNode;g.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));c.classList.add("on");
+  if(g.dataset.k==="__id"){const b=$("#avNomeBox");if(b){b.hidden=c.dataset.i!=="0";if(c.dataset.i==="0"){const n=$("#avNome");if(n)setTimeout(()=>n.focus(),50)}}}
+  avProgresso();return}
  if(e.target.id==="avNo"){$("#qdlg").close();return}
- if(e.target.id==="avOk"){const o={t:Date.now()};
-  document.querySelectorAll("#qdlg .chips").forEach(g=>{const s=g.querySelector(".on");if(s)o[g.dataset.k]=+s.dataset.i});
+ if(e.target.id==="avOk"){
+  if(avs.some(x=>x.id===dev)){toast("Você já preencheu o formulário. Obrigado!");$("#qdlg").close();return}
+  const o={t:Date.now()};
+  document.querySelectorAll("#qdlg .chips").forEach(g=>{if(g.dataset.k==="__id")return;const s=g.querySelector(".on");if(s)o[g.dataset.k]=+s.dataset.i});
   const m=$("#avM").value.trim(),n=$("#avN").value.trim();if(m)o.m=m;if(n)o.n=n;
+  const idSel=document.querySelector('#qdlg .chips[data-k="__id"] .on'),quer=!!idSel&&idSel.dataset.i==="0",nome=quer?($("#avNome").value||"").trim():"";
+  if(!idSel){toast("Escolha se quer se identificar ou responder de forma anônima.");return}
+  if(quer&&!nome){toast("Digite seu nome ou escolha responder de forma anônima.");$("#avNome").focus();return}
   if(Object.keys(o).length<2){toast("Marque ou escreva algo, se quiser participar.");return}
-  try{await store.avSend(o);$("#qdlg").close();toast("Obrigado! Sua opinião ajuda muito 💚")}catch(err){toast("Não consegui enviar agora. Tente de novo.")}}});
+  const btn=$("#avOk");btn.disabled=true;
+  try{
+   await store.avSend(o);
+   if(quer){try{await store.idSend({nome:nome,t:o.t})}catch(e2){}}
+   $("#qdlg").innerHTML='<div class="av-ok"><div class="av-ok-v">✓</div><h2>Muito obrigado!</h2><p>Você já preencheu o formulário. 😊</p><div class="row"><button class="btn" id="avNo" type="button">Fechar</button></div></div>';
+  }catch(err){btn.disabled=false;toast("Não consegui enviar agora. Tente de novo.")}}});
 let vistaXp="barras";
-const TIT=["Utilidade para o planejamento","Aplicabilidade das atividades","Facilidade de uso","Compartilhamento de experiências","Recomendação"];
+let xpFull=false,xpAnim=false;
+/* pesos: Sim/bastante = +1, Parcialmente/meio-termo = +0,5, Não contribui = -1; null = fica de fora da conta e só é contado embaixo */
+const PESOS={u:[1,.5,-1,null],a:[1,.5,-1],f:[1,.5,0,-1],g:[1,.5,-1],c:[1,.5,-1],r:[1,.5,-1]};
+function vbRes(p,L){const k=p[0],O=p[2],W=PESOS[k]||[],R=L.filter(x=>typeof x[k]==="number"&&x[k]>=0&&x[k]<O.length),cnt=O.map((o,j)=>R.filter(x=>x[k]===j).length);let soma=0,val=0,exc=0;cnt.forEach((n,j)=>{if(W[j]===null||W[j]===undefined)exc+=n;else{soma+=W[j]*n;val+=n}});return{O,cnt,soma,val,exc,tot:R.length,exO:O.filter((o,j)=>W[j]===null)[0]||""}}
+function vbBarra(tit,sub,r,geral){
+ const saldo=r.val?r.soma/r.val:0,pct=Math.round(Math.abs(saldo)*100),pos=saldo>0.0001,neg=saldo<-0.0001,cls=pos?"pos":neg?"neg":"neu";
+ const mx=Math.max(0,...r.cnt),top=r.O.filter((o,j)=>r.cnt[j]===mx&&mx>0).map(o=>esc(o)),topP=Math.round(mx*100/Math.max(1,r.tot));
+ const txt=!r.val?"Sem respostas válidas ainda":pos?pct+"% positivo":neg?pct+"% negativo":"Neutro (0%)";
+ const aria=tit+": "+txt+", com "+r.val+(r.val===1?" resposta":" respostas");
+ return '<div class="vb'+(geral?' vb-geral':'')+'"><h3 class="vb-t">'+esc(tit)+'</h3>'+(sub?'<p class="vb-q">'+esc(sub)+'</p>':'')+
+  '<div class="vb-linha"><span class="vb-e vb-eneg'+(neg?' vb-on':'')+'" aria-hidden="true">🙁</span>'+
+  '<div class="vb-trilho" role="img" aria-label="'+esc(aria)+'"><span class="vb-zero"></span>'+(r.val?'<i class="vb-fill '+cls+'" style="--w:'+(pct/2)+'%"></i>':'')+'</div>'+
+  '<span class="vb-e vb-epos'+(pos?' vb-on':'')+'" aria-hidden="true">😊</span></div>'+
+  '<div class="vb-res"><b class="'+cls+'">'+txt+'</b>'+(r.val?'<span> · '+r.val+(r.val===1?' resposta':' respostas')+'</span>':'')+'</div>'+
+  (top.length&&!geral?'<div class="vb-top">⭐ Mais comum: <b>'+top.join(' e ')+'</b> <span>('+topP+'%)</span></div>':'')+
+  (r.exc?'<div class="vb-ex">'+r.exc+(r.exc===1?' pessoa marcou':' pessoas marcaram')+' “'+esc(r.exO)+'”, fora da conta</div>':'')+'</div>'}
+function vbHtml(L){
+ const an=!xpAnim;xpAnim=true;
+ const rs=PERG.map(p=>vbRes(p,L)),G={O:[],cnt:[],soma:rs.reduce((a,r)=>a+r.soma,0),val:rs.reduce((a,r)=>a+r.val,0),exc:0,tot:0,exO:""};
+ return '<div class="vb-wrap'+(an?' vb-anim':'')+'">'+vbBarra("Aprovação geral da plataforma","Junta as respostas de todas as perguntas",G,true)+PERG.map((p,i)=>vbBarra(TIT[i],p[1],rs[i],false)).join('')+'</div>'}
+$("#xp").addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("xp-full"))xpFull=d.open},true);
+const TIT=["Utilidade para o planejamento","Aplicabilidade das atividades","Facilidade de busca","Criar e compartilhar a ficha","Troca entre colegas","Recomendação"];
 function vistaPerg(p,t,L){const k=p[0],O=p[2],R=L.filter(x=>typeof x[k]==="number"),tot=R.length,c={};O.forEach((o,j)=>c[o]=R.filter(x=>x[k]===j).length);
  const nota='<small class="nt">'+tot+(tot===1?' pessoa respondeu':' pessoas responderam')+' esta pergunta.</small>';
  if(!tot)return '<div class="gc"><h3>'+esc(t)+'</h3><div class="semd">Sem respostas ainda.</div></div>';
@@ -2690,15 +2763,16 @@ function vistaPerg(p,t,L){const k=p[0],O=p[2],R=L.filter(x=>typeof x[k]==="numbe
  else corpo='<div class="gv">'+rosquinha(O,c,tot,true,t)+legenda(O,c,tot)+'</div>';
  return '<div class="gc"><h3>'+esc(t)+'</h3>'+corpo+nota+'</div>'}
 function xp(){const fez=avs.some(x=>x.id===dev),b1=$("#avBtn"),b2=$("#avBtn2");
- if(b1)b1.textContent=fez?"Atualizar minha resposta":"Clique aqui";if(b2)b2.textContent=fez?"Atualizar resposta":"Responder";
+ if(b1)b1.textContent=fez?"Preencher a ficha":"Clique aqui";if(b2)b2.textContent="Preencher a ficha";
  const el=$("#xp");if(!el)return;if(!$("#experiencia").classList.contains("on")&&el.children.length)return;
  const L=avs.filter(x=>(repsA[x.id]||0)<LIMITE_DEN);
+ {const nb=$("#xpCount");if(nb){nb.querySelector("b").textContent=L.length;nb.querySelector(".xc-t").textContent=L.length===1?"preencheu":"preencheram"}}
  if(!L.length){el.innerHTML='<div class="empty">As avaliações aparecem aqui quando os primeiros professores responderem. 🌱</div>';return}
  const abas='<div class="vt" role="tablist" aria-label="Forma de ver os dados">'+VISTAS.map(v=>'<button type="button" role="tab" aria-selected="'+(vistaXp===v[0])+'" class="'+(vistaXp===v[0]?'on':'')+'" data-xv="'+v[0]+'">'+v[1]+'</button>').join('')+'</div>';
- let h='<div class="kpis"><div><b>'+L.length+'</b>'+(L.length===1?'pessoa respondeu':'pessoas responderam')+'</div><div><b>'+L.filter(x=>x.m||x.n).length+'</b>comentários</div></div>'+abas;
+ let h=''+vbHtml(L)+'<details class="xp-full"'+(xpFull?' open':'')+'><summary><span class="xf-i">📊</span><span class="xf-t">Ver dados completos</span><span class="xf-a" aria-hidden="true">⌄</span></summary><div class="xf-c">'+abas;
  PERG.forEach((p,i)=>{h+=vistaPerg(p,TIT[i],L)});
  [["m","O que modificar ou acrescentar"],["n","Necessidades que a plataforma ainda não atende"]].forEach(w=>{const C=L.filter(x=>x[w[0]]);if(!C.length)return;h+='<h3>'+w[1]+'</h3>'+C.map(x=>'<div class="xc"><p>'+esc(x[w[0]])+'</p><button type="button" class="den'+(minhasRepA.has(x.id)?' feita':'')+'" data-ar="'+esc(x.id)+'">'+txtDen(minhasRepA.has(x.id))+'</button></div>').join('')});
- el.innerHTML=h}
+ h+='</div></details>';el.innerHTML=h}
 $("#xp").addEventListener("click",e=>{const v=e.target.closest("[data-xv]");if(v){vistaXp=v.dataset.xv;xp();return}
  const b=e.target.closest("[data-ar]");if(!b)return;const id=b.dataset.ar;Promise.resolve(minhasRepA.has(id)?store.avUnrep(id):store.avRep(id)).catch(()=>toast("Não consegui agora."))});
 $("#avBtn2").onclick=abreAval;
@@ -2720,7 +2794,7 @@ function ir(t,sem){
   scrollTo({top:0,behavior:"instant"});
   if(t==="atividades"){if(!$("#chips").children.length)chips();turmasBusca()}
   if(t==="dados")stats();
-  if(t==="experiencia")xp()
+  if(t==="experiencia"){xpAnim=false;xp()}
 }
 function menuFecha(){const m=$("#mn");if(m.hidden)return;m.classList.add("fecha");$("#menu").classList.remove("aberto");setTimeout(()=>{m.hidden=true;m.classList.remove("fecha")},200)}
 $("#menu").onclick=e=>{e.stopPropagation();const m=$("#mn");if(m.hidden){m.hidden=false;$("#menu").classList.add("aberto")}else menuFecha()};
@@ -3150,10 +3224,36 @@ function admLista(){
   $("#adBody").innerHTML='<h2>🔒 Administrador</h2>'+
     '<div class="fx"><button type="button" class="fx-b" id="adSai" aria-label="Sair e fechar" title="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>'+
     admAtencao(A,V)+
+    admAba("idq","Quem se identificou ("+admIdentLista().length+")",admIdentHtml())+
     admAba("man","Manutenção do site",manut+manutV)+
     admAba("ilu",admIluTitulo(A),admIluCorpo(A))+
     admAba("sug","Sugestões para a plataforma ("+SG.length+")",lSg)+
     admAba("ava","Avaliações de experiência ("+V.length+")",lAv);
+}
+/* ===== Administrador: resumo, respostas por pergunta e lista de quem se identificou ===== */
+function admResumo(){
+  const tot=avs.length,idn=admIdentLista().length;
+  return '<div class="adm-item" style="display:flex;gap:18px;flex-wrap:wrap">'+
+    '<div><b style="font-size:1.4rem">'+tot+'</b><br><small>'+(tot===1?"resposta ao todo":"respostas ao todo")+'</small></div>'+
+    '<div><b style="font-size:1.4rem">'+idn+'</b><br><small>'+(idn===1?"professor(a) se identificou":"professores(as) se identificaram")+'</small></div>'+
+    '</div>';
+}
+function admPerguntasCorpo(){
+  if(!avs.length)return '<div class="empty">Nenhuma resposta ainda.</div>';
+  return vbHtml(avs.slice());
+}
+function admIdentLista(){
+  const mapa={};idents.forEach(z=>{const k=z.dev||z.id;if(k)mapa[k]=z});
+  return avs.filter(x=>mapa[x.id]).map(x=>Object.assign({nome:mapa[x.id].nome},x)).sort((a,b)=>(b.t||0)-(a.t||0));
+}
+function admIdentHtml(){
+  const L=admIdentLista();
+  if(!L.length)return '<div class="empty">Ninguém se identificou ainda.</div>';
+  return L.map(x=>{
+    const resp=PERG.map((p,i)=>'<div class="bl" style="display:block;margin:2px 0"><small>'+esc(TIT[i])+': </small><b>'+esc(typeof x[p[0]]==="number"?p[2][x[p[0]]]:"—")+'</b></div>').join('');
+    const extra=[["m","O que modificaria/acrescentaria"],["n","Necessidade não atendida"]].map(w=>x[w[0]]?'<p style="margin:6px 0 0"><small>'+esc(w[1])+':</small> '+esc(x[w[0]])+'</p>':'').join('');
+    return '<div class="adm-item"><b>'+esc(x.nome||"(sem nome)")+'</b><small>'+(x.t?new Date(x.t).toLocaleString("pt-BR"):"sem data")+'</small>'+resp+extra+'</div>';
+  }).join("");
 }
 function admAtencao(A,V){
   const DA=A.filter(a=>(reps[a.id]||0)>0).sort((a,b)=>(reps[b.id]||0)-(reps[a.id]||0));
@@ -4056,7 +4156,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgEsconde("cpgEsc"
   }
   function podeRodar(){
     var m=document.getElementById("vidModal");
-    if(document.querySelector("dialog[open]")||document.querySelector(".mdl:not([hidden])")) return false;
+    if(document.querySelector("dialog[open]")||document.querySelector(".mdl:not([hidden]):not(dialog)")) return false;
     return document.body.classList.contains("home") && palco.offsetParent!==null && (!m||m.hidden) && !document.getElementById("intro");
   }
   function ator(p,cfg,fim){
@@ -4151,8 +4251,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){cpgEsconde("cpgEsc"
 @keyframes apRespira{0%,100%{opacity:.45}50%{opacity:.9}}
 @media (prefers-reduced-motion:reduce){.ap-sol::before,.ap-sol::after{animation:none}.ap-bal{transition:none}}
 /* nada disso aparece com algum quadro aberto */
-body:has(dialog[open]) .ap-prof,body:has(.mdl:not([hidden])) .ap-prof,body:has(#cpgGer:not([hidden])) .ap-prof,body:has(#cpgEsc:not([hidden])) .ap-prof,
-body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cpgGer:not([hidden])) .ap-sol,body:has(#cpgEsc:not([hidden])) .ap-sol{visibility:hidden}
+body:has(dialog[open]) .ap-prof,body:has(.mdl:not([hidden]):not(dialog)) .ap-prof,body:has(#cpgGer:not([hidden])) .ap-prof,body:has(#cpgEsc:not([hidden])) .ap-prof,
+body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden]):not(dialog)) .ap-sol,body:has(#cpgGer:not([hidden])) .ap-sol,body:has(#cpgEsc:not([hidden])) .ap-sol{visibility:hidden}
 </style>
 
 <div class="ap-prof" id="apProf" aria-hidden="true">
@@ -4260,7 +4360,7 @@ body:has(dialog[open]) .ap-sol,body:has(.mdl:not([hidden])) .ap-sol,body:has(#cp
   function noAtividades(){return document.body.classList.contains("ativ")}
   function livre(){
     var g=document.getElementById("cpgGer");
-    return !document.querySelector("dialog[open]")&&!document.querySelector(".mdl:not([hidden])")&&!document.querySelector("#aldModal:not([hidden])")&&!(g&&!g.hidden)&&!document.getElementById("intro");
+    return !document.querySelector("dialog[open]")&&!document.querySelector(".mdl:not([hidden]):not(dialog)")&&!document.querySelector("#aldModal:not([hidden])")&&!(g&&!g.hidden)&&!document.getElementById("intro");
   }
   /* botões de compartilhar que estão na tela */
   function visiveis(){
@@ -4532,7 +4632,7 @@ body:has(#aldModal:not([hidden])) .ap-prof,body:has(#aldModal:not([hidden])) .ap
   }
   function abreAuto(){
     if(lido()||!m.hidden)return;
-    if(document.querySelector("dialog[open]")||document.querySelector(".mdl:not([hidden])")||(document.getElementById("vidModal")&&!document.getElementById("vidModal").hidden)){setTimeout(abreAuto,1500);return}
+    if(document.querySelector("dialog[open]")||document.querySelector(".mdl:not([hidden]):not(dialog)")||(document.getElementById("vidModal")&&!document.getElementById("vidModal").hidden)){setTimeout(abreAuto,1500);return}
     abre();
   }
   ok.onclick=function(){
@@ -4571,6 +4671,12 @@ body.ativ #buscaX{display:block}
 .seg{touch-action:pan-y;user-select:none;-webkit-user-select:none}
 #chips{overscroll-behavior-x:contain}
 @media (prefers-reduced-motion:reduce){body.ativ .search{transition:none}#lupa{transition:none}}
+
+/* ===== Menus de pastilhas (unidade temática / campo de experiência / turma): arrastar com o dedo ou com o mouse ===== */
+#chips,#turmas{touch-action:pan-x pan-y;overscroll-behavior-x:contain;cursor:grab;-webkit-user-select:none;user-select:none}
+#chips.arrastando,#turmas.arrastando{cursor:grabbing;scroll-snap-type:none}
+#chips.arrastando .chip,#turmas.arrastando .chip{pointer-events:none}
+#chips .chip,#turmas .chip{-webkit-user-drag:none;user-drag:none}
 </style>
 <script id="buscaBolinhaJs">
 (function(){
@@ -4610,8 +4716,7 @@ body.ativ #buscaX{display:block}
     var t=e.touches[0];
     if(t.clientX<=28||t.clientX>=window.innerWidth-28){x0=null;return}
     /* a lista de turmas rola sozinha: não interferir */
-    if(e.target.closest("#turmas"))
-{x0=null;return}
+    if(e.target.closest("#turmas,#chips,.rola")){x0=null;return}
     x0=t.clientX;y0=t.clientY;t0=Date.now();vai=false;
   }
   function move(e){
@@ -4630,9 +4735,9 @@ body.ativ #buscaX{display:block}
     x0=null;vai=false;
     if(!ok)return;
     var m=modoAtual();
-    /* arrastar para a esquerda avança (Campo de experiência); para a direita volta (Unidade temática) */
-    if(dx<0&&m==="un")alvo="m2";
-    else if(dx>0&&m==="ca")alvo="m1";
+    /* arrastar para a direita avança (Campo de experiência); para a esquerda volta (Unidade temática) */
+    if(dx>0&&m==="un")alvo="m2";
+    else if(dx<0&&m==="ca")alvo="m1";
     else return;
     var b=document.getElementById(alvo);
     if(b){b.click();if(navigator.vibrate){try{navigator.vibrate(12)}catch(_){}}}
@@ -4650,8 +4755,8 @@ body.ativ #buscaX{display:block}
     var dx=e.clientX-mx,dy=e.clientY-my;mx=null;
     if(Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy)*1.4)return;
     var m=modoAtual(),b=null;
-    if(dx<0&&m==="un")b=document.getElementById("m2");
-    else if(dx>0&&m==="ca")b=document.getElementById("m1");
+    if(dx>0&&m==="un")b=document.getElementById("m2");
+    else if(dx<0&&m==="ca")b=document.getElementById("m1");
     if(b)b.click();
   });
 })();
@@ -4868,4 +4973,278 @@ body.ativ #buscaX{display:block}
   agenda();
 })();
 </script>
+<script id="arrastaChipsJs">
+/* Arrastar as pastilhas de lado: funciona com o dedo (celular) e com o mouse (computador). Um toque rápido continua escolhendo a pastilha. */
+(function(){
+  function liga(box){
+    if(!box||box.__arrasta)return; box.__arrasta=true;
+    var ativo=false,moveu=false,x0=0,s0=0,id=null,vel=0,tUlt=0,xUlt=0,raf=0;
+    function para(){cancelAnimationFrame(raf);raf=0}
+    function inercia(){
+      if(Math.abs(vel)<0.05){raf=0;return}
+      box.scrollLeft-=vel*16; vel*=0.94; raf=requestAnimationFrame(inercia);
+    }
+    box.addEventListener("pointerdown",function(e){
+      if(e.pointerType==="touch")return;            /* no toque o navegador já rola sozinho, e com mais suavidade */
+      if(e.button!==0)return;
+      para();ativo=true;moveu=false;x0=e.clientX;s0=box.scrollLeft;id=e.pointerId;vel=0;tUlt=e.timeStamp;xUlt=e.clientX;
+    });
+    box.addEventListener("pointermove",function(e){
+      if(!ativo||e.pointerId!==id)return;
+      var dx=e.clientX-x0;
+      if(!moveu&&Math.abs(dx)>5){moveu=true;box.classList.add("arrastando");try{box.setPointerCapture(id)}catch(_){}}
+      if(!moveu)return;
+      box.scrollLeft=s0-dx;
+      var dt=e.timeStamp-tUlt; if(dt>0){vel=(e.clientX-xUlt)/dt;} tUlt=e.timeStamp;xUlt=e.clientX;
+      e.preventDefault();
+    });
+    function solta(e){
+      if(!ativo||(e&&e.pointerId!==id))return;
+      ativo=false;
+      if(moveu){try{box.releasePointerCapture(id)}catch(_){}
+        box.classList.remove("arrastando");
+        /* engole o clique que o navegador dispara ao soltar, para não escolher uma pastilha sem querer */
+        var bloqueia=function(ev){ev.stopPropagation();ev.preventDefault();box.removeEventListener("click",bloqueia,true)};
+        box.addEventListener("click",bloqueia,true);setTimeout(function(){box.removeEventListener("click",bloqueia,true)},0);
+        raf=requestAnimationFrame(inercia);
+      }
+    }
+    box.addEventListener("pointerup",solta);
+    box.addEventListener("pointercancel",solta);
+    box.addEventListener("dragstart",function(e){e.preventDefault()});
+    box.addEventListener("wheel",para,{passive:true});
+  }
+  function todos(){liga(document.getElementById("chips"));liga(document.getElementById("turmas"))}
+  todos();
+  document.addEventListener("DOMContentLoaded",todos);
+  setInterval(todos,1500);
+})();
+</script>
+
+<style id="arrastaCorMenuCss">
+/* ===== Faixa de pastilhas: arrastar com o dedo para os dois lados ===== */
+#chips,#turmas{touch-action:pan-x;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#chips.arrastando,#turmas.arrastando{cursor:grabbing;scroll-snap-type:none}
+#chips .chip,#turmas .chip{-webkit-user-drag:none;touch-action:pan-x}
+
+/* ===== Todo o menu segue a cor do modo: Unidades = verde-azulado, Campos = laranja ===== */
+#panel{--mc:#0f8b8d;--mcs:#e3f3f2;--mcd:#0b6264}
+#panel.ca{--mc:#e8590c;--mcs:#fde8da;--mcd:#b8470a}
+#panel .seg{background:var(--mcs)!important}
+#panel .gota{background:var(--mc)!important}
+#panel .seg button{color:var(--mc)!important}
+#panel .seg button.on{color:#fff!important}
+#panel .pt{color:var(--mcd)!important}
+#panel .rola .seta{color:var(--mc);border-color:var(--mcs)}
+#panel #chips .chip.cor{--cc:var(--mc);--cs:var(--mcs);background:var(--mc);border-color:var(--mc);color:#fff}
+#panel #chips .chip.cor:hover{background:var(--mc);box-shadow:0 6px 14px var(--mcs)}
+#panel #chips .chip.cor.on{box-shadow:0 0 0 3px var(--mcs),0 4px 12px rgba(0,0,0,.18)}
+.tit-cab{transition:border-color .5s ease}
+/* turmas também seguem a cor do modo (verde-azulado em Unidade, laranja em Campo) */
+#panel #turmas .chip.cor,#panel #chips .chip.cor{--cc:var(--mc)!important;--cs:var(--mcs)!important}
+#panel #turmas .chip.cor{background:var(--mc);border-color:var(--mc);color:#fff}
+#panel #turmas .chip.cor:hover{background:var(--mc);box-shadow:0 6px 14px var(--mcs)}
+#panel #turmas .chip.cor.on{box-shadow:0 0 0 3px var(--mcs),0 4px 12px rgba(0,0,0,.18)}
+#panel .chip,#panel .chip.cor{transition:background .5s ease,border-color .5s ease,box-shadow .25s ease,transform .25s ease}
+/* lupa do topo: discreta, só o ícone fino, sem círculo nem emoji */
+#top #lupa{width:36px;height:36px;margin-right:2px;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none;color:var(--mut)}
+#top #lupa svg{width:20px;height:20px;display:block}
+#top #lupa:hover{transform:none!important;background:var(--soft)!important}
+#top #lupa:active{transform:scale(.92)!important}
+#top #lupa.tem{background:transparent!important;color:var(--pri)!important}
+#top #lupa.tem::after{top:5px;right:5px;width:7px;height:7px;border-width:1.5px}
+
+/* ===== Menu do canto superior direito: fonte do Colabora, Prof, cabeçalho da marca, ícones coloridos e efeitos ===== */
+#mn{min-width:260px;padding:0 0 8px;border:0;border-radius:22px;overflow:hidden;font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;background:var(--card);box-shadow:0 18px 40px rgba(15,139,141,.22),0 2px 8px rgba(0,0,0,.08)}
+.mn-cab{position:relative;padding:14px 18px 13px;background:var(--soft);margin-bottom:6px}
+.mn-cab::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--pri),var(--pri2))}
+.mn-marca{display:block;font:700 1.3rem/1.1 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri)}
+.mn-marca b{color:var(--pri2);font-weight:700}
+.mn-sub{display:block;margin-top:3px;font:600 .8rem "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--mut)}
+#mn button{display:flex;align-items:center;gap:12px;width:calc(100% - 16px);margin:3px 8px;padding:10px 12px;border-radius:16px;font:600 .98rem/1.2 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--ink);position:relative;overflow:hidden;text-align:left}
+#mn button::before{content:"";position:absolute;left:0;top:22%;bottom:22%;width:4px;border-radius:0 4px 4px 0;background:var(--ic);transform:scaleY(0);transition:transform .25s var(--pula)}
+#mn button::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,color-mix(in srgb,var(--ic) 20%,transparent) 50%,transparent 70%);transform:translateX(-120%);pointer-events:none}
+#mn button:hover,#mn button:active{background:color-mix(in srgb,var(--ic) 9%,transparent);color:var(--ink)}
+#mn button:hover::before,#mn button:active::before{transform:scaleY(1)}
+#mn button:hover::after,#mn button:active::after{transform:translateX(120%);transition:transform .6s ease}
+.mn-i{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--ic) 15%,transparent);color:var(--ic);transition:transform .3s var(--pula),background .25s ease,color .25s ease}
+.mn-i svg{width:21px;height:21px}
+#mn button:hover .mn-i,#mn button:active .mn-i{transform:scale(1.12) rotate(-6deg);background:var(--ic);color:#fff}
+.mn-t{flex:1;min-width:0}
+.mn-s{flex:none;color:var(--mut);font-size:1.4rem;line-height:1;transition:transform .25s ease,color .25s ease}
+#mn button:hover .mn-s,#mn button:active .mn-s{transform:translateX(3px);color:var(--ic)}
+@media (prefers-reduced-motion:reduce){#mn button::before,#mn button::after,.mn-i,.mn-s{transition:none!important}}
+
+/* ===== Sequência didática: botão Publicar centralizado no formulário ===== */
+#seqDock{flex-direction:column;align-items:center;justify-content:center;gap:12px}
+#seqDock #seqPubFab:not([hidden]){display:block!important;position:static!important;right:auto!important;left:auto!important;bottom:auto!important;top:auto!important;margin:0 auto;align-self:center;pointer-events:auto;padding:12px 22px;font-size:1rem;text-align:center}
+</style>
+<script id="arrastaCorMenuJs">
+(function(){
+  var panel=document.getElementById("panel"),seg=document.getElementById("seg");
+  if(!panel||!seg)return;
+
+  /* cor do modo: garante que o painel sempre acompanha Unidade (verde) ou Campo (laranja) */
+  function sync(){panel.classList.toggle("ca",seg.classList.contains("ca"))}
+  new MutationObserver(sync).observe(seg,{attributes:true,attributeFilter:["class"]});
+  sync();
+
+  /* arrasto com o dedo na faixa de pastilhas, nos dois sentidos */
+  function liga(box){
+    if(!box||box.__dedo)return;box.__dedo=true;
+    var x0=0,y0=0,s0=0,ativo=false,moveu=false,decidido=false,horiz=false;
+    function bloqueiaClique(){
+      var b=function(ev){ev.stopPropagation();ev.preventDefault();box.removeEventListener("click",b,true)};
+      box.addEventListener("click",b,true);setTimeout(function(){box.removeEventListener("click",b,true)},350);
+    }
+    box.addEventListener("touchstart",function(e){
+      if(e.touches.length!==1){ativo=false;return}
+      var t=e.touches[0];x0=t.clientX;y0=t.clientY;s0=box.scrollLeft;ativo=true;moveu=false;decidido=false;horiz=false;
+      e.stopPropagation(); /* o gesto de trocar Unidade/Campo não deve ouvir este toque */
+    },{passive:true});
+    box.addEventListener("touchmove",function(e){
+      if(!ativo)return;
+      var t=e.touches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+      if(!decidido&&(Math.abs(dx)>6||Math.abs(dy)>6)){decidido=true;horiz=Math.abs(dx)>=Math.abs(dy)}
+      if(horiz){
+        moveu=true;
+        box.scrollLeft=s0-dx; /* segue o dedo mesmo se o navegador não rolar sozinho */
+        e.stopPropagation();
+        if(e.cancelable)e.preventDefault();
+      }
+    },{passive:false});
+    function fim(e){
+      if(!ativo)return;ativo=false;
+      if(moveu)bloqueiaClique(); /* arrastar não escolhe a pastilha sem querer */
+      e.stopPropagation();
+    }
+    box.addEventListener("touchend",fim,{passive:true});
+    box.addEventListener("touchcancel",function(e){ativo=false;e.stopPropagation()},{passive:true});
+  }
+  function todos(){liga(document.getElementById("chips"));liga(document.getElementById("turmas"))}
+  todos();setInterval(todos,1500);
+})();
+</script>
+<style id="corModoTitulo">
+/* Título "Atividades", linha embaixo dele e botão de fichas por linha seguem o modo: Unidade = verde-azulado, Campo = laranja */
+:root{--mt:#0f8b8d;--mts:#e3f3f2}
+:root:has(#seg.ca){--mt:#e8590c;--mts:#fde8da}
+#tituloLista.tit-lista,#tituloLista.tit-lista.cor,#panel #tituloLista,#panel #tituloLista.cor{color:var(--mt)!important;transition:color .5s ease}
+.tit-cab{border-bottom-color:var(--mts)}
+.tit-cab.cor,.tit-cab:has(#tituloLista.cor){border-bottom-color:var(--mt)}
+.vcols button{color:var(--mt)!important;border-color:var(--mt)!important;transition:color .5s ease,border-color .5s ease,transform .15s,background .2s}
+</style>
+<style id="dadosVisual">
+/* ===== Página Dados do planejamento docente: sem espaço sobrando no topo, título da marca e visual mais vivo ===== */
+#dados{margin-top:0}
+.tela.on#dados{padding-top:62px}
+#dados .dd-bar{margin:0 0 16px;display:block}
+#dados .dd-tit{position:relative;margin:0;padding:0 0 14px;font:700 clamp(1.9rem,7.2vw,2.7rem)/1.1 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri);text-wrap:balance;letter-spacing:-.005em}
+#dados .dd-tit::after{content:"";position:absolute;left:0;bottom:0;height:5px;width:100%;border-radius:5px;background:linear-gradient(90deg,var(--pri) 0%,var(--pri) 55%,var(--pri2) 100%);transform-origin:left center}
+#dados.on .dd-tit::after{animation:ddLinha .9s var(--suave,ease) backwards}
+@keyframes ddLinha{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+#dados.on .dd-tit{animation:ddTit .7s var(--suave,ease) backwards}
+@keyframes ddTit{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* cartões das seções */
+#stats .sec{border:1px solid var(--line);border-left:6px solid var(--pri);border-radius:20px;background:linear-gradient(180deg,#fff 0%,#fffdf9 100%);box-shadow:0 2px 10px rgba(42,36,48,.05);transition:transform .3s var(--pula,ease),box-shadow .3s ease,border-color .3s ease}
+#stats .sec:nth-of-type(even){border-left-color:var(--pri2)}
+#stats .sec:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(15,139,141,.15)}
+#stats .sec:nth-of-type(even):hover{box-shadow:0 12px 26px rgba(232,89,12,.15)}
+#stats .sec[open]{box-shadow:0 14px 30px rgba(42,36,48,.09)}
+#stats .sec>summary{padding:16px 18px;transition:background .25s ease}
+#stats .sec>summary:hover{background:linear-gradient(90deg,var(--soft),transparent 70%)}
+#stats .sec:nth-of-type(even)>summary:hover{background:linear-gradient(90deg,#fde8da,transparent 70%)}
+#stats .sec .si{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--soft);font-size:1.45rem;transition:transform .35s var(--pula,ease)}
+#stats .sec:nth-of-type(even) .si{background:#fde8da}
+#stats .sec>summary:hover .si{transform:rotate(-8deg) scale(1.1)}
+#stats .sec .st b{font:700 1.12rem/1.2 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri2)}
+#stats .sec:nth-of-type(odd) .st b{color:var(--pri)}
+#stats .sec .sn{background:linear-gradient(135deg,var(--soft),#fff);border:1px solid var(--line)}
+#stats .sec .sa{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--bg);transition:transform .3s var(--pula,ease),background .25s ease}
+#stats .sec>summary:hover .sa{background:var(--soft)}
+#stats .sec>.sec-corpo{border-top:1px dashed var(--line);background:linear-gradient(180deg,rgba(227,243,242,.35),transparent 90px)}
+#stats .sec[open]>.sec-corpo{animation:ddAbre .4s var(--suave,ease)}
+@keyframes ddAbre{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* blocos internos, abas, quadros de números e mapa de calor */
+#stats .pf-b>h3{font:700 1.15rem/1.2 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri)}
+#stats .pf-b{border-top:1px dashed var(--line)}
+#stats .abg{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 1px 6px rgba(42,36,48,.04);transition:box-shadow .3s ease,transform .3s var(--pula,ease)}
+#stats .abg:hover{box-shadow:0 8px 20px rgba(15,139,141,.12);transform:translateY(-2px)}
+#stats .abg[open]{transform:none}
+#stats .abg>summary{border-radius:16px}
+#stats .pf-o:hover .dot{transform:translateY(-3px) scale(1.06);box-shadow:0 6px 14px rgba(15,139,141,.25)}
+#stats .pf-o .dot{transition:background .3s ease,color .3s ease,transform .3s var(--pula,ease),box-shadow .3s ease}
+#stats .kpis div{border-radius:18px;border:1px solid var(--line);background:linear-gradient(160deg,#fff,var(--soft));box-shadow:0 2px 8px rgba(42,36,48,.05)}
+#stats .kpis div:nth-child(even){background:linear-gradient(160deg,#fff,#fde8da)}
+#stats .hm td{transition:transform .2s var(--pula,ease)}
+#stats .hm td:hover{transform:scale(1.12)}
+#stats .bl i{border-radius:8px;background:linear-gradient(90deg,var(--pri),#14b3b6)}
+
+/* botão de baixar material */
+#dados #csvrow{margin-top:20px;justify-content:center}
+#dados #baixaAbre{padding:14px 26px;border-radius:999px;font-weight:700;background:linear-gradient(135deg,var(--pri2),#f07a2f);box-shadow:0 8px 20px rgba(232,89,12,.3)}
+#dados #baixaAbre:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(232,89,12,.38)}
+#dados #baixaAbre:active{transform:scale(.96)}
+@media (prefers-reduced-motion:reduce){#dados.on .dd-tit,#dados.on .dd-tit::after,#stats .sec[open]>.sec-corpo{animation:none!important}#stats .sec,#stats .sec .si,#stats .abg,#stats .pf-o .dot,#stats .hm td,#dados #baixaAbre{transition:none!important}}
+</style>
+<style id="experienciaVisual">
+/* ===== Experiência do usuário: barras de aprovação animadas (parte do zero no centro) ===== */
+#experiencia{margin-top:0}
+.tela.on#experiencia{padding-top:62px}
+#experiencia .xp-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 16px}
+#experiencia .dd-tit{position:relative;flex:1 1 100%;margin:0;padding:0 0 14px;font:700 clamp(1.9rem,7.2vw,2.7rem)/1.1 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri);text-wrap:balance;letter-spacing:-.005em}
+#experiencia .dd-tit::after{content:"";position:absolute;left:0;bottom:0;height:5px;width:100%;border-radius:5px;background:linear-gradient(90deg,var(--pri) 0%,var(--pri) 55%,var(--pri2) 100%);transform-origin:left center}
+#experiencia.on .dd-tit::after{animation:ddLinha .9s var(--suave,ease) backwards}
+#experiencia.on .dd-tit{animation:ddTit .7s var(--suave,ease) backwards}
+#experiencia #avBtn2{border-radius:999px;font-weight:700;background:linear-gradient(135deg,var(--pri2),#f07a2f);box-shadow:0 8px 20px rgba(232,89,12,.3)}
+.vb-wrap{display:grid;gap:14px;margin-top:16px}
+.vb{background:linear-gradient(180deg,#fff,#fffdf9);border:1px solid var(--line);border-radius:22px;padding:16px 16px 14px;box-shadow:0 2px 10px rgba(42,36,48,.05);transition:transform .3s var(--pula,ease),box-shadow .3s ease}
+.vb:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(15,139,141,.14)}
+.vb-geral{border:2px solid var(--pri);background:linear-gradient(160deg,#fff 40%,var(--soft))}
+.vb-t{margin:0;font:700 1.15rem/1.2 "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri)}
+.vb-geral .vb-t{font-size:1.3rem;color:var(--pri2)}
+.vb-q{margin:4px 0 0;color:var(--mut);font-size:.82rem;line-height:1.35}
+.vb-linha{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;margin:14px 0 8px}
+.vb-e{font-size:1.9rem;line-height:1;filter:grayscale(.6);opacity:.55;transition:transform .4s var(--pula,ease),filter .4s ease,opacity .4s ease}
+.vb-e.vb-on{filter:none;opacity:1;transform:scale(1.25)}
+.vb-trilho{position:relative;height:26px;border-radius:999px;background:linear-gradient(90deg,#fde3e3 0%,#f4f1ea 50%,#dcf3e1 100%);box-shadow:inset 0 2px 5px rgba(42,36,48,.1);overflow:hidden}
+.vb-zero{position:absolute;left:50%;top:3px;bottom:3px;width:3px;margin-left:-1.5px;border-radius:3px;background:rgba(42,36,48,.28);z-index:2}
+.vb-fill{position:absolute;top:0;bottom:0;width:var(--w);transition:width .5s ease}
+.vb-fill.pos{left:50%;background:linear-gradient(90deg,#51cf66,#2f9e44);border-radius:0 999px 999px 0;transform-origin:left center;box-shadow:0 0 14px rgba(47,158,68,.55)}
+.vb-fill.neg{right:50%;background:linear-gradient(270deg,#ff6b6b,#e03131);border-radius:999px 0 0 999px;transform-origin:right center;box-shadow:0 0 14px rgba(224,49,49,.5)}
+.vb-anim .vb-fill{animation:vbCresce 1.3s var(--suave,ease) .35s backwards}
+@keyframes vbCresce{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.vb-anim .vb-e.vb-on{animation:vbPula 1s var(--pula,ease) 1.5s backwards}
+@keyframes vbPula{0%{transform:scale(1)}50%{transform:scale(1.6) rotate(-8deg)}100%{transform:scale(1.25)}}
+.vb-fill::after{content:"";position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:vbBrilho 2.8s ease-in-out 1.8s infinite}
+.vb-fill.pos::after{left:-30%}.vb-fill.neg::after{right:-30%}
+@keyframes vbBrilho{0%{transform:translateX(0);opacity:0}30%{opacity:1}100%{transform:translateX(480%);opacity:0}}
+.vb-fill.neg::after{animation-name:vbBrilhoN}
+@keyframes vbBrilhoN{0%{transform:translateX(0);opacity:0}30%{opacity:1}100%{transform:translateX(-480%);opacity:0}}
+.vb-res{font-size:1.02rem}
+.vb-res b{font:700 1.25rem "Fredoka","Trebuchet MS",system-ui,sans-serif}
+.vb-res b.pos{color:#2f9e44}.vb-res b.neg{color:#e03131}.vb-res b.neu{color:var(--mut)}
+.vb-res span{color:var(--mut);font-size:.88rem}
+.vb-top{margin-top:8px;display:inline-block;padding:6px 12px;border-radius:999px;background:var(--soft);font-size:.86rem}
+.vb-top span{color:var(--mut)}
+.vb-ex{margin-top:8px;color:var(--mut);font-size:.82rem}
+/* dados completos escondidos atrás de um botão */
+.xp-full{margin-top:22px;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden}
+.xp-full>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px;font:700 1rem "Fredoka","Trebuchet MS",system-ui,sans-serif;color:#fff;background:linear-gradient(135deg,var(--pri),#14b3b6);transition:filter .25s ease}
+.xp-full>summary::-webkit-details-marker{display:none}
+.xp-full>summary:hover{filter:brightness(1.07)}
+.xp-full>summary:focus-visible{outline:3px solid var(--pri2);outline-offset:-3px}
+.xp-full .xf-a{font-size:1.2rem;transition:transform .3s var(--pula,ease)}
+.xp-full[open] .xf-a{transform:rotate(180deg)}
+.xp-full .xf-c{padding:2px 16px 18px;animation:ddAbre .4s var(--suave,ease)}
+@media (prefers-reduced-motion:reduce){#experiencia.on .dd-tit,#experiencia.on .dd-tit::after,.vb-anim .vb-fill,.vb-anim .vb-e.vb-on,.vb-fill::after,.xp-full .xf-c{animation:none!important}.vb,.vb-e,.xp-full .xf-a,.vb-fill{transition:none!important}}
+</style>
+<style id="experienciaContador">
+#experiencia .xp-count{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--soft);border:1px solid var(--line);color:var(--pri);font-weight:700;font-size:.9rem;white-space:nowrap;box-shadow:0 2px 8px rgba(15,139,141,.12)}
+#experiencia .xp-count .xc-i{font-size:1.1rem;line-height:1}
+#experiencia .xp-count b{font:700 1.15rem "Fredoka","Trebuchet MS",system-ui,sans-serif;color:var(--pri2)}
+#experiencia .xp-count .xc-t{font-weight:600;color:var(--mut);font-size:.82rem}
+</style>
 </body></html>
